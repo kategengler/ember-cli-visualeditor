@@ -1,0 +1,20 @@
+{
+  "name": "ember-cli-visualeditor",
+  "version": "0.0.0",
+  "repository": "",
+  "engines": {
+    "node": ">= 0.10.0"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "jquery": "^1.11.1"
+  },
+  "devDependencies": {
+    "visualeditor": "wikimedia/VisualEditor.git#c7395335d2b94a298ce85fa064fb6f0cd712ed3e"
+  },
+  "description": "Ember addon that provides VisualEditor.",
+  "keywords": [
+    "ember-addon"
+  ]
+}
