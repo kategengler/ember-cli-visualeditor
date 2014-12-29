@@ -6,7 +6,7 @@
  * Released under the MIT license
  * http://ve.mit-license.org
  *
- * Date: 2014-12-29T15:46:22Z
+ * Date: 2014-12-29T23:28:28Z
  */
 /*!
  * UnicodeJS v0.1.2
@@ -27129,26 +27129,8 @@ ve.ce.Surface.prototype.onDocumentKeyDown = function ( e ) {
 
 /**
  * Handle document key press events.
- *
- * @method
- * @param {jQuery.Event} e Key press event
  */
-ve.ce.Surface.prototype.onDocumentKeyPress = function ( e ) {
-	// Filter out non-character keys. Doing this prevents:
-	// * Unexpected content deletion when selection is not collapsed and the user presses, for
-	//   example, the Home key (Firefox fires 'keypress' for it)
-	// TODO: Should be covered with Selenium tests.
-	if (
-		// Catches most keys that don't produce output (charCode === 0, thus no character)
-		e.which === 0 || e.charCode === 0 ||
-		// Opera 12 doesn't always adhere to that convention
-		e.keyCode === OO.ui.Keys.TAB || e.keyCode === OO.ui.Keys.ESCAPE ||
-		// Ignore all keypresses with Ctrl / Cmd modifier keys
-		ve.ce.isShortcutKey( e )
-	) {
-		return;
-	}
-
+ve.ce.Surface.prototype.onDocumentKeyPress = function () {
 	this.handleInsertion();
 };
 
@@ -32802,12 +32784,12 @@ OO.inheritClass( ve.ui.Overlay, OO.ui.Element );
  * @mixins OO.EventEmitter
  *
  * @constructor
- * @param {HTMLDocument|Array|ve.dm.LinearData|ve.dm.Document} dataOrDoc Document data to edit
+ * @param {HTMLDocument|Array|ve.dm.LinearData|ve.dm.Document|ve.dm.Surface} dataOrDocOrSurface Document data to edit
  * @param {Object} [config] Configuration options
  * @cfg {string[]} [excludeCommands] List of commands to exclude
  * @cfg {Object} [importRules] Import rules
  */
-ve.ui.Surface = function VeUiSurface( dataOrDoc, config ) {
+ve.ui.Surface = function VeUiSurface( dataOrDocOrSurface, config ) {
 	config = config || {};
 
 	var documentModel;
@@ -32828,17 +32810,20 @@ ve.ui.Surface = function VeUiSurface( dataOrDoc, config ) {
 	this.triggerListener = new ve.TriggerListener( OO.simpleArrayDifference(
 		Object.keys( ve.ui.commandRegistry.registry ), config.excludeCommands || []
 	) );
-	if ( dataOrDoc instanceof ve.dm.Document ) {
+	if ( dataOrDocOrSurface instanceof ve.dm.Document ) {
 		// ve.dm.Document
-		documentModel = dataOrDoc;
-	} else if ( dataOrDoc instanceof ve.dm.LinearData || Array.isArray( dataOrDoc ) ) {
+		documentModel = dataOrDocOrSurface;
+	} else if ( dataOrDocOrSurface instanceof ve.dm.LinearData || Array.isArray( dataOrDocOrSurface ) ) {
 		// LinearData or raw linear data
-		documentModel = new ve.dm.Document( dataOrDoc );
+		documentModel = new ve.dm.Document( dataOrDocOrSurface );
+	} else if ( dataOrDocOrSurface instanceof ve.dm.Surface ) {
+		this.model = dataOrDocOrSurface;
+		this.documentModel = this.model.getDocument();
 	} else {
 		// HTMLDocument
-		documentModel = ve.dm.converter.getModelFromDom( dataOrDoc );
+		documentModel = ve.dm.converter.getModelFromDom( dataOrDocOrSurface );
 	}
-	this.model = new ve.dm.Surface( documentModel );
+	this.model = this.model || new ve.dm.Surface( documentModel );
 	this.view = new ve.ce.Surface( this.model, this, { $: this.$ } );
 	this.dialogs = this.createDialogWindowManager();
 	this.importRules = config.importRules || {};
