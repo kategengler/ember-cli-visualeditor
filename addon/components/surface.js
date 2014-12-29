@@ -1,27 +1,9 @@
 /* globals ve:true, $:true */
 
 import Ember from 'ember';
+import SurfaceState from '../lib/surface-state';
 
-var SurfaceState = function() {
-  this.documentModel = null;
-  this.selection = null;
-  this.fragment = null;
-  this.fragmentAnnotations = null;
-};
-
-SurfaceState.prototype.isAnnotationSelected = function(name) {
-  if (this.fragmentAnnotations) {
-    return this.fragmentAnnotations.hasAnnotationWithName(name);
-  } else {
-    return false;
-  }
-};
-
-SurfaceState.prototype.getFragment = function() {
-  return this.fragment;
-};
-
-var Surface = Ember.Component.extend(Ember.Evented, {
+var SurfaceComponent = Ember.Component.extend(Ember.Evented, {
 
   classNames: ["ve-surface-component"],
 
@@ -34,7 +16,7 @@ var Surface = Ember.Component.extend(Ember.Evented, {
   },
 
   _createDocumentFromHtml: function(input) {
-    targetDoc = window.document;
+    var targetDoc = window.document;
     var parser = new DOMParser();
     var doc = parser.parseFromString(input, 'text/html');
     // Create a dm.Document instance from the input html in the #sample element
@@ -100,4 +82,4 @@ var Surface = Ember.Component.extend(Ember.Evented, {
 
 });
 
-export default Surface;
+export default SurfaceComponent;

@@ -1,9 +1,7 @@
 import Ember from 'ember';
 
-export default Ember.Component.extend({
-
+var Toolbar = Ember.Component.extend({
   classNames: ["ve-toolbar"],
-
   surface: null,
 
   afterRender: function() {
@@ -14,5 +12,6 @@ export default Ember.Component.extend({
       toolGroup.set('surface', surface);
     });
   },
-
 });
+
+export default Toolbar;

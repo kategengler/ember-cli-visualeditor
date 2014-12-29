@@ -1,7 +1,6 @@
 import Ember from 'ember';
 
-export default Ember.Component.extend({
-
+var ToolGroup = Ember.Component.extend({
   name: null,
   classNames: ['ve-tool-group'],
   surface: null,
@@ -24,5 +23,6 @@ export default Ember.Component.extend({
       toolView.attachSurface(surface);
     });
   },
-
 });
+
+export default ToolGroup;
