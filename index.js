@@ -7,6 +7,47 @@ module.exports = {
   included: function included(app) {
     this._super.included(app);
 
+    app.import('vendor/jquery.i18n/src/jquery.i18n.js');
+    app.import('vendor/jquery.i18n/src/jquery.i18n.messagestore.js');
+    app.import('vendor/jquery.i18n/src/jquery.i18n.parser.js');
+    app.import('vendor/jquery.i18n/src/jquery.i18n.emitter.js');
+    app.import('vendor/jquery.i18n/src/jquery.i18n.language.js');
+    app.import('vendor/jquery.i18n/src/jquery.i18n.fallbacks.js');
+    app.import('vendor/jquery.i18n/src/languages/bs.js');
+    app.import('vendor/jquery.i18n/src/languages/dsb.js');
+    app.import('vendor/jquery.i18n/src/languages/fi.js');
+    app.import('vendor/jquery.i18n/src/languages/fi.js');
+    app.import('vendor/jquery.i18n/src/languages/ga.js');
+    app.import('vendor/jquery.i18n/src/languages/he.js');
+    app.import('vendor/jquery.i18n/src/languages/hsb.js');
+    app.import('vendor/jquery.i18n/src/languages/hu.js');
+    app.import('vendor/jquery.i18n/src/languages/hy.js');
+    app.import('vendor/jquery.i18n/src/languages/la.js');
+    app.import('vendor/jquery.i18n/src/languages/ml.js');
+    app.import('vendor/jquery.i18n/src/languages/os.js');
+    app.import('vendor/jquery.i18n/src/languages/ru.js');
+    app.import('vendor/jquery.i18n/src/languages/sl.js');
+    app.import('vendor/jquery.i18n/src/languages/uk.js');
+    app.import('vendor/jquery.uls/src/jquery.uls.data.js');
+    app.import('vendor/jquery.uls/src/jquery.uls.data.utils.js');
+
+    // provides OO namespace
+    app.import('vendor/oojs/oojs.jquery.js');
+
+    // provides OO widgets
+    app.import('vendor/oojs-ui/oojs-ui.js');
+    app.import('vendor/oojs-ui/oojs-ui-apex.js');
+
+    // Deativated this for now.
+    // On the long run, ember-cli-rails will have a mechanism to link assets into the public folder
+    // In general it would be interesting to have all dependencies not loaded upfront
+    // but lazily.
+
+    // These are included in visualEditor.js
+    // app.import('vendor/unicodejs/unicodejs.js');
+    // app.import('vendor/rangefix/rangefix.js');
+    // app.import('vendor/visualeditor/visualEditor.js');
+
     // Deativated this for now.
     // On the long run, ember-cli-rails will have a mechanism to link assets into the public folder
     // In general it would be interesting to have all dependencies not loaded upfront
@@ -16,36 +57,6 @@ module.exports = {
     // app.import('vendor/visualeditor/visualEditor.css');
     // app.import('vendor/visualeditor/i18n/en.json');
     // app.import('vendor/visualeditor/i18n/de.json');
-
-    // app.import('vendor/jquery.i18n/src/jquery.i18n.js');
-    // app.import('vendor/jquery.i18n/src/jquery.i18n.messagestore.js');
-    // app.import('vendor/jquery.i18n/src/jquery.i18n.parser.js');
-    // app.import('vendor/jquery.i18n/src/jquery.i18n.emitter.js');
-    // app.import('vendor/jquery.i18n/src/jquery.i18n.language.js');
-    // app.import('vendor/jquery.i18n/src/jquery.i18n.fallbacks.js');
-    // app.import('vendor/jquery.i18n/src/languages/bs.js');
-    // app.import('vendor/jquery.i18n/src/languages/dsb.js');
-    // app.import('vendor/jquery.i18n/src/languages/fi.js');
-    // app.import('vendor/jquery.i18n/src/languages/fi.js');
-    // app.import('vendor/jquery.i18n/src/languages/ga.js');
-    // app.import('vendor/jquery.i18n/src/languages/he.js');
-    // app.import('vendor/jquery.i18n/src/languages/hsb.js');
-    // app.import('vendor/jquery.i18n/src/languages/hu.js');
-    // app.import('vendor/jquery.i18n/src/languages/hy.js');
-    // app.import('vendor/jquery.i18n/src/languages/la.js');
-    // app.import('vendor/jquery.i18n/src/languages/ml.js');
-    // app.import('vendor/jquery.i18n/src/languages/os.js');
-    // app.import('vendor/jquery.i18n/src/languages/ru.js');
-    // app.import('vendor/jquery.i18n/src/languages/sl.js');
-    // app.import('vendor/jquery.i18n/src/languages/uk.js');
-
-    // app.import('vendor/jquery.uls/src/jquery.uls.data.js');
-    // app.import('vendor/jquery.uls/src/jquery.uls.data.utils.js');
-
-    // app.import('vendor/oojs/oojs.jquery.js');
-    // app.import('vendor/oojs/oojs.jquery.js');
-    // app.import('vendor/oojs-ui/oojs-ui.js');
-    // app.import('vendor/oojs-ui/oojs-ui-apex.js');
 
     // var options = {
     //     destDir: 'assets/themes/apex/images/icons'
@@ -93,9 +104,5 @@ module.exports = {
     // };
     // app.import('vendor/oojs-ui/themes/apex/images/toolbar-shadow.png', options);
 
-    // app.import('vendor/unicodejs/unicodejs.js');
-    // app.import('vendor/rangefix/rangefix.js');
-
-    // app.import('vendor/visualeditor/visualEditor.js');
   }
 };
