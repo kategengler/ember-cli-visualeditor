@@ -1,7 +1,6 @@
 /* globals ve:true, $:true */
 
 import Ember from 'ember';
-import DocumentFactory from '../lib/document-factory';
 
 var SurfaceState = function() {
   this.documentModel = null;
@@ -30,9 +29,18 @@ var Surface = Ember.Component.extend(Ember.Evented, {
   _surfaceState: new SurfaceState(),
 
   loadDocumentFromHtml: function(html) {
-    var documentFactory = new DocumentFactory();
-    var documentModel = documentFactory.createDocumentFromHtml(html);
+    var documentModel = this._createDocumentFromHtml(html);
     this._updateDocumentModel(documentModel);
+  },
+
+  _createDocumentFromHtml: function(input) {
+    targetDoc = window.document;
+    var parser = new DOMParser();
+    var doc = parser.parseFromString(input, 'text/html');
+    // Create a dm.Document instance from the input html in the #sample element
+    // Note: from the interface we would expect that dm.Converter does not use singletons -- but unfortunately it still does
+    var converter = new ve.dm.Converter(ve.dm.modelRegistry, ve.dm.nodeFactory, ve.dm.annotationFactory, ve.dm.metaItemFactory);
+    return converter.getModelFromDom(doc, targetDoc);
   },
 
   _updateDocumentModel: function(documentModel) {
