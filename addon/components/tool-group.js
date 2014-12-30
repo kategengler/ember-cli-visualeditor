@@ -3,7 +3,7 @@ import Ember from 'ember';
 var ToolGroup = Ember.Component.extend({
   name: null,
   classNames: ['ve-tool-group'],
-  surface: null,
+  toolbar: null,
 
   init: function() {
     this._super();
@@ -17,12 +17,13 @@ var ToolGroup = Ember.Component.extend({
   // it didn't work here. Instead we need to do it in didInsertElement
   didInsertElement: function() {
     this._super();
-    var surface = this.get('surface');
+    var toolbar = this.get('toolbar');
     var toolViews = this.get('childViews');
     toolViews.forEach(function(toolView) {
-      toolView.attachSurface(surface);
+      toolView.set('toolbar', toolbar);
     });
   },
+
 });
 
 export default ToolGroup;

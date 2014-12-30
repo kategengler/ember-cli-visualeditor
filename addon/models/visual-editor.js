@@ -2,13 +2,6 @@
 
 import Ember from 'ember';
 
-/*
-  Requirements:
-    - has an empty ve.dm.DocumentModel at first
-    - provides fromHtml, toHtml
-    - any change to the documentModel triggers
-*/
-
 var VisualEditorModel = Ember.Object.extend({
 
   // ve.dm.Surface instance
