@@ -6,7 +6,7 @@
  * Released under the MIT license
  * http://ve.mit-license.org
  *
- * Date: 2014-12-29T23:28:28Z
+ * Date: 2014-12-30T21:27:45Z
  */
 /*!
  * UnicodeJS v0.1.2

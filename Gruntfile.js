@@ -5,7 +5,7 @@ module.exports = function ( grunt ) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-uglify');
-  
+
   grunt.initConfig({
     clean: {
       dist: [ 'dist/*' ]
@@ -37,11 +37,11 @@ module.exports = function ( grunt ) {
         src: 'lib/oojs-ui/i18n/*',
         dest: 'dist/'
       },
-      "oojs-themes-apex": {
-        expand: true,
-        cwd: 'node_modules/visualeditor/',
-        src: 'lib/oojs-ui/themes/apex/**',
-        dest: 'dist/'
+      "oojs-ui": {
+        files: [
+          { expand: true, cwd: 'node_modules/visualeditor/', src: 'lib/oojs-ui/themes/apex/**', dest: 'dist/' },
+          { expand: true, cwd: 'node_modules/visualeditor/', src: 'lib/oojs-ui/*', dest: 'dist/', filter: 'isFile' }
+        ]
       }
     },
     uglify: {
