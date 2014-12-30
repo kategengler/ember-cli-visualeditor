@@ -81,7 +81,7 @@ var VisualEditorComponent = Ember.Component.extend({
     surface.getView().focus();
   },
 
-  // delegates
+  // delegates for convenience
 
   fromHtml: function(html) {
     this.get('model').fromHtml(html);

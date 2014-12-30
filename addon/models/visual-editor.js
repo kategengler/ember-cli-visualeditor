@@ -7,15 +7,13 @@ var VisualEditorModel = Ember.Object.extend(Ember.Evented, {
 
   // ve.dm.Surface instance
   surface: null,
+
   surfaceState: SurfaceState.create(),
 
   init: function() {
     this._super();
     // initialize with an empty model
-    var documentModel = new ve.dm.Document( [
-        // { type: 'paragraph' },
-        // { type: '/paragraph' }
-      ] );
+    var documentModel = new ve.dm.Document([]);
     var surface = new ve.dm.Surface(documentModel);
     this.set('surface', surface);
   },
@@ -80,12 +78,10 @@ var VisualEditorModel = Ember.Object.extend(Ember.Evented, {
   }.observes('surface'),
 
   onSelectionChange: function() {
-    console.log('VisualEditor.onSelectionChange');
     this.updateState();
   },
 
   onContextChange: function() {
-    console.log('VisualEditor.onContextChange');
     this.updateState();
   },
 
