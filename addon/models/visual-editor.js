@@ -14,9 +14,6 @@ var VisualEditorModel = Ember.Object.extend({
   // ve.dm.Surface instance
   surface: null,
 
-  isEnabled: false,
-  isFocused: false,
-
   init: function() {
     this._super();
 
@@ -29,34 +26,44 @@ var VisualEditorModel = Ember.Object.extend({
   },
 
   fromHtml: function(html) {
-    var targetDoc = window.document;
-    var parser = new DOMParser();
-    var doc = parser.parseFromString(html, 'text/html');
-    // Create a dm.Document instance from the input html in the #sample element
-    // Note: from the interface we would expect that dm.Converter does not use singletons -- but unfortunately it still does
-    var converter = new ve.dm.Converter(ve.dm.modelRegistry, ve.dm.nodeFactory, ve.dm.annotationFactory, ve.dm.metaItemFactory);
-    var documentModel = converter.getModelFromDom(doc, targetDoc);
-    var surface = new ve.dm.Surface(documentModel);
-    this.set('surface', surface);
+    // Note: at the moment we can not reuse VisualEditor's surface for different content, i.e., the whole thing needs
+    // to be created from scratch. To avoid this unnecessarily to happen we compare the current html with the one provided.
+    // VE-TODO: see if we can improve VE's API to allow switching the document-model
+    var oldHtml = this.toHtml();
+    if (oldHtml !== html) {
+      var documentModel;
+      try {
+        var targetDoc = window.document;
+        var parser = new DOMParser();
+        // TODO: discuss what to do if the html is corrupted
+        var doc = parser.parseFromString(html, 'text/html');
+        // Create a dm.Document instance from the input html in the #sample element
+        // Note: from the interface we would expect that dm.Converter does not use singletons -- but unfortunately it still does
+        var converter = new ve.dm.Converter(ve.dm.modelRegistry, ve.dm.nodeFactory, ve.dm.annotationFactory, ve.dm.metaItemFactory);
+        documentModel = converter.getModelFromDom(doc, targetDoc);
+      } catch (err) {
+        console.error('Could not parse HTML content. Wrapping it into preformatted element.');
+        documentModel = new vm.dm.DocumentModel([
+          'preformatted',
+          html,
+          '/preformatted'
+        ]);
+      }
+      var surface = new ve.dm.Surface(documentModel);
+      this.set('surface', surface);
+    }
   },
 
   toHtml: function() {
     var surface = this.get('surface');
-    var documentNode = ve.dm.converter.getDomFromModel(surface.getDocument());
-    return $(documentNode).find('body').html();
+    if (surface) {
+      var documentNode = ve.dm.converter.getDomFromModel(surface.getDocument());
+      return $(documentNode).find('body').html();
+    } else {
+      return null;
+    }
   },
 
-  disable: function() {
-    this.set('isEnabled', false);
-  },
-
-  enable: function() {
-    this.set('isEnabled', true);
-  },
-
-  focus: function() {
-    this.set('isFocused', true);
-  },
 });
 
 export default VisualEditorModel;

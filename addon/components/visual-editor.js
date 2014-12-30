@@ -11,6 +11,9 @@ var VisualEditorComponent = Ember.Component.extend({
   // ve.ui.Surface instance
   surface: null,
 
+  isEnabled: false,
+  isFocused: false,
+
   init: function() {
     this._super();
     Ember.assert("'model' should be of type ve.dm.Surface", this.get('model') instanceof VisualEditorModel);
@@ -27,6 +30,7 @@ var VisualEditorComponent = Ember.Component.extend({
     if (this._state === "inDOM") {
       surface.initialize();
     }
+    this.updateEnabledState();
   }.observes('model.surface'),
 
   createSurfaceUI: function() {
@@ -55,21 +59,37 @@ var VisualEditorComponent = Ember.Component.extend({
     this.set('surface', null);
   }.on('willDestroyElement'),
 
-  onEnabledChange: function() {
+  updateEnabledState: function() {
     var surface = this.get('surface');
-    if (this.get('model.isEnabled')) {
+    if (this.get('isEnabled')) {
       surface.enable();
     } else {
       surface.disable();
     }
-  }.observes('model.isEnabled'),
+  }.observes('isEnabled'),
 
-  onFocusChange: function() {
-    var surface = this.get('surface');
-    if (this.get('model.isFocused')) {
-      surface.getView().focus();
-    }
-  }.observes('mode.isFocused'),
+  enable: function() {
+    this.set('isEnabled', true);
+  },
+
+  disable: function() {
+    this.set('isEnabled', false);
+  },
+
+  focus: function() {
+    this.set('isFocused', true);
+    surface.getView().focus();
+  },
+
+  // delegates
+
+  fromHtml: function(html) {
+    this.get('model').fromHtml(html);
+  },
+
+  toHtml: function() {
+    return this.get('model').toHtml();
+  },
 
 });
 
