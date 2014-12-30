@@ -41,19 +41,19 @@ $ npm link visualeditor
 
 ### Upgrading VE
 
-First upgrade the VisualEditor#tahi branch
+First upgrade the VisualEditor#ember-cli-visualeditor branch
 
 ````bash
 $ cd VisualEditor
 $ git checkout master
 $ git pull wikimedia master
-$ git checkout tahi
+$ git checkout ember-cli-visualeditor
 $ git rebase master
 ````
 Hopefully this works without conflicts - if so push it upstream.
 
 ````bash
-$ git push -f origin tahi
+$ git push -f origin ember-cli-visualeditor
 ````
 
 Then rebundle `ember-cli-visualeditor`
