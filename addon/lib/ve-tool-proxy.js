@@ -40,7 +40,7 @@ VeToolProxy.prototype.getCommand = function() {
 
 VeToolProxy.prototype.updateState = function(surfaceState) {
   if (this.veTool) {
-    this.veTool.prototype.onUpdateState.call(this, surfaceState.getFragment());
+    this.veTool.prototype.onUpdateState.call(this, surfaceState.get('fragment'));
   }
 };
 

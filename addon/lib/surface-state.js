@@ -1,20 +1,22 @@
-var SurfaceState = function() {
-  this.documentModel = null;
-  this.selection = null;
-  this.fragment = null;
-  this.fragmentAnnotations = null;
-};
+import Ember from 'ember';
 
-SurfaceState.prototype.isAnnotationSelected = function(name) {
-  if (this.fragmentAnnotations) {
-    return this.fragmentAnnotations.hasAnnotationWithName(name);
-  } else {
-    return false;
-  }
-};
+var SurfaceState = Ember.Object.extend({
 
-SurfaceState.prototype.getFragment = function() {
-  return this.fragment;
-};
+  selection: null,
+  fragment: null,
+
+  fragmentAnnotations: function() {
+    return this.get('fragment').getAnnotations();
+  }.property('fragment'),
+
+  isAnnotationSelected: function(name) {
+    var fragmentAnnotations = this.get('fragmentAnnotations');
+    if (fragmentAnnotations) {
+      return fragmentAnnotations.hasAnnotationWithName(name);
+    } else {
+      return false;
+    }
+  },
+});
 
 export default SurfaceState;

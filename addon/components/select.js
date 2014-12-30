@@ -28,21 +28,11 @@ export default ToolGroup.extend({
     $(this.element).change(this.onChange.bind(this));
   },
 
-  attachEditor: function(visualEditor) {
-    this._super(visualEditor);
-    // HACK: there is a subtle but important detail here
-    // Registering the handler after calling _super has the effect
-    // that the handlers of the options will be called before this one
-    // so that we can rely on the options being up to date
-    // TODO: this could be improved somehow, e.g., by observing option.isActive and aggregating into a computed property
-    visualEditor.get('model').on('state-changed', this, this.onSurfaceStateChange);
-  },
+  needsSurfaceUpdate: true,
 
-  detachEditor: function() {
-    this.get('visualEditor').get('model').off('state-changed', this, this.onSurfaceStateChange);
-  },
+  updateState: function(surfaceState) {
+    this._super(surfaceState);
 
-  onSurfaceStateChange: function() {
     var options = this.get('childViews');
     var isEnabled = true;
     for (var i = 0; i < options.length; i++) {

@@ -16,7 +16,9 @@ var Tool = Ember.Component.extend(Ember.Evented, {
 
   toolbar: null,
   proxy: null,
-  visualEditor: Ember.computed.alias('parentView.visualEditor'),
+
+  needsToolbar: true,
+  needsSurfaceUpdate: true,
 
   // Instantiates a ve.ui.Tool and monkey-patches it to bind it to this ember object.
   init: function() {
@@ -26,21 +28,7 @@ var Tool = Ember.Component.extend(Ember.Evented, {
     this.set('proxy', new VeToolProxy(this, veTool));
   },
 
-  attachEditor: function(visualEditor) {
-    var visualEditor = this.get('visualEditor');
-    if (visualEditor) {
-      visualEditor.get('model').on('state-changed', this, this.onSurfaceStateChanged);
-    }
-  }.observes('visualEditor'),
-
-  detachEditor: function() {
-    var visualEditor = this.get('visualEditor');
-    if (visualEditor) {
-      visualEditor.get('model').off('state-changed', this, this.onSurfaceStateChanged);
-    }
-  }.observesBefore('visualEditor'),
-
-  onSurfaceStateChanged: function(surfaceState) {
+  updateState: function(surfaceState) {
     this.get('proxy').updateState(surfaceState);
   },
 
@@ -51,7 +39,7 @@ var Tool = Ember.Component.extend(Ember.Evented, {
   },
 
   getSurface: function() {
-    return this.get('visualEditor.surface');
+    return this.get('toolbar.visualEditor.surface');
   },
 
 });

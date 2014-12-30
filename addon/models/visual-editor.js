@@ -1,18 +1,20 @@
 /* globals ve:true, $:true */
 
 import Ember from 'ember';
+import SurfaceState from 'ember-cli-visualeditor/lib/surface-state';
 
-var VisualEditorModel = Ember.Object.extend({
+var VisualEditorModel = Ember.Object.extend(Ember.Evented, {
 
   // ve.dm.Surface instance
   surface: null,
+  surfaceState: SurfaceState.create(),
 
   init: function() {
     this._super();
-
+    // initialize with an empty model
     var documentModel = new ve.dm.Document( [
-        { type: 'paragraph' },
-        { type: '/paragraph' }
+        // { type: 'paragraph' },
+        // { type: '/paragraph' }
       ] );
     var surface = new ve.dm.Surface(documentModel);
     this.set('surface', surface);
@@ -36,7 +38,7 @@ var VisualEditorModel = Ember.Object.extend({
         documentModel = converter.getModelFromDom(doc, targetDoc);
       } catch (err) {
         console.error('Could not parse HTML content. Wrapping it into preformatted element.');
-        documentModel = new vm.dm.DocumentModel([
+        documentModel = new ve.dm.DocumentModel([
           'preformatted',
           html,
           '/preformatted'
@@ -55,6 +57,44 @@ var VisualEditorModel = Ember.Object.extend({
     } else {
       return null;
     }
+  },
+
+  diconnectSurface: function() {
+    var surface = this.get('surface');
+    if (surface) {
+      surface.disconnect(this, {
+        'select': 'onSelectionChange',
+        'contextChange': 'onContextChange'
+      });
+    }
+  }.observesBefore('surface'),
+
+  connectSurface: function() {
+    var surface = this.get('surface');
+    if (surface) {
+      surface.connect(this, {
+        'select': 'onSelectionChange',
+        'contextChange': 'onContextChange'
+      });
+    }
+  }.observes('surface'),
+
+  onSelectionChange: function() {
+    console.log('VisualEditor.onSelectionChange');
+    this.updateState();
+  },
+
+  onContextChange: function() {
+    console.log('VisualEditor.onContextChange');
+    this.updateState();
+  },
+
+  updateState: function() {
+    var surface = this.get('surface');
+    var surfaceState = this.get('surfaceState');
+    surfaceState.set('fragment', surface.getFragment());
+    surfaceState.set('selection', surface.getSelection());
+    this.trigger('state-changed', surfaceState);
   },
 
 });
