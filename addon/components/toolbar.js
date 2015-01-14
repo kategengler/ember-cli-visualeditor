@@ -15,11 +15,7 @@ var Toolbar = Ember.Component.extend({
     });
   },
 
-  onVisualEditor: function() {
-    this.observeVisualEditor();
-  }.observes('visualEditor'),
-
-  observeVisualEditor: function() {
+  initVisualEditor: function() {
     var visualEditor = this.get('visualEditor');
     if(visualEditor) {
       var visualEditorModel = visualEditor.get('model');
@@ -27,7 +23,15 @@ var Toolbar = Ember.Component.extend({
     } else {
       console.error('Could not connect to VisualEditor.');
     }
-  },
+  }.observes('visualEditor'),
+
+  onDestroy: function() {
+    var visualEditor = this.get('visualEditor');
+    if(visualEditor) {
+      var visualEditorModel = visualEditor.get('model');
+      visualEditorModel.off('state-changed', this, this.onSurfaceStateChanged);
+    }
+  }.on('willDestroyElement'),
 
   // recursive function to collect all Tool instances from this view tree
   extractTools: function() {
