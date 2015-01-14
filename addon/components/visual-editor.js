@@ -14,6 +14,8 @@ var VisualEditorComponent = Ember.Component.extend({
   isEnabled: false,
   isFocused: false,
 
+  classNameBindings: ['isEnabled:enabled:disabled'],
+
   init: function() {
     this._super();
     Ember.assert("'model' should be of type ve.dm.Surface", this.get('model') instanceof VisualEditorModel);
