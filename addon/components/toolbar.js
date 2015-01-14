@@ -6,15 +6,6 @@ var Toolbar = Ember.Component.extend({
   visualEditor: null,
   tools: null,
 
-  afterRender: function() {
-    this._super();
-    // propagating the toolbar so that tools can access the visualEditor instance
-    var toolGroups = this.get('childViews');
-    toolGroups.forEach(function(toolGroup) {
-      toolGroup.set('toolbar', this);
-    });
-  },
-
   initVisualEditor: function() {
     var visualEditor = this.get('visualEditor');
     if(visualEditor) {

@@ -10,6 +10,8 @@ export default ToolGroup.extend({
   isDisabled: true,
   disabledBinding: 'isDisabled',
 
+  needsSurfaceUpdate: true,
+
   _options: {},
 
   didInsertElement: function() {
@@ -27,8 +29,6 @@ export default ToolGroup.extend({
 
     $(this.element).change(this.onChange.bind(this));
   },
-
-  needsSurfaceUpdate: true,
 
   updateState: function(surfaceState) {
     this._super(surfaceState);
