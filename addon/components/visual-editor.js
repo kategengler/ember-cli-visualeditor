@@ -64,6 +64,7 @@ var VisualEditorComponent = Ember.Component.extend({
     if (this.get('isEnabled')) {
       surface.enable();
     } else {
+      surface.getModel().setNullSelection();
       surface.disable();
     }
   }.observes('isEnabled'),
