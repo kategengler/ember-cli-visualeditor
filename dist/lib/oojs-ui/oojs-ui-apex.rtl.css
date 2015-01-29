@@ -1,12 +1,12 @@
 /*!
- * OOjs UI v0.6.0
+ * OOjs UI v0.6.3
  * https://www.mediawiki.org/wiki/OOjs_UI
  *
- * Copyright 2011–2014 OOjs Team and other contributors.
+ * Copyright 2011–2015 OOjs Team and other contributors.
  * Released under the MIT license
  * http://oojs.mit-license.org
  *
- * Date: 2014-12-16T21:01:07Z
+ * Date: 2015-01-16T00:05:16Z
  */
 .oo-ui-progressBarWidget-slide-frames from {
 	margin-right: -40%;
@@ -66,7 +66,7 @@
 	cursor: pointer;
 	display: inline-block;
 	vertical-align: middle;
-	font-family: inherit;
+	font: inherit;
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	   -moz-user-select: none;
@@ -324,6 +324,10 @@
 	display: block;
 	background: rgba(0, 0, 0, 0.4);
 }
+.oo-ui-lookupElement > .oo-ui-menuSelectWidget {
+	z-index: 1;
+	width: 100%;
+}
 .oo-ui-bookletLayout-stackLayout.oo-ui-stackLayout-continuous > .oo-ui-panelLayout-scrollable {
 	overflow-y: hidden;
 }
@@ -433,6 +437,22 @@
 .oo-ui-fieldLayout-disabled .oo-ui-labelElement-label {
 	color: #cccccc;
 }
+.oo-ui-actionFieldLayout-field {
+	display: table;
+	table-layout: fixed;
+	width: 100%;
+}
+.oo-ui-actionFieldLayout-input,
+.oo-ui-actionFieldLayout-button {
+	display: table-cell;
+	vertical-align: middle;
+}
+.oo-ui-actionFieldLayout-input {
+	padding-left: 1em;
+}
+.oo-ui-actionFieldLayout-button {
+	width: 1%;
+}
 .oo-ui-fieldsetLayout {
 	position: relative;
 	margin: 0;
@@ -452,9 +472,10 @@
 	margin-top: 2em;
 }
 .oo-ui-fieldsetLayout > .oo-ui-labelElement-label {
-	font-size: 1.5em;
+	font-size: 1.1em;
 	margin-bottom: 0.5em;
 	padding: 0.25em 0;
+	font-weight: bold;
 }
 .oo-ui-fieldsetLayout.oo-ui-iconElement > .oo-ui-labelElement-label {
 	padding-right: 1.75em;
@@ -463,8 +484,8 @@
 .oo-ui-fieldsetLayout.oo-ui-iconElement > .oo-ui-iconElement-icon {
 	right: 0;
 	top: 0.25em;
-	width: 2em;
-	height: 2em;
+	width: 1.5em;
+	height: 1.5em;
 }
 .oo-ui-gridLayout {
 	position: absolute;
@@ -1284,7 +1305,7 @@
 	box-shadow: 0 0.15em 0.5em 0 rgba(0, 0, 0, 0.2);
 }
 .oo-ui-popupWidget-anchored .oo-ui-popupWidget-popup {
-	margin-top: 7px;
+	margin-top: 6px;
 }
 .oo-ui-popupWidget-anchored .oo-ui-popupWidget-anchor:before,
 .oo-ui-popupWidget-anchored .oo-ui-popupWidget-anchor:after {
@@ -1297,14 +1318,14 @@
 	border-top: 0;
 }
 .oo-ui-popupWidget-anchored .oo-ui-popupWidget-anchor:before {
-	bottom: -8px;
-	right: -7px;
+	bottom: -7px;
+	right: -6px;
 	border-bottom-color: #aaaaaa;
 	border-width: 7px;
 }
 .oo-ui-popupWidget-anchored .oo-ui-popupWidget-anchor:after {
-	bottom: -8px;
-	right: -6px;
+	bottom: -7px;
+	right: -5px;
 	border-bottom-color: #ffffff;
 	border-width: 6px;
 }
@@ -1482,8 +1503,8 @@
 	color: #888888;
 }
 .oo-ui-dropdownWidget {
-	position: relative;
 	display: inline-block;
+	position: relative;
 	margin: 0.25em 0;
 	width: 100%;
 	max-width: 50em;
@@ -1507,7 +1528,7 @@
 	background-position: center center;
 	background-repeat: no-repeat;
 }
-.oo-ui-dropdownWidget .oo-ui-menuSelectWidget {
+.oo-ui-dropdownWidget > .oo-ui-menuSelectWidget {
 	z-index: 1;
 	width: 100%;
 }
@@ -1651,9 +1672,9 @@
 	width: 100%;
 	max-width: 50em;
 }
-.oo-ui-comboBoxWidget > .oo-ui-selectWidget {
-	width: 100%;
+.oo-ui-comboBoxWidget > .oo-ui-menuSelectWidget {
 	z-index: 1;
+	width: 100%;
 }
 .oo-ui-comboBoxWidget-handle {
 	border: solid 1px rgba(0, 0, 0, 0.1);
@@ -2150,6 +2171,9 @@
 }
 .oo-ui-icon-link {
 	background-image: /* @embed */ url(themes/apex/images/icons/link.png);
+}
+.oo-ui-icon-lock {
+	background-image: /* @embed */ url(themes/apex/images/icons/lock.png);
 }
 .oo-ui-icon-menu {
 	background-image: /* @embed */ url(themes/apex/images/icons/menu.png);
