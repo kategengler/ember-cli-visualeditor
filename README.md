@@ -4,9 +4,53 @@ Work in progress.
 
 Creating an ember-cli addon that allows to integrate a VisualEditor driven editor component easily.
 
+# Integration into ember-cli app
+
+Add the addon to your `package.json`
+
+```
+  ...
+  "ember-cli-visualeditor": "substance/ember-cli-visualeditor#master"
+  ...
+```
+
+Add this to your `Brocfile.js`:
+
+```
+var EmberApp = require('ember-cli/lib/broccoli/ember-app');
+var mergeTrees = require('broccoli-merge-trees');
+var pickFiles = require('broccoli-static-compiler');
+...
+var app = new EmberApp();
+var appTree = app.toTree();
+...
+var visualEditor = pickFiles('node_modules/ember-cli-visualeditor/dist', {
+  srcDir: '/',
+  destDir: '/visual-editor'
+})
+...
+module.exports = mergeTrees([appTree, visualEditor]);
+```
+
+And finally, before using the visual-editor component, add this to the `beforeModel` function of a route:
+
+```
+import initializeVisualEditor from 'ember-cli-visualeditor/initializers/initialize_visual_editor';
+
+export default Ember.Route.extend({
+
+  beforeModel: function() {
+    return initializeVisualEditor("");
+  },
+  ...
+
+});
+
+```
+
 ## Development
 
-During the course developing this addon, we will contribute improvements for the VisualEditor that
+During the course developing of this addon, we will contribute improvements for the VisualEditor that
 make embedding easier.
 
 ````bash
