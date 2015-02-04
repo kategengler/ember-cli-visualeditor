@@ -30,6 +30,11 @@ var scripts = [
   '/visual-editor/visualEditor.js'
 ];
 
+var styleSheets = [
+  '/visual-editor/lib/oojs-ui/oojs-ui-apex.svg.css',
+  '/visual-editor/visualEditor.css'
+];
+
 var initializeVisualEditor = function(routePrefix) {
   if (routePrefix === undefined) {
     routePrefix = "";
@@ -56,12 +61,28 @@ var initializeVisualEditor = function(routePrefix) {
   });
   chain.then(function() {
     initializeVisualEditor.loaded = true;
+
+    styleSheets.forEach(function(href) {
+      $('<link/>', {
+         rel: 'stylesheet',
+         type: 'text/css',
+         href: routePrefix + href
+      }).appendTo('head');
+    });
+
+    // HACK: this produces a failing request with fallback to 'en'
+    // so we use 'en' right away
+    if ($.i18n().locale === "en-US") {
+      $.i18n().locale = "en";
+    }
+
     ve.init.platform.addMessagePath(routePrefix + '/visual-editor/lib/oojs-ui/i18n/');
     ve.init.platform.addMessagePath(routePrefix + '/visual-editor/modules/ve/i18n/');
+
     return ve.init.platform.initialize();
   });
   chain.fail(function() {
-    console.error('AAAARG', arguments);
+    console.error('Failed to load assets for ember-cli-visualeditor', arguments);
   });
   promise.resolve();
   return chain;
