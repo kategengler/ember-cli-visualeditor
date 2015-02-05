@@ -6,7 +6,7 @@
  * Released under the MIT license
  * http://ve.mit-license.org
  *
- * Date: 2015-01-29T22:48:48Z
+ * Date: 2015-02-05T19:59:13Z
  */
 /*!
  * UnicodeJS v0.1.2
@@ -854,7 +854,7 @@ unicodeJS.wordbreakproperties = {
 /*!
  * VisualEditor namespace.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -883,7 +883,7 @@ ve.now = ( function () {
 /*!
  * VisualEditor utilities.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -2085,7 +2085,7 @@ ve.getSystemPlatform = function () {
 /*!
  * VisualEditor UserInterface TriggerListener class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -2166,7 +2166,7 @@ ve.TriggerListener.prototype.getTriggers = function ( name ) {
 /*!
  * VisualEditor tracking methods.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 ( function () {
@@ -2233,7 +2233,7 @@ ve.TriggerListener.prototype.getTriggers = function ( name ) {
 /*!
  * VisualEditor Initialization namespace.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -2248,7 +2248,7 @@ ve.init = {
 /*!
  * VisualEditor Initialization Platform class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -2290,7 +2290,7 @@ ve.init.Platform.static.getSystemPlatform = function () {
  * Check whether we are running in Internet Explorer.
  *
  * HACK: This should not be needed, and it should eventually be removed. If this hasn't died
- * in a fire by the end of September 2015, Roan has failed.
+ * in a fire by the end of September 2014, Roan has failed.
  *
  * @static
  * @method
@@ -2466,7 +2466,7 @@ ve.init.Platform.prototype.getInitializedPromise = function () {
 /*!
  * VisualEditor Initialization Target class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -2599,7 +2599,7 @@ ve.init.Target.static.documentCommands = ['commandHelp'];
  *
  * @type {string[]} List of command names
  */
-ve.init.Target.static.targetCommands = ['findAndReplace', 'findNext', 'findPrevious'];
+ve.init.Target.static.targetCommands = ['findAndReplace'];
 
 /**
  * List of commands to exclude from the target entirely
@@ -2790,7 +2790,7 @@ ve.init.Target.prototype.setupToolbar = function ( surface ) {
 /*!
  * VisualEditor stand-alone Initialization namespace.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -2805,7 +2805,7 @@ ve.init.sa = {
 /*!
  * VisualEditor Standalone Initialization Platform class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -2987,7 +2987,7 @@ OO.ui.msg = ve.init.platform.getMessage.bind( ve.init.platform );
 /*!
  * VisualEditor Standalone Initialization Target class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -3094,7 +3094,7 @@ ve.init.sa.Target.prototype.setupToolbar = function ( surface ) {
 /*!
  * VisualEditor Range class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -3331,7 +3331,7 @@ ve.Range.prototype.toJSON = function () {
 /*!
  * VisualEditor Node class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -3699,7 +3699,7 @@ ve.Node.prototype.traverseUpstream = function ( callback ) {
 /*!
  * VisualEditor BranchNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -3839,7 +3839,7 @@ ve.BranchNode.prototype.getNodeFromOffset = function ( offset, shallow ) {
 /*!
  * VisualEditor LeafNode mixin.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -3868,7 +3868,7 @@ ve.LeafNode.prototype.hasChildren = function () {
 /*!
  * VisualEditor Document class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -4423,7 +4423,7 @@ ve.Document.prototype.getCoveredSiblingGroups = function ( range ) {
 /*!
  * VisualEditor EventSequencer class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -4855,7 +4855,7 @@ ve.EventSequencer.prototype.callListener = function ( timing, eventName, i, list
 /*!
  * VisualEditor DataModel namespace.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -4873,7 +4873,7 @@ ve.dm = {
 /*!
  * VisualEditor DataModel Model class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -5321,7 +5321,7 @@ ve.dm.Model.prototype.getHashObject = function () {
 /*!
  * VisualEditor ModelRegistry class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 ( function ( ve ) {
 
@@ -5766,7 +5766,7 @@ ve.dm.Model.prototype.getHashObject = function () {
 /*!
  * VisualEditor DataModel NodeFactory class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -6026,7 +6026,7 @@ ve.dm.nodeFactory = new ve.dm.NodeFactory();
 /*!
  * VisualEditor DataModel AnnotationFactory class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -6052,7 +6052,7 @@ ve.dm.annotationFactory = new ve.dm.AnnotationFactory();
 /*!
  * VisualEditor DataModel AnnotationSet class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -6604,7 +6604,7 @@ ve.dm.AnnotationSet.prototype.intersectWith = function ( set ) {
 /*!
  * VisualEditor DataModel MetaItemFactory class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -6660,7 +6660,7 @@ ve.dm.metaItemFactory = new ve.dm.MetaItemFactory();
 /*!
  * VisualEditor DataModel ClassAttribute class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see AUTHORS.txt
+ * @copyright 2011-2014 VisualEditor Team and others; see AUTHORS.txt
  * @license The MIT License (MIT); see LICENSE.txt
  */
 
@@ -6764,69 +6764,9 @@ ve.dm.ClassAttributeNode.static.getClassAttrFromAttributes = function ( attribut
 };
 
 /*!
- * VisualEditor DataModel Alignable node.
- *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
- */
-
-/**
- * A mixin class for Alignable nodes.
- *
- * @class
- * @abstract
- * @constructor
- */
-ve.dm.AlignableNode = function VeDmAlignableNode() {
-};
-
-/* Inheritance */
-
-OO.initClass( ve.dm.AlignableNode );
-
-/**
- * Creates attributes for the data element from DOM elements
- *
- * @static
- * @param {Node[]} domElements DOM elements from converter
- * @param {ve.dm.Converter} converter Converter object
- * @return {Object} Attributes for data element
- */
-ve.dm.AlignableNode.static.toDataElementAttributes = function ( domElements ) {
-	var matches = domElements[0].className.match( /ve-align-([A-Za-z]+)/ );
-
-	if ( matches ) {
-		return {
-			align: matches[1],
-			originalAlign: matches[1]
-		};
-	} else {
-		return {};
-	}
-};
-
-/**
- * Modify DOM element from the data element during toDomElements
- *
- * @param {Node} domElement Parent DOM element
- * @param {Object} dataElement Linear model element
- * @param {HTMLDocument} doc HTML document for creating elements
- * @return {Object} Attributes for DOM element
- */
-ve.dm.AlignableNode.static.modifyDomElement = function ( domElement, dataElement ) {
-	if ( dataElement.attributes.align !== dataElement.attributes.originalAlign ) {
-		if ( dataElement.attributes.originalAlign ) {
-			$( domElement ).removeClass( 've-align-' + dataElement.attributes.originalAlign );
-		}
-		if ( dataElement.attributes.align ) {
-			$( domElement ).addClass( 've-align-' + dataElement.attributes.align );
-		}
-	}
-};
-
-/*!
  * VisualEditor DataModel Focusable node.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -6849,7 +6789,7 @@ ve.dm.FocusableNode.static.isFocusable = true;
 /*!
  * VisualEditor DataModel Scalable class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -7463,7 +7403,7 @@ ve.dm.Scalable.prototype.isDimensionsObjectValid = function ( dimensions ) {
 /*!
  * VisualEditor DataModel Resizable node.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -7510,7 +7450,7 @@ ve.dm.ResizableNode.prototype.createScalable = function () {
 /*!
  * VisualEditor DataModel Node class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -8077,7 +8017,7 @@ ve.dm.Node.prototype.canBeMergedWith = function ( node ) {
 /*!
  * VisualEditor DataModel BranchNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -8300,7 +8240,7 @@ ve.dm.BranchNode.prototype.hasSlugAtOffset = function ( offset ) {
 /*!
  * VisualEditor DataModel LeafNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -8351,7 +8291,7 @@ ve.dm.LeafNode.prototype.getAnnotations = function () {
 /*!
  * VisualEditor DataModel Annotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -8544,7 +8484,7 @@ ve.dm.Annotation.prototype.compareToForSerialization = function ( annotation ) {
 /*!
  * VisualEditor DataModel InternalList class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -8754,15 +8694,13 @@ ve.dm.InternalList.prototype.getNextUniqueNumber = function () {
  * @returns {Array} Linear model data
  */
 ve.dm.InternalList.prototype.convertToData = function ( converter, doc ) {
-	var i, length, itemData, div,
+	var i, length, itemData,
 		itemHtmlQueue = this.getItemHtmlQueue(), list = [];
 
 	list.push( { type: 'internalList' } );
 	for ( i = 0, length = itemHtmlQueue.length; i < length; i++ ) {
 		if ( itemHtmlQueue[i] !== '' ) {
-			div = doc.createElement( 'div' );
-			div.innerHTML = itemHtmlQueue[i];
-			itemData = converter.getDataFromDomSubtree( div );
+			itemData = converter.getDataFromDomSubtree( $( '<div>', doc ).html( itemHtmlQueue[i] )[0] );
 			list = list.concat(
 				[{ type: 'internalItem' }],
 				itemData,
@@ -9025,7 +8963,7 @@ ve.dm.InternalList.prototype.merge = function ( list, commonLength ) {
 /*!
  * VisualEditor DataModel MetaItem class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -9191,7 +9129,7 @@ ve.dm.MetaItem.prototype.isAttached = function () {
 /*!
  * VisualEditor DataModel MetaList class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -9949,7 +9887,7 @@ ve.dm.TableMatrixCell.prototype.equals = function ( other ) {
 /*!
  * VisualEditor DataModel TransactionProcessor class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -10491,7 +10429,7 @@ ve.dm.TransactionProcessor.processors.replaceMetadata = function ( op ) {
 /*!
  * VisualEditor DataModel Transaction class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -11952,7 +11890,7 @@ ve.dm.Transaction.prototype.pushRemoval = function ( doc, currentOffset, range, 
 /*!
  * VisualEditor Selection class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -12149,7 +12087,7 @@ ve.dm.selectionFactory = new OO.Factory();
 /*!
  * VisualEditor Text Selection class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -12283,7 +12221,7 @@ ve.dm.selectionFactory.register( ve.dm.LinearSelection );
 /*!
  * VisualEditor Null Selection class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -12384,7 +12322,7 @@ ve.dm.selectionFactory.register( ve.dm.NullSelection );
 /*!
  * VisualEditor Table Selection class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -12777,7 +12715,7 @@ ve.dm.selectionFactory.register( ve.dm.TableSelection );
 /*!
  * VisualEditor DataModel Surface class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -13702,7 +13640,7 @@ ve.dm.Surface.prototype.onDocumentPreSynchronize = function ( tx ) {
 /*!
  * VisualEditor DataModel Fragment class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -14932,7 +14870,7 @@ ve.dm.SurfaceFragment.prototype.isolateAndUnwrap = function ( isolateForType ) {
 /*!
  * VisualEditor DataString class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -14968,7 +14906,7 @@ ve.dm.DataString.prototype.read = function ( position ) {
 /*!
  * VisualEditor DataModel Document class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -16291,7 +16229,7 @@ ve.dm.Document.prototype.getDir = function () {
 /*!
  * VisualEditor DataModel DocumentSlice class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -16334,7 +16272,7 @@ ve.dm.DocumentSlice.prototype.getBalancedData = function () {
  *
  * Class containing linear data and an index-value store.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -16577,7 +16515,7 @@ ve.dm.LinearData.prototype.clone = function () {
 /*!
  * VisualEditor DataModel DocumentSynchronizer class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -16912,7 +16850,7 @@ ve.dm.DocumentSynchronizer.prototype.synchronize = function () {
 /*!
  * VisualEditor IndexValueStore class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -17066,7 +17004,7 @@ ve.dm.IndexValueStore.prototype.merge = function ( other ) {
 /*!
  * VisualEditor DataModel Converter class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -18651,7 +18589,7 @@ ve.dm.converter = new ve.dm.Converter( ve.dm.modelRegistry, ve.dm.nodeFactory, v
  *
  * Class containing Flat linear data and an index-value store.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -18738,7 +18676,7 @@ ve.dm.FlatLinearData.prototype.isCloseElementData = function ( offset ) {
  *
  * Class containing element linear data and an index-value store.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -18762,16 +18700,13 @@ OO.inheritClass( ve.dm.ElementLinearData, ve.dm.FlatLinearData );
 /* Static Methods */
 
 /**
- * Compare two elements' basic properties
- *
- * Elements are comparable if they have the same type and attributes, or
- * have the same text data.
+ * Compare two elements ignoring any annotations
  *
  * @param {Object|Array|string} a First element
  * @param {Object|Array|string} b Second element
  * @returns {boolean} Elements are comparable
  */
-ve.dm.ElementLinearData.static.compareElements = function ( a, b ) {
+ve.dm.ElementLinearData.static.compareUnannotated = function ( a, b ) {
 	if ( a === undefined || b === undefined ) {
 		return false;
 	}
@@ -18785,16 +18720,14 @@ ve.dm.ElementLinearData.static.compareElements = function ( a, b ) {
 		bPlain = b[0];
 	}
 	if ( a && a.type ) {
-		aPlain = {
-			type: a.type,
-			attributes: a.attributes
-		};
+		aPlain = ve.copy( a );
+		delete aPlain.annotations;
+		delete aPlain.internal;
 	}
 	if ( b && b.type ) {
-		bPlain = {
-			type: b.type,
-			attributes: b.attributes
-		};
+		bPlain = ve.copy( b );
+		delete bPlain.annotations;
+		delete bPlain.internal;
 	}
 	return ve.compare( aPlain, bPlain );
 };
@@ -19744,7 +19677,7 @@ ve.dm.ElementLinearData.prototype.countNonInternalElements = function () {
  *
  * Class containing meta linear data and an index-value store.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -19898,7 +19831,7 @@ ve.dm.MetaLinearData.prototype.setAnnotationsAtOffsetAndIndex = function ( offse
 /*!
  * VisualEditor DataModel GeneratedContentNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -19932,7 +19865,7 @@ ve.dm.GeneratedContentNode.static.storeGeneratedContents = function ( dataElemen
 /*!
  * VisualEditor DataModel AlienNode, AlienBlockNode and AlienInlineNode classes.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -20051,7 +19984,7 @@ ve.dm.modelRegistry.register( ve.dm.AlienInlineNode );
 /*!
  * VisualEditor DataModel BlockquoteNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see AUTHORS.txt
+ * @copyright 2011-2014 VisualEditor Team and others; see AUTHORS.txt
  * @license The MIT License (MIT); see LICENSE.txt
  */
 
@@ -20088,7 +20021,7 @@ ve.dm.modelRegistry.register( ve.dm.BlockquoteNode );
 /*!
  * VisualEditor DataModel BreakNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -20124,7 +20057,7 @@ ve.dm.modelRegistry.register( ve.dm.BreakNode );
 /*!
  * VisualEditor DataModel CenterNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -20159,7 +20092,7 @@ ve.dm.modelRegistry.register( ve.dm.CenterNode );
 /*!
  * VisualEditor DataModel DefinitionListItemNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -20210,7 +20143,7 @@ ve.dm.modelRegistry.register( ve.dm.DefinitionListItemNode );
 /*!
  * VisualEditor DataModel DefinitionListNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -20247,7 +20180,7 @@ ve.dm.modelRegistry.register( ve.dm.DefinitionListNode );
 /*!
  * VisualEditor DataModel DivNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -20282,7 +20215,7 @@ ve.dm.modelRegistry.register( ve.dm.DivNode );
 /*!
  * VisualEditor DataModel DocumentNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -20323,7 +20256,7 @@ ve.dm.modelRegistry.register( ve.dm.DocumentNode );
 /*!
  * VisualEditor DataModel HeadingNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -20382,7 +20315,7 @@ ve.dm.modelRegistry.register( ve.dm.HeadingNode );
 /*!
  * VisualEditor DataModel InternalItemNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -20421,7 +20354,7 @@ ve.dm.modelRegistry.register( ve.dm.InternalItemNode );
 /*!
  * VisualEditor DataModel InternalListNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -20460,7 +20393,7 @@ ve.dm.modelRegistry.register( ve.dm.InternalListNode );
 /*!
  * VisualEditor DataModel ListItemNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -20497,7 +20430,7 @@ ve.dm.modelRegistry.register( ve.dm.ListItemNode );
 /*!
  * VisualEditor DataModel ListNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -20554,7 +20487,7 @@ ve.dm.modelRegistry.register( ve.dm.ListNode );
 /*!
  * VisualEditor DataModel ParagraphNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -20591,7 +20524,7 @@ ve.dm.modelRegistry.register( ve.dm.ParagraphNode );
 /*!
  * VisualEditor DataModel PreformattedNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -20630,7 +20563,7 @@ ve.dm.modelRegistry.register( ve.dm.PreformattedNode );
 /*!
  * VisualEditor DataModel TableCaptionNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -20667,7 +20600,7 @@ ve.dm.modelRegistry.register( ve.dm.TableCaptionNode );
 /*!
  * VisualEditor DataModel TableCellNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -20861,7 +20794,7 @@ ve.dm.modelRegistry.register( ve.dm.TableCellNode );
 /*!
  * VisualEditor DataModel TableNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -21101,7 +21034,7 @@ ve.dm.TableNodeCellIterator.prototype.nextCell = function () {
 /*!
  * VisualEditor DataModel TableRowNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -21178,7 +21111,7 @@ ve.dm.modelRegistry.register( ve.dm.TableRowNode );
 /*!
  * VisualEditor DataModel TableSelectionNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -21255,7 +21188,7 @@ ve.dm.modelRegistry.register( ve.dm.TableSectionNode );
 /*!
  * VisualEditor DataModel TextNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -21306,7 +21239,7 @@ ve.dm.modelRegistry.register( ve.dm.TextNode );
 /*!
  * VisualEditor DataModel ImageNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -21354,7 +21287,7 @@ ve.dm.ImageNode.prototype.createScalable = function () {
 /*!
  * VisualEditor DataModel BlockImageNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -21484,7 +21417,7 @@ ve.dm.modelRegistry.register( ve.dm.BlockImageNode );
 /*!
  * VisualEditor DataModel block image caption node class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -21521,7 +21454,7 @@ ve.dm.modelRegistry.register( ve.dm.BlockImageCaptionNode );
 /*!
  * VisualEditor DataModel InlineImageNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -21586,7 +21519,7 @@ ve.dm.modelRegistry.register( ve.dm.InlineImageNode );
 /*!
  * VisualEditor DataModel LanguageAnnotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -21664,7 +21597,7 @@ ve.dm.modelRegistry.register( ve.dm.LanguageAnnotation );
 /*!
  * VisualEditor DataModel LinkAnnotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -21752,7 +21685,7 @@ ve.dm.modelRegistry.register( ve.dm.LinkAnnotation );
 /*!
  * VisualEditor DataModel TextStyleAnnotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -21810,7 +21743,7 @@ ve.dm.modelRegistry.register( ve.dm.TextStyleAnnotation );
 /*!
  * VisualEditor DataModel AbbreviationAnnotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -21845,7 +21778,7 @@ ve.dm.modelRegistry.register( ve.dm.AbbreviationAnnotation );
 /*!
  * VisualEditor DataModel BigAnnotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -21880,7 +21813,7 @@ ve.dm.modelRegistry.register( ve.dm.BigAnnotation );
 /*!
  * VisualEditor DataModel BoldAnnotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -21915,7 +21848,7 @@ ve.dm.modelRegistry.register( ve.dm.BoldAnnotation );
 /*!
  * VisualEditor DataModel CodeSampleAnnotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -21950,7 +21883,7 @@ ve.dm.modelRegistry.register( ve.dm.CodeSampleAnnotation );
 /*!
  * VisualEditor DataModel CodeAnnotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -21985,7 +21918,7 @@ ve.dm.modelRegistry.register( ve.dm.CodeAnnotation );
 /*!
  * VisualEditor DataModel DatetimeAnnotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -22020,7 +21953,7 @@ ve.dm.modelRegistry.register( ve.dm.DatetimeAnnotation );
 /*!
  * VisualEditor DataModel DefinitionAnnotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -22055,7 +21988,7 @@ ve.dm.modelRegistry.register( ve.dm.DefinitionAnnotation );
 /*!
  * VisualEditor DataModel HighlightAnnotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -22090,7 +22023,7 @@ ve.dm.modelRegistry.register( ve.dm.HighlightAnnotation );
 /*!
  * VisualEditor DataModel ItalicAnnotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -22125,7 +22058,7 @@ ve.dm.modelRegistry.register( ve.dm.ItalicAnnotation );
 /*!
  * VisualEditor DataModel QuotationAnnotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -22160,7 +22093,7 @@ ve.dm.modelRegistry.register( ve.dm.QuotationAnnotation );
 /*!
  * VisualEditor DataModel SmallAnnotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -22195,7 +22128,7 @@ ve.dm.modelRegistry.register( ve.dm.SmallAnnotation );
 /*!
  * VisualEditor DataModel SpanAnnotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -22230,7 +22163,7 @@ ve.dm.modelRegistry.register( ve.dm.SpanAnnotation );
 /*!
  * VisualEditor DataModel StrikethroughAnnotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -22265,7 +22198,7 @@ ve.dm.modelRegistry.register( ve.dm.StrikethroughAnnotation );
 /*!
  * VisualEditor DataModel SubscriptAnnotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -22302,7 +22235,7 @@ ve.dm.modelRegistry.register( ve.dm.SubscriptAnnotation );
 /*!
  * VisualEditor DataModel SuperscriptAnnotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -22339,7 +22272,7 @@ ve.dm.modelRegistry.register( ve.dm.SuperscriptAnnotation );
 /*!
  * VisualEditor DataModel UnderlineAnnotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -22374,7 +22307,7 @@ ve.dm.modelRegistry.register( ve.dm.UnderlineAnnotation );
 /*!
  * VisualEditor DataModel UserInputAnnotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -22409,7 +22342,7 @@ ve.dm.modelRegistry.register( ve.dm.UserInputAnnotation );
 /*!
  * VisualEditor DataModel VariableAnnotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -22444,7 +22377,7 @@ ve.dm.modelRegistry.register( ve.dm.VariableAnnotation );
 /*!
  * VisualEditor DataModel AlienMetaItem class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -22492,7 +22425,7 @@ ve.dm.modelRegistry.register( ve.dm.AlienMetaItem );
 /*!
  * VisualEditor DataModel CommentMetaItem class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -22533,7 +22466,7 @@ ve.dm.modelRegistry.register( ve.dm.CommentMetaItem );
 /*!
  * VisualEditor DataModel CommentNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -22647,7 +22580,7 @@ ve.dm.modelRegistry.register( ve.dm.FakeCommentNode );
 /*!
  * VisualEditor ContentEditable namespace.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -23020,7 +22953,7 @@ ve.ce.isShortcutKey = function ( e ) {
 /*!
  * VisualEditor Content Editable Range State class
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -23252,7 +23185,7 @@ ve.ce.RangeState.prototype.compareAnchorNode = function ( selection ) {
 /*!
  * VisualEditor ContentEditable AnnotationFactory class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -23308,7 +23241,7 @@ ve.ce.annotationFactory = new ve.ce.AnnotationFactory();
 /*!
  * VisualEditor ContentEditable NodeFactory class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -23381,7 +23314,7 @@ ve.ce.nodeFactory = new ve.ce.NodeFactory();
 /*!
  * VisualEditor ContentEditable Document class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -23641,7 +23574,7 @@ ve.ce.Document.prototype.getDirectionFromSelection = function ( selection ) {
 /*!
  * VisualEditor ContentEditable View class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -23838,7 +23771,7 @@ ve.ce.View.prototype.getResolvedAttribute = function ( key ) {
 /*!
  * VisualEditor ContentEditable Annotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -23917,7 +23850,7 @@ ve.ce.Annotation.prototype.getModelHtmlDocument = function () {
 /*!
  * VisualEditor ContentEditable Node class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -24115,7 +24048,7 @@ ve.ce.Node.prototype.getModelHtmlDocument = function () {
 /*!
  * VisualEditor ContentEditable BranchNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -24437,7 +24370,7 @@ ve.ce.BranchNode.prototype.destroy = function () {
 /*!
  * VisualEditor ContentEditable ContentBranchNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -24849,7 +24782,7 @@ ve.ce.ContentBranchNode.prototype.onTeardown = function () {
 /*!
  * VisualEditor ContentEditable LeafNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -24925,50 +24858,9 @@ ve.ce.LeafNode.prototype.getAnnotatedHtml = function () {
 };
 
 /*!
- * VisualEditor ContentEditable AlignableNode class.
- *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
- */
-
-/**
- * ContentEditable Alignable node.
- *
- * @class
- * @abstract
- *
- * @constructor
- */
-ve.ce.AlignableNode = function VeCeAlignableNode( $alignable, config ) {
-	config = config || {};
-
-	this.$alignable = $alignable || this.$element;
-
-	if ( this.model.getAttribute( 'align' ) ) {
-		this.$alignable.addClass( 've-align-' + this.model.getAttribute( 'align' ) );
-	}
-
-	this.model.connect( this, { attributeChange: 'onAlignableAttributeChange' } );
-};
-
-/* Inheritance */
-
-OO.initClass( ve.ce.AlignableNode );
-
-ve.ce.AlignableNode.prototype.onAlignableAttributeChange = function ( key, from, to ) {
-	if ( key === 'align' ) {
-		if ( from ) {
-			this.$alignable.removeClass( 've-align-' + from );
-		}
-		if ( to ) {
-			this.$alignable.addClass( 've-align-' + to );
-		}
-	}
-};
-
-/*!
  * VisualEditor ContentEditable FocusableNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -25519,7 +25411,7 @@ ve.ce.FocusableNode.prototype.getStartAndEndRects = function () {
 /*!
  * VisualEditor ContentEditable ResizableNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -25699,22 +25591,24 @@ ve.ce.ResizableNode.prototype.updateSizeLabel = function () {
  * @param {string[]} [handles] List of handles to show: 'nw', 'ne', 'sw', 'se'. Show all if undefined.
  */
 ve.ce.ResizableNode.prototype.showHandles = function ( handles ) {
-	var i, len,
-		add = [],
-		remove = [],
-		allDirections = [ 'nw', 'ne', 'sw', 'se' ];
+	var i, selectors;
 
-	for ( i = 0, len = allDirections.length; i < len; i++ ) {
-		if ( handles === undefined || handles.indexOf( allDirections[i] ) !== -1 ) {
-			remove.push( 've-ce-resizableNode-hide-' + allDirections[i] );
-		} else {
-			add.push( 've-ce-resizableNode-hide-' + allDirections[i] );
+	if ( handles === undefined ) {
+		this.$resizeHandles.find( 'div' ).show();
+	} else {
+		this.$resizeHandles.find( 'div' ).hide();
+		i = handles.length;
+		selectors = [];
+		while ( i-- ) {
+			// The following classes can be used here:
+			// ve-ce-resizableNode-nwHandle
+			// ve-ce-resizableNode-neHandle
+			// ve-ce-resizableNode-swHandle
+			// ve-ce-resizableNode-seHandle
+			selectors.push( '.ve-ce-resizableNode-' + handles[i] + 'Handle' );
 		}
+		this.$resizeHandles.find( selectors.join( ',' ) ).show();
 	}
-
-	this.$resizeHandles
-		.addClass( add.join( ' ' ) )
-		.removeClass( remove.join( ' ' ) );
 };
 
 /**
@@ -25725,10 +25619,11 @@ ve.ce.ResizableNode.prototype.showHandles = function ( handles ) {
 ve.ce.ResizableNode.prototype.onResizableFocus = function () {
 	var surface = this.getRoot().getSurface();
 
-	this.$resizeHandles.appendTo( surface.getSurface().$controls );
 	if ( this.$sizeLabel ) {
+		// Attach the size label first so it doesn't mask the resize handles
 		this.$sizeLabel.appendTo( surface.getSurface().$controls );
 	}
+	this.$resizeHandles.appendTo( surface.getSurface().$controls );
 
 	// Call getScalable to pre-fetch the extended data
 	this.model.getScalable();
@@ -26032,7 +25927,7 @@ ve.ce.ResizableNode.prototype.getAttributeChanges = function ( width, height ) {
 /*!
  * VisualEditor ContentEditable Surface class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -26323,8 +26218,7 @@ ve.ce.Surface.prototype.destroy = function () {
 	// Disconnect DOM events on the window
 	this.$window.off( 'resize', this.onWindowResizeHandler );
 
-	// HACK: Blur to make selection/cursor disappear (needed in Firefox
-	// in some cases, and in iOS to hide the keyboard)
+	// HACK: Blur to make selection/cursor disappear (needed in Firefox in some cases)
 	this.$documentNode[0].blur();
 
 	// Remove DOM elements (also disconnects their events)
@@ -26723,11 +26617,7 @@ ve.ce.Surface.prototype.updateDeactivatedSelection = function () {
 
 	this.$deactivatedSelection.empty();
 
-	if (
-		!this.deactivated || this.focusedNode ||
-		!( selection instanceof ve.dm.LinearSelection ) ||
-		selection.isCollapsed()
-	) {
+	if ( !this.deactivated || this.focusedNode || !( selection instanceof ve.dm.LinearSelection ) ) {
 		return;
 	}
 	rects = this.getSelectionRects( selection );
@@ -27576,6 +27466,9 @@ ve.ce.Surface.prototype.beforePaste = function ( e ) {
 		textStart = textEnd = 0;
 		nodeRange = node.getRange();
 		contextElement = node.getClonedElement();
+		// Throw away inner whitespace and other internal properties
+		// otherwise our textStart/End offsets may be wrong.
+		delete contextElement.internal;
 		context = [ contextElement ];
 		// If there is content to the left of the cursor, put a placeholder
 		// character to the left of the cursor
@@ -27597,9 +27490,6 @@ ve.ce.Surface.prototype.beforePaste = function ( e ) {
 		}
 		context.push( { type: '/' + context[0].type } );
 
-		// Throw away 'internal', specifically inner whitespace,
-		// before conversion as it can affect textStart/End offsets.
-		delete contextElement.internal;
 		ve.dm.converter.getDomSubtreeFromModel(
 			new ve.dm.Document(
 				new ve.dm.ElementLinearData( doc.getStore(), context ),
@@ -27839,7 +27729,7 @@ ve.ce.Surface.prototype.afterPaste = function () {
 			left = 0;
 			while (
 				context.getLength() &&
-				ve.dm.ElementLinearData.static.compareElements(
+				ve.dm.ElementLinearData.static.compareUnannotated(
 					data.getData( left ),
 					data.isElementData( left ) ? context.getData( 0 ) : beforePasteData.leftText
 				)
@@ -27852,7 +27742,7 @@ ve.ce.Surface.prototype.afterPaste = function () {
 			right = internalListRange.start;
 			while (
 				context.getLength() &&
-				ve.dm.ElementLinearData.static.compareElements(
+				ve.dm.ElementLinearData.static.compareUnannotated(
 					data.getData( right - 1 ),
 					data.isElementData( right - 1 ) ? context.getData( context.getLength() - 1 ) : beforePasteData.rightText
 				)
@@ -28244,11 +28134,6 @@ ve.ce.Surface.prototype.updateSlug = function () {
 				this.slugFragment = null;
 			}
 		} else {
-			// Unwrap the ve-ce-branchNode-blockSlugWrapper wrapper from the paragraph
-			this.getDocument().getBranchNodeFromOffset( slugFragmentRange.start + 1 ).$element.unwrap();
-			// Modifying the DOM above breaks cursor position, so restore
-			this.showSelection( this.getModel().getSelection() );
-
 			model.applyStaging();
 			this.slugFragment = null;
 		}
@@ -29112,50 +28997,6 @@ ve.ce.Surface.prototype.handleTableEditingEscape = function ( e ) {
 };
 
 /**
- * Get an approximate range covering data visible in the viewport
- *
- * It is assumed that vertical offset increases as you progress through the DM.
- * Items with custom positioning may throw off results given by this method, so
- * it should only be treated as an approximation.
- *
- * @return {ve.Range} Range covering data visible in the viewport
- */
-ve.ce.Surface.prototype.getViewportRange = function () {
-	var surface = this,
-		documentModel = this.getModel().getDocument(),
-		data = documentModel.data,
-		surfaceRect = this.getSurface().getBoundingClientRect(),
-		padding = 50,
-		top = Math.max( this.surface.toolbarHeight - surfaceRect.top - padding, 0 ),
-		bottom = top + this.$window.height() - this.surface.toolbarHeight + ( padding * 2 ),
-		documentRange = new ve.Range( 0, this.getModel().getDocument().getInternalList().getListNode().getOuterRange().start );
-
-	function binarySearch( offset, range, side ) {
-		var mid, rect, start = range.start, end = range.end, lastLength = Infinity;
-		while ( range.getLength() < lastLength ) {
-			lastLength = range.getLength();
-			mid = data.getNearestContentOffset(
-				Math.round( ( range.start + range.end ) / 2 )
-			);
-			rect = surface.getSelectionBoundingRect( new ve.dm.LinearSelection( documentModel, new ve.Range( mid ) ) );
-			if ( rect[side] > offset ) {
-				end = mid;
-				range = new ve.Range( range.start, end );
-			} else {
-				start = mid;
-				range = new ve.Range( start, range.end );
-			}
-		}
-		return side === 'bottom' ? start : end;
-	}
-
-	return new ve.Range(
-		binarySearch( top, documentRange, 'bottom' ),
-		binarySearch( bottom, documentRange, 'top' )
-	);
-};
-
-/**
  * Show selection
  *
  * @method
@@ -29492,7 +29333,7 @@ ve.ce.Surface.prototype.setNotUnicorningAll = function ( node ) {
 /*!
  * VisualEditor ContentEditable Surface class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -29796,7 +29637,7 @@ ve.ce.SurfaceObserver.prototype.getRange = function () {
 /*!
  * VisualEditor ContentEditable GeneratedContentNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -29902,13 +29743,11 @@ ve.ce.GeneratedContentNode.prototype.getRenderedDomElements = function ( domElem
 		this.setAttribute( attr, this[attr] );
 	}
 
-	// Clone the elements into the target document
-	$rendering = $( ve.copyDomElements( domElements, doc ) );
-
+	// Copy domElements so we can modify the elements
 	// Filter out link and style tags for bug 50043
 	// Previously filtered out meta tags, but restore these as they
 	// can be made visible.
-	$rendering = $rendering.not( 'link, style' );
+	$rendering = this.$( domElements ).not( 'link, style' );
 	// Also remove link and style tags nested inside other tags
 	$rendering.find( 'link, style' ).remove();
 
@@ -29931,7 +29770,8 @@ ve.ce.GeneratedContentNode.prototype.getRenderedDomElements = function ( domElem
 			.each( resolveAttribute );
 	}
 
-	return $rendering.toArray();
+	// Clone the elements into the target document
+	return ve.copyDomElements( $rendering.toArray(), doc );
 };
 
 /**
@@ -30115,7 +29955,7 @@ ve.ce.GeneratedContentNode.prototype.getResizableElement = function () {
 /*!
  * VisualEditor ContentEditable AlienNode, AlienBlockNode and AlienInlineNode classes.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -30233,7 +30073,7 @@ ve.ce.nodeFactory.register( ve.ce.AlienInlineNode );
 /*!
  * VisualEditor ContentEditable BlockquoteNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see AUTHORS.txt
+ * @copyright 2011-2014 VisualEditor Team and others; see AUTHORS.txt
  * @license The MIT License (MIT); see LICENSE.txt
  */
 
@@ -30241,7 +30081,7 @@ ve.ce.nodeFactory.register( ve.ce.AlienInlineNode );
  * ContentEditable Blockquote node.
  *
  * @class
- * @extends ve.ce.ContentBranchNode
+ * @extends ve.ce.BranchNode
  * @constructor
  * @param {ve.dm.BlockquoteNode} model Model to observe
  * @param {Object} [config] Configuration options
@@ -30268,7 +30108,7 @@ ve.ce.nodeFactory.register( ve.ce.BlockquoteNode );
 /*!
  * VisualEditor ContentEditable BreakNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -30305,7 +30145,7 @@ ve.ce.nodeFactory.register( ve.ce.BreakNode );
 /*!
  * VisualEditor ContentEditable CenterNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -30339,7 +30179,7 @@ ve.ce.nodeFactory.register( ve.ce.CenterNode );
 /*!
  * VisualEditor ContentEditable CommentNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -30399,7 +30239,7 @@ ve.ce.nodeFactory.register( ve.ce.CommentNode );
 /*!
  * VisualEditor ContentEditable DefinitionListItemNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -30467,7 +30307,7 @@ ve.ce.nodeFactory.register( ve.ce.DefinitionListItemNode );
 /*!
  * VisualEditor ContentEditable DefinitionListNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -30501,7 +30341,7 @@ ve.ce.nodeFactory.register( ve.ce.DefinitionListNode );
 /*!
  * VisualEditor ContentEditable DivNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -30533,7 +30373,7 @@ ve.ce.nodeFactory.register( ve.ce.DivNode );
 /*!
  * VisualEditor ContentEditable DocumentNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -30618,14 +30458,14 @@ ve.ce.nodeFactory.register( ve.ce.DocumentNode );
 /*!
  * VisualEditor ContentEditable HeadingNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
  * ContentEditable heading node.
  *
  * @class
- * @extends ve.ce.ContentBranchNode
+ * @extends ve.ce.BranchNode
  * @constructor
  * @param {ve.dm.HeadingNode} model Model to observe
  * @param {Object} [config] Configuration options
@@ -30684,7 +30524,7 @@ ve.ce.nodeFactory.register( ve.ce.HeadingNode );
 /*!
  * VisualEditor InternalItemNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -30720,7 +30560,7 @@ ve.ce.nodeFactory.register( ve.ce.InternalItemNode );
 /*!
  * VisualEditor InternalListNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -30764,7 +30604,7 @@ ve.ce.nodeFactory.register( ve.ce.InternalListNode );
 /*!
  * VisualEditor ContentEditable ListItemNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -30800,7 +30640,7 @@ ve.ce.nodeFactory.register( ve.ce.ListItemNode );
 /*!
  * VisualEditor ContentEditable ListNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -30866,14 +30706,14 @@ ve.ce.nodeFactory.register( ve.ce.ListNode );
 /*!
  * VisualEditor ContentEditable ParagraphNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
  * ContentEditable paragraph node.
  *
  * @class
- * @extends ve.ce.ContentBranchNode
+ * @extends ve.ce.BranchNode
  * @constructor
  * @param {ve.dm.ParagraphNode} model Model to observe
  * @param {Object} [config] Configuration options
@@ -30909,14 +30749,14 @@ ve.ce.nodeFactory.register( ve.ce.ParagraphNode );
 /*!
  * VisualEditor ContentEditable PreformattedNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
  * ContentEditable preformatted node.
  *
  * @class
- * @extends ve.ce.ContentBranchNode
+ * @extends ve.ce.BranchNode
  * @constructor
  * @param {ve.dm.PreformattedNode} model Model to observe
  * @param {Object} [config] Configuration options
@@ -30943,7 +30783,7 @@ ve.ce.nodeFactory.register( ve.ce.PreformattedNode );
 /*!
  * VisualEditor ContentEditable TableCaptionNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -30992,7 +30832,7 @@ ve.ce.nodeFactory.register( ve.ce.TableCaptionNode );
 /*!
  * VisualEditor ContentEditable TableCellNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -31115,7 +30955,7 @@ ve.ce.nodeFactory.register( ve.ce.TableCellNode );
 /*!
  * VisualEditor ContentEditable TableNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -31577,7 +31417,7 @@ ve.ce.nodeFactory.register( ve.ce.TableNode );
 /*!
  * VisualEditor ContentEditable TableRowNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -31611,7 +31451,7 @@ ve.ce.nodeFactory.register( ve.ce.TableRowNode );
 /*!
  * VisualEditor ContentEditable TableSectionNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -31677,7 +31517,7 @@ ve.ce.nodeFactory.register( ve.ce.TableSectionNode );
 /*!
  * VisualEditor ContentEditable TextNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -31786,7 +31626,7 @@ ve.ce.nodeFactory.register( ve.ce.TextNode );
 /*!
  * VisualEditor ContentEditable ImageNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -31878,7 +31718,7 @@ ve.ce.ImageNode.prototype.onLoad = function () {
 /*!
  * VisualEditor ContentEditable block image node class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -31940,7 +31780,7 @@ ve.ce.nodeFactory.register( ve.ce.BlockImageNode );
 /*!
  * VisualEditor ContentEditable block image caption node class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -31974,7 +31814,7 @@ ve.ce.nodeFactory.register( ve.ce.BlockImageCaptionNode );
 /*!
  * VisualEditor ContentEditable InlineImageNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -32032,7 +31872,7 @@ ve.ce.nodeFactory.register( ve.ce.InlineImageNode );
 /*!
  * VisualEditor ContentEditable LanguageAnnotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -32094,7 +31934,7 @@ ve.ce.annotationFactory.register( ve.ce.LanguageAnnotation );
 /*!
  * VisualEditor ContentEditable LinkAnnotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -32154,7 +31994,7 @@ ve.ce.annotationFactory.register( ve.ce.LinkAnnotation );
 /*!
  * VisualEditor ContentEditable TextStyleAnnotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -32197,7 +32037,7 @@ ve.ce.annotationFactory.register( ve.ce.TextStyleAnnotation );
 /*!
  * VisualEditor ContentEditable AbbreviationAnnotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -32235,7 +32075,7 @@ ve.ce.annotationFactory.register( ve.ce.AbbreviationAnnotation );
 /*!
  * VisualEditor ContentEditable BigAnnotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -32273,7 +32113,7 @@ ve.ce.annotationFactory.register( ve.ce.BigAnnotation );
 /*!
  * VisualEditor ContentEditable BoldAnnotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -32311,7 +32151,7 @@ ve.ce.annotationFactory.register( ve.ce.BoldAnnotation );
 /*!
  * VisualEditor ContentEditable CodeAnnotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -32349,7 +32189,7 @@ ve.ce.annotationFactory.register( ve.ce.CodeAnnotation );
 /*!
  * VisualEditor ContentEditable CodeSampleAnnotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -32387,7 +32227,7 @@ ve.ce.annotationFactory.register( ve.ce.CodeSampleAnnotation );
 /*!
  * VisualEditor ContentEditable DatetimeAnnotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -32425,7 +32265,7 @@ ve.ce.annotationFactory.register( ve.ce.DatetimeAnnotation );
 /*!
  * VisualEditor ContentEditable DefinitionAnnotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -32463,7 +32303,7 @@ ve.ce.annotationFactory.register( ve.ce.DefinitionAnnotation );
 /*!
  * VisualEditor ContentEditable HighlightAnnotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -32501,7 +32341,7 @@ ve.ce.annotationFactory.register( ve.ce.HighlightAnnotation );
 /*!
  * VisualEditor ContentEditable ItalicAnnotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -32539,7 +32379,7 @@ ve.ce.annotationFactory.register( ve.ce.ItalicAnnotation );
 /*!
  * VisualEditor ContentEditable QuotationAnnotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -32577,7 +32417,7 @@ ve.ce.annotationFactory.register( ve.ce.QuotationAnnotation );
 /*!
  * VisualEditor ContentEditable SmallAnnotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -32615,7 +32455,7 @@ ve.ce.annotationFactory.register( ve.ce.SmallAnnotation );
 /*!
  * VisualEditor ContentEditable SpanAnnotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -32653,7 +32493,7 @@ ve.ce.annotationFactory.register( ve.ce.SpanAnnotation );
 /*!
  * VisualEditor ContentEditable StrikethroughAnnotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -32691,7 +32531,7 @@ ve.ce.annotationFactory.register( ve.ce.StrikethroughAnnotation );
 /*!
  * VisualEditor ContentEditable SubscriptAnnotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -32729,7 +32569,7 @@ ve.ce.annotationFactory.register( ve.ce.SubscriptAnnotation );
 /*!
  * VisualEditor ContentEditable SuperscriptAnnotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -32767,7 +32607,7 @@ ve.ce.annotationFactory.register( ve.ce.SuperscriptAnnotation );
 /*!
  * VisualEditor ContentEditable UnderlineAnnotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -32805,7 +32645,7 @@ ve.ce.annotationFactory.register( ve.ce.UnderlineAnnotation );
 /*!
  * VisualEditor ContentEditable UserInputAnnotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -32843,7 +32683,7 @@ ve.ce.annotationFactory.register( ve.ce.UserInputAnnotation );
 /*!
  * VisualEditor ContentEditable VariableAnnotation class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -32881,7 +32721,7 @@ ve.ce.annotationFactory.register( ve.ce.VariableAnnotation );
 /*!
  * VisualEditor UserInterface namespace.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -32904,7 +32744,7 @@ ve.ui.windowFactory.register( OO.ui.MessageDialog );
 /*!
  * VisualEditor UserInterface Overlay class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -32932,7 +32772,7 @@ OO.inheritClass( ve.ui.Overlay, OO.ui.Element );
 /*!
  * VisualEditor UserInterface Surface class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -33382,7 +33222,7 @@ ve.ui.Surface.prototype.stopFilibuster = function () {
 /*!
  * VisualEditor UserInterface Context class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -33417,9 +33257,9 @@ ve.ui.Context = function VeUiContext( surface, config ) {
 	this.menu.connect( this, { choose: 'onContextItemChoose' } );
 
 	// Initialization
-	// Hide element using a class, not this.toggle, as child implementations
+	// Hide element using $.hide() not this.toggle as child implementations
 	// of toggle may require the instance to be fully constructed before running.
-	this.$element.addClass( 've-ui-context' );
+	this.$element.addClass( 've-ui-context' ).hide();
 	this.menu.toggle( false );
 	this.inspectors.$element.addClass( 've-ui-context-inspectors' );
 };
@@ -33742,7 +33582,7 @@ ve.ui.Context.prototype.destroy = function () {
 /*!
  * VisualEditor UserInterface Table Context class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -33878,7 +33718,7 @@ ve.ui.TableContext.prototype.toggle = function ( show ) {
 /*!
  * VisualEditor UserInterface Tool classes.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -33977,7 +33817,7 @@ ve.ui.Tool.prototype.getCommand = function () {
 /*!
  * VisualEditor UserInterface Toolbar class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -34204,9 +34044,16 @@ ve.ui.Toolbar.prototype.getCommands = function () {
  * @inheritdoc
  */
 ve.ui.Toolbar.prototype.getToolAccelerator = function ( name ) {
-	var messages = ve.ui.triggerRegistry.getMessages( name );
+	var i, l, triggers = this.getTriggers( name ), shortcuts = [];
 
-	return messages ? messages.join( ', ' ) : undefined;
+	if ( triggers ) {
+		for ( i = 0, l = triggers.length; i < l; i++ ) {
+			shortcuts.push( triggers[i].getMessage() );
+		}
+		return shortcuts.join( ', ' );
+	} else {
+		return undefined;
+	}
 };
 
 /**
@@ -34316,7 +34163,7 @@ ve.ui.Toolbar.prototype.unfloat = function () {
 /*!
  * VisualEditor UserInterface TargetToolbar class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -34375,7 +34222,7 @@ ve.ui.TargetToolbar.prototype.getCommands = function () {
 /*!
  * VisualEditor UserInterface ToolFactory class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -34471,7 +34318,7 @@ ve.ui.toolGroupFactory = new OO.ui.ToolGroupFactory();
 /*!
  * VisualEditor UserInterface Command class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -34562,7 +34409,7 @@ ve.ui.Command.prototype.getArgs = function () {
 /*!
  * VisualEditor CommandRegistry class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -34703,16 +34550,6 @@ ve.ui.commandRegistry.register(
 ve.ui.commandRegistry.register(
 	new ve.ui.Command(
 		'findAndReplace', 'window', 'toggle', { args: ['findAndReplace'] }
-	)
-);
-ve.ui.commandRegistry.register(
-	new ve.ui.Command(
-		'findNext', 'window', 'open', { args: ['findAndReplace', null, 'findNext'] }
-	)
-);
-ve.ui.commandRegistry.register(
-	new ve.ui.Command(
-		'findPrevious', 'window', 'open', { args: ['findAndReplace', null, 'findPrevious'] }
 	)
 );
 ve.ui.commandRegistry.register(
@@ -34875,7 +34712,7 @@ ve.ui.commandRegistry.register(
 /*!
  * VisualEditor UserInterface Trigger class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -35273,7 +35110,7 @@ ve.ui.Trigger.prototype.getMessage = function () {
 /*!
  * VisualEditor UserInterface TriggerRegistry class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -35285,7 +35122,7 @@ ve.ui.Trigger.prototype.getMessage = function () {
  */
 ve.ui.TriggerRegistry = function VeUiTriggerRegistry() {
 	// Parent constructor
-	ve.ui.TriggerRegistry.super.call( this );
+	OO.Registry.call( this );
 };
 
 /* Inheritance */
@@ -35332,17 +35169,7 @@ ve.ui.TriggerRegistry.prototype.register = function ( name, triggers ) {
 		}
 	}
 
-	ve.ui.TriggerRegistry.super.prototype.register.call( this, name, triggerList );
-};
-
-/**
- * Get trigger messages for a trigger by name
- *
- * @param {string} name Symbolic name
- * @return {string[]} List of trigger messages
- */
-ve.ui.TriggerRegistry.prototype.getMessages = function ( name ) {
-	return ( this.lookup( name ) || [] ).map( function ( trigger ) { return trigger.getMessage(); } );
+	OO.Registry.prototype.register.call( this, name, triggerList );
 };
 
 /* Initialization */
@@ -35457,29 +35284,11 @@ ve.ui.triggerRegistry.register(
 ve.ui.triggerRegistry.register(
 	'findAndReplace', { mac: new ve.ui.Trigger( 'cmd+f' ), pc: new ve.ui.Trigger( 'ctrl+f' ) }
 );
-ve.ui.triggerRegistry.register(
-	'findNext', {
-		mac: new ve.ui.Trigger( 'cmd+g' ),
-		pc: [
-			new ve.ui.Trigger( 'ctrl+g' ),
-			new ve.ui.Trigger( 'f3' )
-		]
-	}
-);
-ve.ui.triggerRegistry.register(
-	'findPrevious', {
-		mac: new ve.ui.Trigger( 'cmd+shift+g' ),
-		pc: [
-			new ve.ui.Trigger( 'shift+ctrl+g' ),
-			new ve.ui.Trigger( 'shift+f3' )
-		]
-	}
-);
 
 /*!
  * VisualEditor UserInterface Sequence class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -35581,7 +35390,7 @@ ve.ui.Sequence.prototype.getCommandName = function () {
 /*!
  * VisualEditor UserInterface SequenceRegistry class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -35651,7 +35460,7 @@ ve.ui.sequenceRegistry.register(
 /*!
  * VisualEditor UserInterface Action class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -35695,7 +35504,7 @@ ve.ui.Action.static.methods = [];
 /*!
  * VisualEditor UserInterface ActionFactory class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -35738,7 +35547,7 @@ ve.ui.actionFactory = new ve.ui.ActionFactory();
 /*!
  * VisualEditor UserInterface file drop handler class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -35877,7 +35686,7 @@ ve.ui.FileDropHandler.prototype.setProgress = function ( progress ) {
 /*!
  * VisualEditor FileDropHandlerFactory class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -35930,7 +35739,7 @@ ve.ui.fileDropHandlerFactory = new ve.ui.FileDropHandlerFactory();
 /*!
  * VisualEditor UserInterface WindowManager class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -35980,7 +35789,7 @@ ve.ui.WindowManager.prototype.getReadyDelay = function () {
 /*!
  * VisualEditor UserInterface AnnotationAction class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -36125,7 +35934,7 @@ ve.ui.actionFactory.register( ve.ui.AnnotationAction );
 /*!
  * VisualEditor UserInterface ContentAction class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -36226,7 +36035,7 @@ ve.ui.actionFactory.register( ve.ui.ContentAction );
 /*!
  * VisualEditor UserInterface FormatAction class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -36313,7 +36122,7 @@ ve.ui.actionFactory.register( ve.ui.FormatAction );
 /*!
  * VisualEditor UserInterface HistoryAction class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -36377,7 +36186,7 @@ ve.ui.actionFactory.register( ve.ui.HistoryAction );
 /*!
  * VisualEditor UserInterface IndentationAction class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -36716,7 +36525,7 @@ ve.ui.actionFactory.register( ve.ui.IndentationAction );
 /*!
  * VisualEditor UserInterface ListAction class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -36948,7 +36757,7 @@ ve.ui.actionFactory.register( ve.ui.ListAction );
 /*!
  * VisualEditor ContentEditable TableNode class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see AUTHORS.txt
+ * @copyright 2011-2014 VisualEditor Team and others; see AUTHORS.txt
  * @license The MIT License (MIT); see LICENSE.txt
  */
 
@@ -37137,11 +36946,10 @@ ve.ui.TableAction.prototype.changeCellStyle = function ( style ) {
  * @return {boolean} Action was executed
  */
 ve.ui.TableAction.prototype.mergeCells = function () {
-	var i, r, c, cell, cells, hasNonPlaceholders,
+	var i, cells,
 		txs = [],
 		surfaceModel = this.surface.getModel(),
-		selection = surfaceModel.getSelection(),
-		matrix = selection.getTableNode().getMatrix();
+		selection = surfaceModel.getSelection();
 
 	if ( !( selection instanceof ve.dm.TableSelection ) ) {
 		return false;
@@ -37159,13 +36967,12 @@ ve.ui.TableAction.prototype.mergeCells = function () {
 		for ( i = cells.length - 1; i >= 1; i-- ) {
 			txs.push(
 				this.replacePlaceholder(
-					matrix,
+					selection.getTableNode().getMatrix(),
 					cells[i],
 					{ style: cells[0].node.getStyle() }
 				)
 			);
 		}
-		surfaceModel.change( txs );
 	} else {
 		// Merge
 		cells = selection.getMatrixCells();
@@ -37185,36 +36992,8 @@ ve.ui.TableAction.prototype.mergeCells = function () {
 				)
 			);
 		}
-		surfaceModel.change( txs );
-
-		// Check for rows filled with entirely placeholders. If such a row exists, delete it.
-		for ( r = selection.endRow; r >= selection.startRow; r-- ) {
-			hasNonPlaceholders = false;
-			for ( c = 0; ( cell = matrix.getCell( r, c ) ) !== undefined; c++ ) {
-				if ( cell && !cell.isPlaceholder() ) {
-					hasNonPlaceholders = true;
-					break;
-				}
-			}
-			if ( !hasNonPlaceholders ) {
-				this.deleteRowsOrColumns( matrix, 'row', r, r );
-			}
-		}
-
-		// Check for columns filled with entirely placeholders. If such a column exists, delete it.
-		for ( c = selection.endCol; c >= selection.startCol; c-- ) {
-			hasNonPlaceholders = false;
-			for ( r = 0; ( cell = matrix.getCell( r, c ) ) !== undefined; r++ ) {
-				if ( cell && !cell.isPlaceholder() ) {
-					hasNonPlaceholders = true;
-					break;
-				}
-			}
-			if ( !hasNonPlaceholders ) {
-				this.deleteRowsOrColumns( matrix, 'col', c, c );
-			}
-		}
 	}
+	surfaceModel.change( txs );
 	return true;
 };
 
@@ -37601,7 +37380,7 @@ ve.ui.actionFactory.register( ve.ui.TableAction );
 /*!
  * VisualEditor UserInterface WindowAction class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -37636,15 +37415,14 @@ ve.ui.WindowAction.static.methods = [ 'open', 'close', 'toggle' ];
 /* Methods */
 
 /**
- * Open a window.
+ * Open or toggle a window.
  *
  * @method
  * @param {string} name Symbolic name of window to open
  * @param {Object} [data] Window opening data
- * @param {string} [action] Action to execute after opening, or immediately if the window is already open
  * @return {boolean} Action was executed
  */
-ve.ui.WindowAction.prototype.open = function ( name, data, action ) {
+ve.ui.WindowAction.prototype.open = function ( name, data ) {
 	var windowType = this.getWindowType( name ),
 		windowManager = windowType && this.getWindowManager( windowType ),
 		surface = this.surface,
@@ -37663,19 +37441,9 @@ ve.ui.WindowAction.prototype.open = function ( name, data, action ) {
 		data = ve.extendObject( data, { surface: surface } );
 	}
 
-	windowManager.getWindow( name ).then( function ( win ) {
-		windowManager.openWindow( win, data ).then( function ( closing ) {
-			surface.getView().emit( 'position' );
-			closing.then( function ( closed ) {
-				surface.getView().activate();
-				closed.then( function () {
-					surface.getView().emit( 'position' );
-				} );
-			} );
-		} ).always( function () {
-			if ( action ) {
-				win.executeAction( action );
-			}
+	windowManager.openWindow( name, data ).then( function ( closing ) {
+		closing.then( function () {
+			surface.getView().activate();
 		} );
 	} );
 
@@ -37771,7 +37539,7 @@ ve.ui.actionFactory.register( ve.ui.WindowAction );
 /*!
  * VisualEditor UserInterface ClearAnnotationCommand class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -37812,7 +37580,7 @@ ve.ui.commandRegistry.register( new ve.ui.ClearAnnotationCommand() );
 /*!
  * VisualEditor UserInterface HistoryCommand class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -37861,7 +37629,7 @@ ve.ui.commandRegistry.register( new ve.ui.HistoryCommand( 'redo', 'redo' ) );
 /*!
  * VisualEditor UserInterface IndentationCommand class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -37917,7 +37685,7 @@ ve.ui.commandRegistry.register( new ve.ui.IndentationCommand( 'outdent', 'decrea
 /*!
  * VisualEditor UserInterface MergeCellsCommand class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -37958,7 +37726,7 @@ ve.ui.commandRegistry.register( new ve.ui.MergeCellsCommand() );
 /*!
  * VisualEditor UserInterface TableCaptionCommand class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -38018,7 +37786,7 @@ ve.ui.commandRegistry.register( new ve.ui.TableCaptionCommand() );
 /*!
  * VisualEditor UserInterface FragmentDialog class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -38081,7 +37849,7 @@ ve.ui.FragmentDialog.prototype.getFragment = function () {
 /*!
  * VisualEditor user interface NodeDialog class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -38174,7 +37942,7 @@ ve.ui.NodeDialog.prototype.getTeardownProcess = function ( data ) {
 /*!
  * VisualEditor UserInterface ToolbarDialog class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -38221,7 +37989,7 @@ ve.ui.ToolbarDialog.prototype.initialize = function () {
 /*!
  * VisualEditor UserInterface CommandHelpDialog class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -38355,6 +38123,24 @@ ve.ui.CommandHelpDialog.static.getCommandGroups = function () {
 				{ trigger: 'clear', msg: 'visualeditor-clearbutton-tooltip' }
 			]
 		},
+		history: {
+			title: 'visualeditor-shortcuts-history',
+			commands: [
+				{ trigger: 'undo', msg: 'visualeditor-historybutton-undo-tooltip' },
+				{ trigger: 'redo', msg: 'visualeditor-historybutton-redo-tooltip' }
+			]
+		},
+		formatting: {
+			title: 'visualeditor-shortcuts-formatting',
+			commands: [
+				{ trigger: 'paragraph', msg: 'visualeditor-formatdropdown-format-paragraph' },
+				{ shortcuts: ['ctrl+(1-6)'], msg: 'visualeditor-formatdropdown-format-heading-label' },
+				{ trigger: 'preformatted', msg: 'visualeditor-formatdropdown-format-preformatted' },
+				{ trigger: 'blockquote', msg: 'visualeditor-formatdropdown-format-blockquote' },
+				{ trigger: 'indent', msg: 'visualeditor-indentationbutton-indent-tooltip' },
+				{ trigger: 'outdent', msg: 'visualeditor-indentationbutton-outdent-tooltip' }
+			]
+		},
 		clipboard: {
 			title: 'visualeditor-shortcuts-clipboard',
 			commands: [
@@ -38382,30 +38168,10 @@ ve.ui.CommandHelpDialog.static.getCommandGroups = function () {
 				{ trigger: 'pasteSpecial', msg: 'visualeditor-clipboard-paste-special' }
 			]
 		},
-		formatting: {
-			title: 'visualeditor-shortcuts-formatting',
-			commands: [
-				{ trigger: 'paragraph', msg: 'visualeditor-formatdropdown-format-paragraph' },
-				{ shortcuts: ['ctrl+(1-6)'], msg: 'visualeditor-formatdropdown-format-heading-label' },
-				{ trigger: 'preformatted', msg: 'visualeditor-formatdropdown-format-preformatted' },
-				{ trigger: 'blockquote', msg: 'visualeditor-formatdropdown-format-blockquote' },
-				{ trigger: 'indent', msg: 'visualeditor-indentationbutton-indent-tooltip' },
-				{ trigger: 'outdent', msg: 'visualeditor-indentationbutton-outdent-tooltip' }
-			]
-		},
-		history: {
-			title: 'visualeditor-shortcuts-history',
-			commands: [
-				{ trigger: 'undo', msg: 'visualeditor-historybutton-undo-tooltip' },
-				{ trigger: 'redo', msg: 'visualeditor-historybutton-redo-tooltip' }
-			]
-		},
 		other: {
 			title: 'visualeditor-shortcuts-other',
 			commands: [
 				{ trigger: 'findAndReplace', msg: 'visualeditor-find-and-replace-title' },
-				{ trigger: 'findNext', msg: 'visualeditor-find-and-replace-next-button' },
-				{ trigger: 'findPrevious', msg: 'visualeditor-find-and-replace-previous-button' },
 				{ trigger: 'selectAll', msg: 'visualeditor-content-select-all' },
 				{ trigger: 'commandHelp', msg: 'visualeditor-dialog-command-help-title' }
 			]
@@ -38420,7 +38186,7 @@ ve.ui.windowFactory.register( ve.ui.CommandHelpDialog );
 /*!
  * VisualEditor UserInterface FindAndReplaceDialog class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -38451,13 +38217,6 @@ ve.ui.FindAndReplaceDialog.static.name = 'findAndReplace';
 
 ve.ui.FindAndReplaceDialog.static.title = OO.ui.deferMsg( 'visualeditor-find-and-replace-title' );
 
-/**
- * Maximum number of results to render
- *
- * @property {number}
- */
-ve.ui.FindAndReplaceDialog.static.maxRenderedResults = 100;
-
 /* Methods */
 
 /**
@@ -38469,10 +38228,6 @@ ve.ui.FindAndReplaceDialog.prototype.initialize = function () {
 
 	this.$findResults = this.$( '<div>' ).addClass( 've-ui-findAndReplaceDialog-findResults' );
 	this.fragments = [];
-	this.results = 0;
-	// Range over the list of fragments indicating which ones where rendered,
-	// e.g. [1,3] means fragments 1 & 2 were rendered
-	this.renderedFragments = null;
 	this.replacing = false;
 	this.focusedIndex = 0;
 	this.query = null;
@@ -38495,18 +38250,13 @@ ve.ui.FindAndReplaceDialog.prototype.initialize = function () {
 		$: this.$,
 		classes: ['ve-ui-findAndReplaceDialog-focusedIndexLabel']
 	} );
-
 	this.previousButton = new OO.ui.ButtonWidget( {
 		$: this.$,
-		icon: 'previous',
-		iconTitle: ve.msg( 'visualeditor-find-and-replace-previous-button' ) + ' ' +
-			ve.ui.triggerRegistry.getMessages( 'findPrevious' ).join( ', ' )
+		icon: 'previous'
 	} );
 	this.nextButton = new OO.ui.ButtonWidget( {
 		$: this.$,
-		icon: 'next',
-		iconTitle: ve.msg( 'visualeditor-find-and-replace-next-button' ) + ' ' +
-			ve.ui.triggerRegistry.getMessages( 'findNext' ).join( ', ' )
+		icon: 'next'
 	} );
 	this.replaceText = new OO.ui.TextInputWidget( {
 		$: this.$,
@@ -38549,23 +38299,22 @@ ve.ui.FindAndReplaceDialog.prototype.initialize = function () {
 		doneButton = new OO.ui.ButtonWidget( {
 			$: this.$,
 			classes: ['ve-ui-findAndReplaceDialog-cell'],
-			label: ve.msg( 'visualeditor-find-and-replace-done' )
+			label: ve.msg( 'visualeditor-dialog-action-done' )
 		} ),
 		$findRow = this.$( '<div>' ).addClass( 've-ui-findAndReplaceDialog-row' ),
 		$replaceRow = this.$( '<div>' ).addClass( 've-ui-findAndReplaceDialog-row' );
 
 	// Events
-	this.onWindowScrollDebounced = ve.debounce( this.onWindowScroll.bind( this ), 250 );
 	this.updateFragmentsDebounced = ve.debounce( this.updateFragments.bind( this ) );
-	this.renderFragmentsDebounced = ve.debounce( this.renderFragments.bind( this ) );
+	this.positionResultsDebounced = ve.debounce( this.positionResults.bind( this ) );
 	this.findText.connect( this, {
 		change: 'onFindChange',
 		enter: 'onFindTextEnter'
 	} );
 	this.matchCaseToggle.connect( this, { change: 'onFindChange' } );
 	this.regexToggle.connect( this, { change: 'onFindChange' } );
-	this.nextButton.connect( this, { click: 'findNext' } );
-	this.previousButton.connect( this, { click: 'findPrevious' } );
+	this.nextButton.connect( this, { click: 'onNextButtonClick' } );
+	this.previousButton.connect( this, { click: 'onPreviousButtonClick' } );
 	this.replaceButton.connect( this, { click: 'onReplaceButtonClick' } );
 	this.replaceAllButton.connect( this, { click: 'onReplaceAllButtonClick' } );
 	doneButton.connect( this, { click: 'close' } );
@@ -38600,17 +38349,14 @@ ve.ui.FindAndReplaceDialog.prototype.getSetupProcess = function ( data ) {
 		.first( function () {
 			this.surface = data.surface;
 			this.surface.$selections.append( this.$findResults );
-
-			// Events
 			this.surface.getModel().connect( this, { documentUpdate: this.updateFragmentsDebounced } );
-			this.surface.getView().connect( this, { position: this.renderFragmentsDebounced } );
-			this.surface.getView().$window.on( 'scroll', this.onWindowScrollDebounced );
+			this.surface.getView().connect( this, { position: this.positionResultsDebounced } );
 
 			var text = data.fragment.getText();
-			if ( text && text !== this.findText.getValue() ) {
+			if ( text ) {
 				this.findText.setValue( text );
 			} else {
-				this.onFindChange();
+				this.updateFragments();
 			}
 		}, this );
 };
@@ -38632,12 +38378,8 @@ ve.ui.FindAndReplaceDialog.prototype.getTeardownProcess = function ( data ) {
 	return ve.ui.FindAndReplaceDialog.super.prototype.getTeardownProcess.call( this, data )
 		.next( function () {
 			var surfaceView = this.surface.getView();
-
-			// Events
 			this.surface.getModel().disconnect( this );
 			surfaceView.disconnect( this );
-			this.surface.getView().$window.off( 'scroll', this.onWindowScrollDebounced );
-
 			surfaceView.focus();
 			this.$findResults.empty().detach();
 			this.fragment = [];
@@ -38646,21 +38388,11 @@ ve.ui.FindAndReplaceDialog.prototype.getTeardownProcess = function ( data ) {
 };
 
 /**
- * Handle window scroll events
- */
-ve.ui.FindAndReplaceDialog.prototype.onWindowScroll = function () {
-	if ( this.renderedFragments.getLength() < this.results ) {
-		// If viewport clipping is being used, reposition results based on the current viewport
-		this.renderFragments();
-	}
-};
-
-/**
  * Handle change events to the find inputs (text or match case)
  */
 ve.ui.FindAndReplaceDialog.prototype.onFindChange = function () {
 	this.updateFragments();
-	this.renderFragments();
+	this.positionResults();
 	this.highlightFocused( true );
 };
 
@@ -38670,13 +38402,13 @@ ve.ui.FindAndReplaceDialog.prototype.onFindChange = function () {
  * @param {jQuery.Event} e
  */
 ve.ui.FindAndReplaceDialog.prototype.onFindTextEnter = function ( e ) {
-	if ( !this.results ) {
+	if ( !this.fragments.length ) {
 		return;
 	}
 	if ( e.shiftKey ) {
-		this.findPrevious();
+		this.onPreviousButtonClick();
 	} else {
-		this.findNext();
+		this.onNextButtonClick();
 	}
 };
 
@@ -38711,58 +38443,25 @@ ve.ui.FindAndReplaceDialog.prototype.updateFragments = function () {
 			this.fragments.push( surfaceModel.getLinearFragment( ranges[i], true, true ) );
 		}
 	}
-	this.results = this.fragments.length;
-	this.focusedIndex = Math.min( this.focusedIndex, this.results ? this.results - 1 : 0 );
-	this.nextButton.setDisabled( !this.results );
-	this.previousButton.setDisabled( !this.results );
-	this.replaceButton.setDisabled( !this.results );
-	this.replaceAllButton.setDisabled( !this.results );
+	this.focusedIndex = Math.min( this.focusedIndex, this.fragments.length );
+	this.nextButton.setDisabled( !this.fragments.length );
+	this.previousButton.setDisabled( !this.fragments.length );
+	this.replaceButton.setDisabled( !this.fragments.length );
+	this.replaceAllButton.setDisabled( !this.fragments.length );
 };
 
 /**
  * Position results markers
  */
-ve.ui.FindAndReplaceDialog.prototype.renderFragments = function () {
+ve.ui.FindAndReplaceDialog.prototype.positionResults = function () {
 	if ( this.replacing ) {
 		return;
 	}
 
-	var i, selection, viewportRange,
-		start = 0, end = this.results;
+	var i, ilen, j, jlen, rects, $result, top;
 
-	// When there are a large number of results, calculate the viewport range for clipping
-	if ( this.results > 50 ) {
-		viewportRange = this.surface.getView().getViewportRange();
-		for ( i = 0; i < this.results; i++ ) {
-			selection = this.fragments[i].getSelection();
-			if ( viewportRange && selection.getRange().start < viewportRange.start ) {
-				start = i + 1;
-				continue;
-			}
-			if ( viewportRange && selection.getRange().end > viewportRange.end ) {
-				end = i;
-				break;
-			}
-		}
-	}
-
-	// When there are too many results to render, just render the current one
-	if ( end - start <= this.constructor.static.maxRenderedResults ) {
-		this.renderRangeOfFragments( new ve.Range( start, end ) );
-	} else {
-		this.renderRangeOfFragments( new ve.Range( this.focusedIndex, this.focusedIndex + 1 ) );
-	}
-};
-
-/**
- * Render subset of search result fragments
- *
- * @param {ve.Range} range Range of fragments to render
- */
-ve.ui.FindAndReplaceDialog.prototype.renderRangeOfFragments = function ( range ) {
-	var i, j, jlen, rects, $result, top;
 	this.$findResults.empty();
-	for ( i = range.start; i < range.end; i++ ) {
+	for ( i = 0, ilen = this.fragments.length; i < ilen; i++ ) {
 		rects = this.surface.getView().getSelectionRects( this.fragments[i].getSelection() );
 		$result = this.$( '<div>' ).addClass( 've-ui-findAndReplaceDialog-findResult' );
 		top = Infinity;
@@ -38778,7 +38477,6 @@ ve.ui.FindAndReplaceDialog.prototype.renderRangeOfFragments = function ( range )
 		$result.data( 'top', top );
 		this.$findResults.append( $result );
 	}
-	this.renderedFragments = range;
 	this.highlightFocused();
 };
 
@@ -38788,41 +38486,27 @@ ve.ui.FindAndReplaceDialog.prototype.renderRangeOfFragments = function ( range )
  * @param {boolean} scrollIntoView Scroll the marker into view
  */
 ve.ui.FindAndReplaceDialog.prototype.highlightFocused = function ( scrollIntoView ) {
-	var $result, rect, top,
-		offset, windowScrollTop, windowScrollHeight,
-		surfaceView = this.surface.getView();
-
-	if ( this.results ) {
-		this.focusedIndexLabel.setLabel(
-			ve.msg( 'visualeditor-find-and-replace-results', this.focusedIndex + 1, this.results )
-		);
-	} else {
-		this.focusedIndexLabel.setLabel( '' );
-		return;
-	}
+	var windowScrollTop, windowScrollHeight, offset,
+		surfaceView = this.surface.getView(),
+		$result = this.$findResults.children().eq( this.focusedIndex );
 
 	this.$findResults
 		.find( '.ve-ui-findAndReplaceDialog-findResult-focused' )
 		.removeClass( 've-ui-findAndReplaceDialog-findResult-focused' );
+	$result.addClass( 've-ui-findAndReplaceDialog-findResult-focused' );
 
-	if ( this.renderedFragments.containsOffset( this.focusedIndex ) ) {
-		$result = this.$findResults.children().eq( this.focusedIndex - this.renderedFragments.start )
-			.addClass( 've-ui-findAndReplaceDialog-findResult-focused' );
-
-		top = $result.data( 'top' );
+	if ( this.fragments.length ) {
+		this.focusedIndexLabel.setLabel(
+			ve.msg( 'visualeditor-find-and-replace-results', this.focusedIndex + 1, this.fragments.length )
+		);
 	} else {
-		// Focused result hasn't been rendered yet so find its offset manually
-		rect = surfaceView.getSelectionBoundingRect( this.fragments[this.focusedIndex].getSelection() );
-		top = rect.top;
-		this.renderRangeOfFragments( new ve.Range( this.focusedIndex, this.focusedIndex + 1 ) );
+		this.focusedIndexLabel.setLabel( '' );
 	}
 
 	if ( scrollIntoView ) {
-		surfaceView = this.surface.getView();
-		offset = top + surfaceView.$element.offset().top;
+		offset = $result.data( 'top' ) + surfaceView.$element.offset().top;
 		windowScrollTop = surfaceView.$window.scrollTop() + this.surface.toolbarHeight;
 		windowScrollHeight = surfaceView.$window.height() - this.surface.toolbarHeight;
-
 		if ( offset < windowScrollTop || offset > windowScrollTop + windowScrollHeight ) {
 			surfaceView.$( 'body, html' ).animate( { scrollTop: offset - ( windowScrollHeight / 2  ) }, 'fast' );
 		}
@@ -38830,18 +38514,18 @@ ve.ui.FindAndReplaceDialog.prototype.highlightFocused = function ( scrollIntoVie
 };
 
 /**
- * Find the next result
+ * Handle click events on the next button
  */
-ve.ui.FindAndReplaceDialog.prototype.findNext = function () {
-	this.focusedIndex = ( this.focusedIndex + 1 ) % this.results;
+ve.ui.FindAndReplaceDialog.prototype.onNextButtonClick = function () {
+	this.focusedIndex = ( this.focusedIndex + 1 ) % this.fragments.length;
 	this.highlightFocused( true );
 };
 
 /**
- * Find the previous result
+ * Handle click events on the previous button
  */
-ve.ui.FindAndReplaceDialog.prototype.findPrevious = function () {
-	this.focusedIndex = ( this.focusedIndex + this.results - 1 ) % this.results;
+ve.ui.FindAndReplaceDialog.prototype.onPreviousButtonClick = function () {
+	this.focusedIndex = ( this.focusedIndex + this.fragments.length - 1 ) % this.fragments.length;
 	this.highlightFocused( true );
 };
 
@@ -38851,7 +38535,7 @@ ve.ui.FindAndReplaceDialog.prototype.findPrevious = function () {
 ve.ui.FindAndReplaceDialog.prototype.onReplaceButtonClick = function () {
 	var end;
 
-	if ( !this.results ) {
+	if ( !this.fragments.length ) {
 		return;
 	}
 
@@ -38863,7 +38547,7 @@ ve.ui.FindAndReplaceDialog.prototype.onReplaceButtonClick = function () {
 	// updateFragmentsDebounced is triggered by insertContent, but call it immediately
 	// so we can find the next fragment to select.
 	this.updateFragments();
-	if ( !this.results ) {
+	if ( !this.fragments.length ) {
 		this.focusedIndex = 0;
 		return;
 	}
@@ -38871,7 +38555,7 @@ ve.ui.FindAndReplaceDialog.prototype.onReplaceButtonClick = function () {
 		this.focusedIndex++;
 	}
 	// We may have iterated off the end
-	this.focusedIndex = this.focusedIndex % this.results;
+	this.focusedIndex = this.focusedIndex % this.fragments.length;
 };
 
 /**
@@ -38880,7 +38564,7 @@ ve.ui.FindAndReplaceDialog.prototype.onReplaceButtonClick = function () {
 ve.ui.FindAndReplaceDialog.prototype.onReplaceAllButtonClick = function () {
 	var i, l;
 
-	for ( i = 0, l = this.results; i < l; i++ ) {
+	for ( i = 0, l = this.fragments.length; i < l; i++ ) {
 		this.replace( i );
 	}
 };
@@ -38903,16 +38587,6 @@ ve.ui.FindAndReplaceDialog.prototype.replace = function ( index ) {
 	}
 };
 
-/**
- * @inheritdoc
- */
-ve.ui.FindAndReplaceDialog.prototype.getActionProcess = function ( action ) {
-	if ( action === 'findNext' || action === 'findPrevious' ) {
-		return new OO.ui.Process( this[action], this );
-	}
-	return ve.ui.FindAndReplaceDialog.super.prototype.getActionProcess.call( this, action );
-};
-
 /* Registration */
 
 ve.ui.windowFactory.register( ve.ui.FindAndReplaceDialog );
@@ -38920,7 +38594,7 @@ ve.ui.windowFactory.register( ve.ui.FindAndReplaceDialog );
 /*!
  * VisualEditor UserInterface ProgressDialog class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -39061,7 +38735,7 @@ ve.ui.windowFactory.register( ve.ui.ProgressDialog );
 /*!
  * VisualEditor UserInterface delimiter-separated values file drop handler class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -39172,7 +38846,7 @@ ve.ui.fileDropHandlerFactory.register( ve.ui.DSVFileDropHandler );
 /*!
  * VisualEditor UserInterface plain text file drop handler class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -39266,7 +38940,7 @@ ve.ui.fileDropHandlerFactory.register( ve.ui.PlainTextFileDropHandler );
 /*!
  * VisualEditor UserInterface HTML file drop handler class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -39351,7 +39025,7 @@ ve.ui.fileDropHandlerFactory.register( ve.ui.HTMLFileDropHandler );
 /*!
  * VisualEditor UserInterface ToolbarDialogWindowManager class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -39375,9 +39049,6 @@ OO.inheritClass( ve.ui.ToolbarDialogWindowManager, ve.ui.WindowManager );
 
 /* Static Properties */
 
-ve.ui.ToolbarDialogWindowManager.static.sizes = ve.copy(
-	ve.ui.ToolbarDialogWindowManager.super.static.sizes
-);
 ve.ui.ToolbarDialogWindowManager.static.sizes.full = {
 	width: '100%',
 	maxHeight: '100%'
@@ -39393,62 +39064,9 @@ ve.ui.ToolbarDialogWindowManager.prototype.getTeardownDelay = function () {
 };
 
 /*!
- * VisualEditor UserInterface AlignWidget class.
- *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
- */
-
-/**
- * Widget that lets the user edit alignment of an object
- *
- * @class
- * @extends OO.ui.ButtonSelectWidget
- *
- * @constructor
- * @param {Object} [config] Configuration options
- * @cfg {string} [dir='ltr'] Interface directionality
- */
-ve.ui.AlignWidget = function VeUiAlignWidget( config ) {
-	// Parent constructor
-	ve.ui.AlignWidget.super.call( this, config );
-
-	var alignButtons = [
-			new OO.ui.ButtonOptionWidget( {
-				$: this.$,
-				data: 'left',
-				icon: 'align-float-left',
-				label: ve.msg( 'visualeditor-align-widget-left' )
-			} ),
-			new OO.ui.ButtonOptionWidget( {
-				$: this.$,
-				data: 'center',
-				icon: 'align-center',
-				label: ve.msg( 'visualeditor-align-widget-center' )
-			} ),
-			new OO.ui.ButtonOptionWidget( {
-				$: this.$,
-				data: 'right',
-				icon: 'align-float-right',
-				label: ve.msg( 'visualeditor-align-widget-right' )
-			} )
-		];
-
-	if ( config.dir === 'rtl' ) {
-		alignButtons = alignButtons.reverse();
-	}
-
-	this.addItems( alignButtons, 0 );
-
-};
-
-/* Inheritance */
-
-OO.inheritClass( ve.ui.AlignWidget, OO.ui.ButtonSelectWidget );
-
-/*!
  * VisualEditor UserInterface LanguageSearchWidget class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -39591,7 +39209,7 @@ ve.ui.LanguageSearchWidget.static.escapeRegex = function ( value ) {
 /*!
  * VisualEditor UserInterface LanguageResultWidget class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -39674,7 +39292,7 @@ ve.ui.LanguageResultWidget.prototype.highlightQuery = function ( text, query ) {
 /*!
  * VisualEditor UserInterface LanguageSearchDialog class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -39791,7 +39409,7 @@ ve.ui.windowFactory.register( ve.ui.LanguageSearchDialog );
 /*!
  * VisualEditor UserInterface LanguageInputWidget class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -39998,7 +39616,7 @@ ve.ui.LanguageInputWidget.prototype.getDir = function () {
 /*!
  * VisualEditor UserInterface SurfaceWidget class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -40114,7 +39732,7 @@ ve.ui.SurfaceWidget.prototype.focus = function () {
 /*!
  * VisualEditor UserInterface LinkTargetInputWidget class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -40261,7 +39879,7 @@ ve.ui.LinkTargetInputWidget.prototype.getTargetFromAnnotation = function ( annot
 /*!
  * VisualEditor Context Menu widget class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -40305,7 +39923,7 @@ ve.ui.ContextSelectWidget.prototype.onChooseItem = function () {
 /*!
  * VisualEditor Context Item widget class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -40377,7 +39995,7 @@ ve.ui.ContextOptionWidget.prototype.getCommand = function () {
 /*!
  * VisualEditor UserInterface DimensionsWidget class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -40612,7 +40230,7 @@ ve.ui.DimensionsWidget.prototype.setHeight = function ( value ) {
 /*!
  * VisualEditor UserInterface MediaSizeWidget class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -41223,7 +40841,7 @@ ve.ui.MediaSizeWidget.prototype.isValid = function () {
 /*!
  * VisualEditor UserInterface WhitespacePreservingTextInputWidget class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -41309,7 +40927,7 @@ ve.ui.WhitespacePreservingTextInputWidget.prototype.getInnerValue = function () 
 /*!
  * VisualEditor UserInterface AnnotationTool classes.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -41583,7 +41201,7 @@ ve.ui.toolFactory.register( ve.ui.SubscriptAnnotationTool );
 /*!
  * VisualEditor UserInterface ClearAnnotationTool class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -41627,7 +41245,7 @@ ve.ui.toolFactory.register( ve.ui.ClearAnnotationTool );
 /*!
  * VisualEditor UserInterface DialogTool class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -41705,7 +41323,7 @@ ve.ui.toolFactory.register( ve.ui.CommandHelpDialogTool );
 /*!
  * VisualEditor UserInterface FindAndReplaceTool classes.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -41740,7 +41358,7 @@ ve.ui.toolFactory.register( ve.ui.FindAndReplaceTool );
 /*!
  * VisualEditor UserInterface FormatTool classes.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -42058,7 +41676,7 @@ ve.ui.toolFactory.register( ve.ui.TableCellDataFormatTool );
 /*!
  * VisualEditor UserInterface HistoryTool classes.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -42147,7 +41765,7 @@ ve.ui.toolFactory.register( ve.ui.RedoHistoryTool );
 /*!
  * VisualEditor UserInterface IndentationTool classes.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -42216,7 +41834,7 @@ ve.ui.toolFactory.register( ve.ui.DecreaseIndentationTool );
 /*!
  * VisualEditor UserInterface InspectorTool classes.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -42352,7 +41970,7 @@ ve.ui.toolFactory.register( ve.ui.CommentInspectorTool );
 /*!
  * VisualEditor UserInterface language tool class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -42380,7 +41998,7 @@ ve.ui.toolFactory.register( ve.ui.LanguageInspectorTool );
 /*!
  * VisualEditor UserInterface ListTool classes.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -42489,7 +42107,7 @@ ve.ui.toolFactory.register( ve.ui.NumberListTool );
 /*!
  * VisualEditor UserInterface ListTool classes.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see AUTHORS.txt
+ * @copyright 2011-2014 VisualEditor Team and others; see AUTHORS.txt
  * @license The MIT License (MIT); see LICENSE.txt
  */
 
@@ -42661,7 +42279,7 @@ ve.ui.toolFactory.register( ve.ui.TableCaptionTool );
 /*!
  * VisualEditor UserInterface FragmentInspector class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -42798,7 +42416,7 @@ ve.ui.FragmentInspector.prototype.getBodyHeight = function () {
 /*!
  * VisualEditor UserInterface AnnotationInspector class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -43102,7 +42720,7 @@ ve.ui.AnnotationInspector.prototype.getTeardownProcess = function ( data ) {
 /*!
  * VisualEditor user interface NodeInspector class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -43195,7 +42813,7 @@ ve.ui.NodeInspector.prototype.getTeardownProcess = function ( data ) {
 /*!
  * VisualEditor UserInterface LinkInspector class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -43363,7 +42981,7 @@ ve.ui.windowFactory.register( ve.ui.LinkInspector );
 /*!
  * VisualEditor UserInterface CommentInspector class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -43537,7 +43155,7 @@ ve.ui.windowFactory.register( ve.ui.CommentInspector );
 /*!
  * VisualEditor UserInterface LanguageInspector class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -43634,7 +43252,7 @@ ve.ui.windowFactory.register( ve.ui.LanguageInspector );
 /*!
  * VisualEditor UserInterface SpecialCharacterInspector class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -43816,7 +43434,7 @@ ve.ui.windowFactory.register( ve.ui.SpecialCharacterInspector );
 /*!
  * VisualEditor UserInterface DesktopSurface class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -43858,7 +43476,7 @@ ve.ui.DesktopSurface.prototype.createDialogWindowManager = function () {
 /*!
  * VisualEditor UserInterface DesktopContext class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -44030,7 +43648,7 @@ ve.ui.DesktopContext.prototype.toggle = function ( show ) {
 	// they contain inspector iframes, and applying display: none; to those causes them to
 	// not load in Firefox
 	this.$element.add( this.popup.$element ).css( {
-		visibility: show ? 'visible' : 'hidden',
+		visibility: show ? '' : 'hidden',
 		display: ''
 	} );
 
@@ -44162,7 +43780,7 @@ ve.ui.DesktopContext.prototype.destroy = function () {
 /*!
  * VisualEditor UserInterface DesktopInspectorWindowManager class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -44239,7 +43857,7 @@ ve.ui.DesktopInspectorWindowManager.prototype.getTeardownDelay = function () {
 /*!
  * VisualEditor UserInterface MobileSurface class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -44355,7 +43973,7 @@ ve.ui.MobileSurface.prototype.destroy = function () {
 /*!
  * VisualEditor UserInterface MobileContext class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -44440,7 +44058,7 @@ ve.ui.MobileContext.prototype.toggle = function ( show ) {
 /*!
  * VisualEditor UserInterface MobileWindowManager class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -44504,7 +44122,7 @@ ve.ui.MobileWindowManager.prototype.getTeardownDelay = function () {
 /*!
  * VisualEditor Mobile Context Item widget class.
  *
- * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**

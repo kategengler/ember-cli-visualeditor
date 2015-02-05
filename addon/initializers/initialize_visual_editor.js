@@ -3,37 +3,15 @@
 var _loadedScripts = {};
 
 var _scripts = [
-  '/visual-editor/lib/jquery.i18n/src/jquery.i18n.js',
-  '/visual-editor/lib/jquery.i18n/src/jquery.i18n.messagestore.js',
-  '/visual-editor/lib/jquery.i18n/src/jquery.i18n.parser.js',
-  '/visual-editor/lib/jquery.i18n/src/jquery.i18n.emitter.js',
-  '/visual-editor/lib/jquery.i18n/src/jquery.i18n.language.js',
-  '/visual-editor/lib/jquery.i18n/src/jquery.i18n.fallbacks.js',
-  '/visual-editor/lib/jquery.i18n/src/languages/bs.js',
-  '/visual-editor/lib/jquery.i18n/src/languages/dsb.js',
-  '/visual-editor/lib/jquery.i18n/src/languages/fi.js',
-  '/visual-editor/lib/jquery.i18n/src/languages/fi.js',
-  '/visual-editor/lib/jquery.i18n/src/languages/ga.js',
-  '/visual-editor/lib/jquery.i18n/src/languages/he.js',
-  '/visual-editor/lib/jquery.i18n/src/languages/hsb.js',
-  '/visual-editor/lib/jquery.i18n/src/languages/hu.js',
-  '/visual-editor/lib/jquery.i18n/src/languages/hy.js',
-  '/visual-editor/lib/jquery.i18n/src/languages/la.js',
-  '/visual-editor/lib/jquery.i18n/src/languages/ml.js',
-  '/visual-editor/lib/jquery.i18n/src/languages/os.js',
-  '/visual-editor/lib/jquery.i18n/src/languages/ru.js',
-  '/visual-editor/lib/jquery.i18n/src/languages/sl.js',
-  '/visual-editor/lib/jquery.i18n/src/languages/uk.js',
-  '/visual-editor/lib/jquery.uls/src/jquery.uls.data.js',
-  '/visual-editor/lib/jquery.uls/src/jquery.uls.data.utils.js',
-  '/visual-editor/lib/oojs/oojs.jquery.js',
-  '/visual-editor/lib/oojs-ui/oojs-ui.js',
-  '/visual-editor/lib/oojs-ui/oojs-ui-apex.js',
-  '/visual-editor/visualEditor.js'
+  '/visual-editor/jquery-i18n.min.js',
+  '/visual-editor/jquery-uls.min.js',
+  '/visual-editor/oojs.min.js',
+  '/visual-editor/oojs-ui.min.js',
+  '/visual-editor/visualEditor.min.js'
 ];
 
 var styleSheets = [
-  '/visual-editor/lib/oojs-ui/oojs-ui-apex.svg.css',
+  '/visual-editor/oojs-ui-apex.svg.css',
   '/visual-editor/visualEditor.css'
 ];
 
@@ -98,8 +76,8 @@ var initializeVisualEditor = function(routePrefix) {
         $.i18n().locale = "en";
       }
 
-      ve.init.platform.addMessagePath(routePrefix + '/visual-editor/lib/oojs-ui/i18n/');
-      ve.init.platform.addMessagePath(routePrefix + '/visual-editor/modules/ve/i18n/');
+      ve.init.platform.addMessagePath(routePrefix + '/visual-editor/i18n/oojs-ui/');
+      ve.init.platform.addMessagePath(routePrefix + '/visual-editor/i18n/ve/');
 
       return ve.init.platform.initialize();
     })
