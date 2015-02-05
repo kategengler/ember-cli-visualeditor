@@ -44,12 +44,11 @@ var injectScript = function(el, src) {
     scriptEl.type = "text\/javascript";
     scriptEl.src = src;
     scriptEl.onload = function() {
-      console.log("loaded ", src);
       promise.resolve();
       _loadedScripts[src] = true;
     };
     scriptEl.onerror = function (error) {
-      console.error('could not load', src);
+      console.error('Could not load', src);
       promise.reject(new URIError("The script " + error.target.src + " is not accessible."));
     };
     el.appendChild(scriptEl);
