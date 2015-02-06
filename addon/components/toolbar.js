@@ -2,8 +2,11 @@ import Ember from 'ember';
 
 var Toolbar = Ember.Component.extend({
 
-  classNames: ["ve-toolbar"],
+  // disable per default
+  classNames: ["ve-toolbar", "disabled"],
+
   visualEditor: null,
+
   tools: null,
 
   initVisualEditor: function() {
@@ -58,6 +61,11 @@ var Toolbar = Ember.Component.extend({
   },
 
   onSurfaceStateChanged: function(surfaceState) {
+    if (surfaceState.get('selection').isNull()) {
+      $(this.element).addClass('disabled');
+    } else {
+      $(this.element).removeClass('disabled');
+    }
     var tools = this.getTools();
     tools.forEach(function(tool) {
       tool.updateState(surfaceState);
