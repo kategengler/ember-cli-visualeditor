@@ -9,7 +9,7 @@ module.exports = function ( grunt ) {
 
   grunt.initConfig({
     clean: {
-      dist: [ 'dist/*' ]
+      vendor: [ 'vendor/*' ]
     },
     subgrunt: {
       visualeditor: {
@@ -28,13 +28,13 @@ module.exports = function ( grunt ) {
         expand: true,
         cwd: 'node_modules/visualeditor/i18n/',
         src: '*',
-        dest: 'dist/i18n/ve/'
+        dest: 'vendor/i18n/ve/'
       },
       "oojs-i18n": {
         expand: true,
         cwd: 'node_modules/visualeditor/lib/oojs-ui/i18n/',
         src: '*',
-        dest: 'dist/i18n/oojs-ui/'
+        dest: 'vendor/i18n/oojs-ui/'
       },
       "oojs": {
         files: [
@@ -43,7 +43,7 @@ module.exports = function ( grunt ) {
       },
       "oojs-ui": {
         files: [
-          { expand: true, cwd: 'node_modules/visualeditor/lib/oojs-ui/', src: 'themes/apex/**', dest: 'dist/' },
+          { expand: true, cwd: 'node_modules/visualeditor/lib/oojs-ui/', src: 'themes/apex/**', dest: 'vendor/' },
           { src: 'node_modules/visualeditor/lib/oojs-ui/oojs-ui-apex.svg.css', dest: 'tmp/oojs-ui.css' }
         ]
       }
@@ -90,7 +90,7 @@ module.exports = function ( grunt ) {
         ]
       },
       "one-js-file": {
-        dest: 'dist/visual-editor.js',
+        dest: 'vendor/visualEditor.js',
         src: [
           'tmp/jquery-i18n.js',
           'tmp/jquery-uls.js',
@@ -100,7 +100,7 @@ module.exports = function ( grunt ) {
         ]
       },
       "one-css-file": {
-        dest: 'dist/visual-editor.css',
+        dest: 'vendor/visualEditor.css',
         src: [
           'tmp/oojs-ui.css',
           'tmp/visualEditor.css',
@@ -110,7 +110,7 @@ module.exports = function ( grunt ) {
     uglify: {
       "one-js-file": {
         files: {
-          'dist/visual-editor.min.js': ['dist/visual-editor.js']
+          'vendor/visualEditor.min.js': ['vendor/visualEditor.js']
         }
       },
     }
