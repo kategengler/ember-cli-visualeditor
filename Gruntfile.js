@@ -18,6 +18,36 @@ module.exports = function ( grunt ) {
         }
       }
     },
+    copy: {
+      "ve-main": {
+        files: [
+          { expand: true, cwd: 'node_modules/visualeditor/dist/', src: 'visualEditor.*', dest: 'tmp/' }
+        ]
+      },
+      "ve-i18n": {
+        expand: true,
+        cwd: 'node_modules/visualeditor/i18n/',
+        src: '*',
+        dest: 'dist/i18n/ve/'
+      },
+      "oojs-i18n": {
+        expand: true,
+        cwd: 'node_modules/visualeditor/lib/oojs-ui/i18n/',
+        src: '*',
+        dest: 'dist/i18n/oojs-ui/'
+      },
+      "oojs": {
+        files: [
+          { src: 'node_modules/visualeditor/lib/oojs/oojs.jquery.js', dest: 'tmp/oojs.js' }
+        ]
+      },
+      "oojs-ui": {
+        files: [
+          { expand: true, cwd: 'node_modules/visualeditor/lib/oojs-ui/', src: 'themes/apex/**', dest: 'dist/' },
+          { src: 'node_modules/visualeditor/lib/oojs-ui/oojs-ui-apex.svg.css', dest: 'tmp/oojs-ui.css' }
+        ]
+      }
+    },
     concat: {
       "jquery-i18n": {
         dest: 'tmp/jquery-i18n.js',
@@ -51,66 +81,42 @@ module.exports = function ( grunt ) {
           'node_modules/visualeditor/lib/jquery.uls/src/jquery.uls.data.js',
           'node_modules/visualeditor/lib/jquery.uls/src/jquery.uls.data.utils.js',
         ]
-      }
-    },
-    copy: {
-      "ve-main": {
-        files: [
-          { expand: true, cwd: 'node_modules/visualeditor/dist/', src: 'visualEditor.*', dest: 'dist/' }
-        ]
-      },
-      "ve-i18n": {
-        expand: true,
-        cwd: 'node_modules/visualeditor/i18n/',
-        src: '*',
-        dest: 'dist/i18n/ve/'
-      },
-      "oojs-i18n": {
-        expand: true,
-        cwd: 'node_modules/visualeditor/lib/oojs-ui/i18n/',
-        src: '*',
-        dest: 'dist/i18n/oojs-ui/'
       },
       "oojs-ui": {
-        files: [
-          { expand: true, cwd: 'node_modules/visualeditor/lib/oojs-ui/', src: 'oojs-ui-apex.svg.css', dest: 'dist/' },
-          { expand: true, cwd: 'node_modules/visualeditor/lib/oojs-ui/', src: 'themes/apex/**', dest: 'dist/' },
+        dest: 'tmp/oojs-ui.js',
+        src: [
+          'node_modules/visualeditor/lib/oojs-ui/oojs-ui.js',
+          'node_modules/visualeditor/lib/oojs-ui/oojs-ui-apex.js'
+        ]
+      },
+      "one-js-file": {
+        dest: 'dist/visual-editor.js',
+        src: [
+          'tmp/jquery-i18n.js',
+          'tmp/jquery-uls.js',
+          'tmp/oojs.js',
+          'tmp/oojs-ui.js',
+          'tmp/visualEditor.js'
+        ]
+      },
+      "one-css-file": {
+        dest: 'dist/visual-editor.css',
+        src: [
+          'tmp/oojs-ui.css',
+          'tmp/visualEditor.css',
         ]
       }
     },
     uglify: {
-      "jquery-i18n": {
+      "one-js-file": {
         files: {
-          'dist/jquery-i18n.min.js': ['tmp/jquery-i18n.js']
+          'dist/visual-editor.min.js': ['dist/visual-editor.js']
         }
       },
-      "jquery-uls": {
-        files: {
-          'dist/jquery-uls.min.js': ['tmp/jquery-uls.js']
-        }
-      },
-      "oojs": {
-        files: {
-          'dist/oojs.min.js': ['node_modules/visualeditor/lib/oojs/oojs.jquery.js']
-        }
-      },
-      "oojs-ui": {
-        files: {
-          'dist/oojs-ui.min.js': [
-            'node_modules/visualeditor/lib/oojs-ui/oojs-ui.js',
-            'node_modules/visualeditor/lib/oojs-ui/oojs-ui-apex.js'
-          ]
-        }
-      },
-      "ve": {
-        files: {
-          'dist/visualEditor.min.js': ['dist/visualEditor.js']
-        }
-      }
     }
   });
 
-  grunt.registerTask( 'build', [ 'clean', 'subgrunt', 'concat', 'copy', 'uglify' ] );
+  grunt.registerTask( 'build', [ 'clean', 'subgrunt', 'copy', 'concat', 'uglify' ] );
   grunt.registerTask( 'default', [ 'build' ] );
 
 };
