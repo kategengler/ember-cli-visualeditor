@@ -5,7 +5,8 @@ module.exports = {
   name: 'ember-cli-visualeditor',
 
   included: function included(app) {
-    var options = app.options["ember-cli-visualeditor"] || {
+
+    app.options["ember-cli-visualeditor"] = app.options["ember-cli-visualeditor"] || {
       assetsRoot: "/",
       // include assets into vendor.js and vendor.css
       includeAssets: false,
@@ -15,17 +16,19 @@ module.exports = {
       forceUnminified: false
     };
 
+    var options = app.options["ember-cli-visualeditor"];
+
     if (options.includeAssets) {
       app.import("vendor/visualEditor.css");
 
-      if (app.environment === "production" && !options.forceUnminified) {
+      if (app.env === "production" && !options.forceUnminified) {
         app.import("vendor/visualEditor.min.js");
       } else {
         app.import("vendor/visualEditor.js");
       }
-      TODO: import the other assets as well
-    }
 
+      // TODO: import the other assets as well
+    }
   }
 
 };
