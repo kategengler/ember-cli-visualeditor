@@ -51,6 +51,8 @@ var loadScriptWithEval = function(src) {
 var initializeVisualEditor = function(env) {
   var options = env.APP["ember-cli-visualeditor"] || {};
 
+  if (options.manual) return;
+
   var assetsRoot = options.assetsRoot || "";
   // append a trailing "/" to the assets route
   if (assetsRoot[assetsRoot.length-1] !== "/") {

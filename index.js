@@ -13,10 +13,17 @@ module.exports = {
       // use $.ajax + $.globalEval to load scripts (= $.getScript)
       useEval: false,
       // always use unminified versions
-      forceUnminified: false
+      forceUnminified: false,
+      // use this to control assets manuallay (e.g., include you own script tags)
+      manual: false
     };
 
     var options = app.options["ember-cli-visualeditor"];
+
+    // skip if controlling manually
+    if (options.manual) {
+      return;
+    }
 
     if (options.includeAssets) {
       app.import("vendor/visualEditor.css");
