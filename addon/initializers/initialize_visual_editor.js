@@ -75,7 +75,7 @@ var initializeVisualEditor = function(env) {
   function _initPlatform() {
     // HACK: this produces a failing request with fallback to 'en'
     // so we use 'en' right away
-    if ($.i18n().locale === "en-US") {
+    if ($.i18n().locale.toLowerCase() === "en-us") {
       $.i18n().locale = "en";
     }
     // TODO: make this configurable
