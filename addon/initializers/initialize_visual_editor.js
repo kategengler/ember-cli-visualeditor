@@ -1,5 +1,8 @@
 /* globals ve: true, $: true */
 
+import veMock from '../lib/ve-mock';
+
+
 var _loadedScripts = {};
 
 // This version injects a script instead of using global.eval
@@ -52,6 +55,11 @@ var initializeVisualEditor = function(env) {
   var options = env.APP["ember-cli-visualeditor"] || {};
 
   if (options.manual) return;
+
+  if (options.useMock) {
+    window.ve = veMock;
+    return;
+  }
 
   var assetsRoot = options.assetsRoot || "";
   // append a trailing "/" to the assets route

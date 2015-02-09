@@ -29,6 +29,9 @@ var VisualEditorComponent = Ember.Component.extend({
     surface = this.createSurfaceUI();
     this.set('surface', surface);
     $(this.element).empty().append(surface.$element);
+    // ve.ui.Surface needs to be initialized after been injected into the DOM
+    // so, if this component is already in the DOM we need to call surface.initialize right away
+    // (... as oposed to do it on 'didInsertElement')
     if (this._state === "inDOM") {
       surface.initialize();
     }
@@ -66,6 +69,7 @@ var VisualEditorComponent = Ember.Component.extend({
     if (this.get('isEnabled')) {
       surface.enable();
     } else {
+      // whenever this component is disabled we also remove the selection
       surface.getModel().setNullSelection();
       surface.disable();
     }
@@ -80,19 +84,10 @@ var VisualEditorComponent = Ember.Component.extend({
   },
 
   focus: function() {
+    var surface = this.get('surface');
     this.set('isFocused', true);
     surface.getView().focus();
-  },
-
-  // delegates for convenience
-
-  fromHtml: function(html) {
-    this.get('model').fromHtml(html);
-  },
-
-  toHtml: function() {
-    return this.get('model').toHtml();
-  },
+  }
 
 });
 

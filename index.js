@@ -15,7 +15,10 @@ module.exports = {
       // always use unminified versions
       forceUnminified: false,
       // use this to control assets manuallay (e.g., include you own script tags)
-      manual: false
+      manual: false,
+      // set this if you want to mock-out visual editor code
+      // e.g., ATM this is necessary in PhantomJS
+      useMock: false
     };
 
     var options = app.options["ember-cli-visualeditor"];
