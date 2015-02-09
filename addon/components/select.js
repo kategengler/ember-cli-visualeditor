@@ -27,7 +27,10 @@ export default ToolGroup.extend({
     this.element.value = " ";
     this.element.disabled = true;
 
-    $(this.element).change(this.onChange.bind(this));
+    var self = this;
+    $(this.element).change(function(e) {
+      self.onChange(e);
+    });
   },
 
   updateState: function(surfaceState) {
