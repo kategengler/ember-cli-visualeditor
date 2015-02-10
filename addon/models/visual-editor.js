@@ -19,29 +19,25 @@ var VisualEditorModel = Ember.Object.extend(Ember.Evented, {
   },
 
   fromHtml: function(html) {
+    html = html || "";
     // Note: at the moment we can not reuse VisualEditor's surface for different content, i.e., the whole thing needs
     // to be created from scratch. To avoid this unnecessarily to happen we compare the current html with the one provided.
     // VE-TODO: see if we can improve VE's API to allow switching the document-model
     var oldHtml = this.toHtml();
     if (oldHtml !== html) {
       var documentModel;
+      var htmlDoc = window.document.implementation.createHTMLDocument();
+      var body = htmlDoc.body || htmlDoc.getElementsByTagName('body')[0];
       try {
-        var targetDoc = window.document;
-        var parser = new DOMParser();
+        body.innerHTML = html;
+      } catch (error) {
         // TODO: discuss what to do if the html is corrupted
-        var doc = parser.parseFromString(html, 'text/html');
-        // Create a dm.Document instance from the input html in the #sample element
-        // Note: from the interface we would expect that dm.Converter does not use singletons -- but unfortunately it still does
-        var converter = new ve.dm.Converter(ve.dm.modelRegistry, ve.dm.nodeFactory, ve.dm.annotationFactory, ve.dm.metaItemFactory);
-        documentModel = converter.getModelFromDom(doc, targetDoc);
-      } catch (err) {
-        console.error('Could not parse HTML content. Wrapping it into preformatted element.');
-        documentModel = new ve.dm.DocumentModel([
-          'preformatted',
-          html,
-          '/preformatted'
-        ]);
+        body.innerHTML = "<pre>Invalid Document</pre>";
       }
+      // Create a dm.Document instance from the input html in the #sample element
+      // Note: from the interface we would expect that dm.Converter does not use singletons -- but unfortunately it still does
+      var converter = new ve.dm.Converter(ve.dm.modelRegistry, ve.dm.nodeFactory, ve.dm.annotationFactory, ve.dm.metaItemFactory);
+      documentModel = converter.getModelFromDom(htmlDoc, window.document);
       var surface = new ve.dm.Surface(documentModel);
       this.set('surface', surface);
     }
@@ -51,7 +47,9 @@ var VisualEditorModel = Ember.Object.extend(Ember.Evented, {
     var surface = this.get('surface');
     if (surface) {
       var documentNode = ve.dm.converter.getDomFromModel(surface.getDocument());
-      return $(documentNode).find('body').html();
+      var html = $(documentNode).find('body').html();
+      console.log("VisualEditor.toHtml()", html);
+      return html;
     } else {
       return null;
     }

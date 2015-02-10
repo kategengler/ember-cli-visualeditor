@@ -1,7 +1,8 @@
 /* globals $:true */
 
 // Used to mock-up VisualEditor API
-// WIP: atm we just need it to get the test-suite working
+// I.e., no selection and manipulation is possible.
+// Only creating a Surface and setting and getting its HTML content.
 
 var ve = {};
 
@@ -9,12 +10,38 @@ ve.dm = {};
 ve.ce = {};
 ve.ui = {};
 
-ve.dm.Document = function() {
-  this.connect = function() {};
-  this.disconnect = function() {};
+if (!Array.isArray) {
+  Array.isArray = function(arg) {
+    return Object.prototype.toString.call(arg) === '[object Array]';
+  };
+}
+
+// Note: in this mock we do not map to a VE data model but use HTML as model
+//   i.e. this is a mix of dm.DocumentNode and ce.DocumentNode
+ve.dm.DocumentNode = function(data) {
+  if (data instanceof window.Document) {
+    this.element = window.document.createElement('div');
+    this.element.innerHTML = data.body.innerHTML;
+  } else if (data instanceof window.Element) {
+    this.element = data;
+  } else if (Array.isArray(data) && data.length === 0 || !data) {
+    this.element = window.document.createElement('div');
+  } else {
+    throw new Error('ve.dm.DocumentNode: construction mode not yet supported in mock implementation');
+  }
+  this.$element = $(this.element);
+  this.$element.addClass('ve-ce-documentNode');
+  this.$element.attr('id', 've-mock-body');
 };
 
-ve.dm.DocumentModel = function() {
+ve.dm.Document = function(data) {
+  this.documentNode = new ve.dm.DocumentNode(data);
+
+  this.getDocumentNode = function() {
+    return this.documentNode;
+  };
+  this.connect = function() {};
+  this.disconnect = function() {};
 };
 
 ve.dm.Selection = function() {
@@ -53,25 +80,45 @@ ve.dm.Surface = function(documentModel) {
 };
 
 ve.dm.Converter = function() {
-  this.getModelFromDom = function() {
-    return new ve.dm.DocumentModel();
-  };
-  this.getDomFromModel = function() {
-    return new DOMParser().parseFromString('<html><body></body></html>', 'text/html');
-  };
-};
 
+  this.getModelFromDom = function(htmlDoc) {
+    return new ve.dm.Document(htmlDoc);
+  };
+
+  this.getDomFromModel = function(documentModel) {
+    var html = documentModel.getDocumentNode().element.innerHTML;
+    var doc = window.document.implementation.createHTMLDocument();
+    var body = doc.body || doc.getElementsByTagName('body')[0];
+    body.innerHTML = html;
+    return doc;
+  };
+
+};
 ve.dm.converter = new ve.dm.Converter();
 
-ve.ce.Surface = function() {
+ve.ce.Surface = function(model) {
+
+  this.element = window.document.createElement('div');
+  this.$element = $(this.element);
+  this.$element.addClass('ve-ce-surface');
+  this.model = model;
+
+  // quasi rendering the document by appending the DocumentNode's element
+  this.element.appendChild(model.getDocument().getDocumentNode().element);
+
   this.focus = function() {};
+
 };
 
 ve.ui.DesktopSurface = function(surfaceModel) {
+
   this.element = window.document.createElement('div');
   this.$element = $(this.element);
-  this.model = surfaceModel;
-  this.view = new ve.ce.Surface();
+  this.$element.addClass('ve-ui-surface');
+
+  this.surfaceModel = surfaceModel;
+  this.view = new ve.ce.Surface(surfaceModel);
+  this.$element.append(this.view.$element);
 
   this.initialize = function() {};
 
@@ -82,7 +129,7 @@ ve.ui.DesktopSurface = function(surfaceModel) {
   this.disable = function() {};
 
   this.getModel = function() {
-    return this.model;
+    return this.surfaceModel;
   };
 
   this.getView = function() {
@@ -90,16 +137,16 @@ ve.ui.DesktopSurface = function(surfaceModel) {
   };
 };
 
+// this registry does not provide any command
 ve.ui.CommandRegistry = function() {
   this.lookup = function() {};
 };
-
 ve.ui.commandRegistry = new ve.ui.CommandRegistry();
 
+// this factory does not provide any tool
 ve.ui.ToolFactory = function() {
   this.lookup = function() {};
 };
-
 ve.ui.toolFactory = new ve.ui.ToolFactory();
 
 export default ve;
