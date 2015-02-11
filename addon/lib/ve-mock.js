@@ -19,16 +19,14 @@ if (!Array.isArray) {
 // Note: in this mock we do not map to a VE data model but use HTML as model
 //   i.e. this is a mix of dm.DocumentNode and ce.DocumentNode
 ve.dm.DocumentNode = function(data) {
+  this.element = window.document.createElement('div');
+
   if (data instanceof window.Document) {
-    this.element = window.document.createElement('div');
     this.element.innerHTML = data.body.innerHTML;
   } else if (data instanceof window.Element) {
     this.element = data;
-  } else if (Array.isArray(data) && data.length === 0 || !data) {
-    this.element = window.document.createElement('div');
-  } else {
-    throw new Error('ve.dm.DocumentNode: construction mode not yet supported in mock implementation');
   }
+
   this.$element = $(this.element);
   this.$element.addClass('ve-ce-documentNode');
   this.$element.attr('id', 've-mock-body');
