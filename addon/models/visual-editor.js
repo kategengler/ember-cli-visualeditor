@@ -46,12 +46,47 @@ var VisualEditorModel = Ember.Object.extend(Ember.Evented, {
   toHtml: function() {
     var surface = this.get('surface');
     if (surface) {
-      var documentNode = ve.dm.converter.getDomFromModel(surface.getDocument());
-      var html = $(documentNode).find('body').html();
-      console.log("VisualEditor.toHtml()", html);
+      var documentModel = ve.dm.converter.getDomFromModel(surface.getDocument());
+      var html = $(documentModel).find('body').html();
       return html;
     } else {
       return null;
+    }
+  },
+
+  toText: function() {
+    var surface = this.get('surface');
+    if (surface) {
+      var documentModel = ve.dm.converter.getDomFromModel(surface.getDocument());
+      var text = $(documentModel).find('body').text();
+      return text;
+    } else {
+      return null;
+    }
+  },
+
+  setCursor: function(charPosition, offset) {
+    var surface = this.get('surface');
+    if (surface) {
+      var documentModel = surface.getDocument();
+      var documentNode = documentModel.getDocumentNode();
+      offset = offset || documentNode.getRange().start;
+      // TODO: Don't know if this really computes an offset representing
+      // the cursor relative to the given offset in terms of plain-text characters
+      var newOffset = documentModel.data.getRelativeContentOffset(offset, charPosition);
+      surface.setLinearSelection(new ve.Range(newOffset));
+    } else {
+      console.error('No surface.');
+    }
+  },
+
+  write: function(string) {
+    var surface = this.get('surface');
+    if (surface) {
+      var fragment = surface.getFragment();
+      fragment.insertContent(string);
+    } else {
+      console.error('No surface.');
     }
   },
 
