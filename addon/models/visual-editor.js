@@ -19,25 +19,29 @@ var VisualEditorModel = Ember.Object.extend(Ember.Evented, {
   },
 
   fromHtml: function(html) {
-    html = html || "";
     // Note: at the moment we can not reuse VisualEditor's surface for different content, i.e., the whole thing needs
     // to be created from scratch. To avoid this unnecessarily to happen we compare the current html with the one provided.
     // VE-TODO: see if we can improve VE's API to allow switching the document-model
     var oldHtml = this.toHtml();
-    if (oldHtml !== html) {
+    if (!oldHtml || oldHtml !== html) {
       var documentModel;
-      var htmlDoc = window.document.implementation.createHTMLDocument();
-      var body = htmlDoc.body || htmlDoc.getElementsByTagName('body')[0];
-      try {
-        body.innerHTML = html;
-      } catch (error) {
-        // TODO: discuss what to do if the html is corrupted
-        body.innerHTML = "<pre>Invalid Document</pre>";
+      if (!html || html.length === 0) {
+        documentModel = new ve.dm.Document([
+          { type: 'paragraph', internal: { generated: 'wrapper' } },
+          { type: '/paragraph' },
+        ]);
+      } else {
+        var htmlDoc = window.document.implementation.createHTMLDocument();
+        var body = htmlDoc.body || htmlDoc.getElementsByTagName('body')[0];
+        try {
+          body.innerHTML = html;
+        } catch (error) {
+          // TODO: discuss what to do if the html is corrupted
+          body.innerHTML = "<pre>Invalid Document</pre>";
+        }
+        var converter = new ve.dm.Converter(ve.dm.modelRegistry, ve.dm.nodeFactory, ve.dm.annotationFactory, ve.dm.metaItemFactory);
+        documentModel = converter.getModelFromDom(htmlDoc, window.document);
       }
-      // Create a dm.Document instance from the input html in the #sample element
-      // Note: from the interface we would expect that dm.Converter does not use singletons -- but unfortunately it still does
-      var converter = new ve.dm.Converter(ve.dm.modelRegistry, ve.dm.nodeFactory, ve.dm.annotationFactory, ve.dm.metaItemFactory);
-      documentModel = converter.getModelFromDom(htmlDoc, window.document);
       var surface = new ve.dm.Surface(documentModel);
       this.set('surface', surface);
     }
