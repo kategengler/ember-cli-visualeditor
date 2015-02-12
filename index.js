@@ -1,6 +1,8 @@
 /* jshint node: true */
 'use strict';
 
+var path = require('path');
+
 module.exports = {
   name: 'ember-cli-visualeditor',
 
@@ -39,6 +41,10 @@ module.exports = {
 
       // TODO: import the other assets as well
     }
-  }
+  },
+
+  blueprintsPath: function() {
+    return path.join(__dirname, 'blueprints');
+  },
 
 };
