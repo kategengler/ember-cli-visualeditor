@@ -15565,7 +15565,7 @@ OO.ui.theme = new OO.ui.Theme();
  * Released under the MIT license
  * http://ve.mit-license.org
  *
- * Date: 2015-02-06T15:40:27Z
+ * Date: 2015-02-13T10:40:02Z
  */
 /*!
  * UnicodeJS v0.1.2
@@ -44309,6 +44309,10 @@ ve.ce.Surface.prototype.handleLinearEnter = function ( e ) {
 		nodeModelRange = nodeModel.getRange();
 	}
 
+	if (node && node.handleEnter) {
+		return node.handleEnter(this);
+	}
+
 	// Handle insertion
 	if ( node === null ) {
 		throw new Error( 'node === null' );
@@ -44361,6 +44365,11 @@ ve.ce.Surface.prototype.handleLinearEnter = function ( e ) {
 			txInsert = undefined;
 			// Continue to traverseUpstream below. That will succeed because all
 			// ContentBranchNodes have splitOnEnter === true.
+			// HACK / WIP: we want to be able to veto the split behavior in certain cases
+			// which are not covered by the current impl.
+			// Particularly we want to use ce.ContentBranchNode as it solves the rendering
+			// of annotated text, but allow splitOnEnter = false
+			return;
 		}
 		insertEmptyParagraph = undefined;
 	}
