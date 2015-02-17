@@ -15565,7 +15565,7 @@ OO.ui.theme = new OO.ui.Theme();
  * Released under the MIT license
  * http://ve.mit-license.org
  *
- * Date: 2015-02-13T10:40:02Z
+ * Date: 2015-02-17T15:41:32Z
  */
 /*!
  * UnicodeJS v0.1.2
@@ -36915,7 +36915,7 @@ ve.dm.BlockImageNode.static.toDataElement = function ( domElements, converter ) 
 		return [
 			dataElement,
 			{ type: 'imageCaption' },
-			{ type: 'imageCaption' },
+			{ type: '/imageCaption' },
 			{ type: '/' + this.name }
 		];
 	} else {
@@ -42808,8 +42808,8 @@ ve.ce.Surface.prototype.onDocumentKeyUp = function ( e ) {
 	clientRect = RangeFix.getBoundingClientRect( nativeRange );
 
 	if ( clientRect && clientRect.top < this.surface.toolbarHeight ) {
-		scrollTo = this.$window.scrollTop() + clientRect.top - this.surface.toolbarHeight;
-		this.$window.scrollTop( scrollTo );
+		scrollTo = this.getScrollPosition() + clientRect.top - this.surface.toolbarHeight;
+		this.setScrollPosition( scrollTo );
 	}
 };
 
@@ -42920,14 +42920,14 @@ ve.ce.Surface.prototype.onCopy = function ( e ) {
 		originalRange = this.getNativeRange();
 		if ( originalRange ) {
 			// Save scroll position before changing focus to "offscreen" paste target
-			scrollTop = this.$window.scrollTop();
+			scrollTop = this.getScrollPosition();
 
 			// Prevent surface observation due to native range changing
 			this.surfaceObserver.disable();
 			ve.selectElement( this.$pasteTarget[0] );
 
 			// Restore scroll position after changing focus
-			this.$window.scrollTop( scrollTop );
+			this.setScrollPosition( scrollTop );
 
 			setTimeout( function () {
 				// Change focus back
@@ -42935,7 +42935,7 @@ ve.ce.Surface.prototype.onCopy = function ( e ) {
 				view.nativeSelection.removeAllRanges();
 				view.nativeSelection.addRange( originalRange.cloneRange() );
 				// Restore scroll position
-				view.$window.scrollTop( scrollTop );
+				view.setScrollPosition( scrollTop );
 				view.surfaceObserver.clear();
 				view.surfaceObserver.enable();
 			} );
@@ -43013,7 +43013,7 @@ ve.ce.Surface.prototype.beforePaste = function ( e ) {
 	}
 
 	// Save scroll position before changing focus to "offscreen" paste target
-	this.beforePasteData.scrollTop = this.$window.scrollTop();
+	this.beforePasteData.scrollTop = this.getScrollPosition();
 
 	this.$pasteTarget.empty();
 
@@ -43081,7 +43081,7 @@ ve.ce.Surface.prototype.beforePaste = function ( e ) {
 	}
 
 	// Restore scroll position after focusing the paste target
-	this.$window.scrollTop( this.beforePasteData.scrollTop );
+	this.setScrollPosition( this.beforePasteData.scrollTop );
 
 };
 
@@ -43329,7 +43329,7 @@ ve.ce.Surface.prototype.afterPaste = function () {
 	// Firefox sometimes doesn't change scrollTop immediately when pasting
 	// line breaks so wait until we fix it.
 	setTimeout( function () {
-		view.$window.scrollTop( beforePasteData.scrollTop );
+		view.setScrollPosition( beforePasteData.scrollTop );
 	} );
 
 	selection = selection.translateByTransaction( tx );
@@ -44896,6 +44896,14 @@ ve.ce.Surface.prototype.setNotUnicorningAll = function ( node ) {
 		this.unicorningNode = null;
 	}
 	this.setUnicorning( null );
+};
+
+ve.ce.Surface.prototype.setScrollPosition = function ( pos ) {
+	this.surface.setScrollPosition(pos);
+};
+
+ve.ce.Surface.prototype.getScrollPosition = function () {
+	return this.surface.getScrollPosition();
 };
 
 /*!
@@ -48785,6 +48793,14 @@ ve.ui.Surface.prototype.startFilibuster = function () {
 
 ve.ui.Surface.prototype.stopFilibuster = function () {
 	this.filibuster.stop();
+};
+
+ve.ui.Surface.prototype.setScrollPosition = function ( pos ) {
+	this.$window.scrollTop(pos);
+};
+
+ve.ui.Surface.prototype.getScrollPosition = function () {
+	return this.$window.scrollTop();
 };
 
 /*!
