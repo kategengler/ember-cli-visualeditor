@@ -1,12 +1,12 @@
 /*!
- * OOjs UI v0.6.0
+ * OOjs UI v0.7.0
  * https://www.mediawiki.org/wiki/OOjs_UI
  *
- * Copyright 2011–2014 OOjs Team and other contributors.
+ * Copyright 2011–2015 OOjs Team and other contributors.
  * Released under the MIT license
  * http://oojs.mit-license.org
  *
- * Date: 2014-12-16T21:01:07Z
+ * Date: 2015-02-12T00:04:52Z
  */
 .oo-ui-progressBarWidget-slide-frames from {
 	margin-left: -40%;
@@ -62,11 +62,14 @@
 .oo-ui-ltr {
 	direction: ltr;
 }
+.oo-ui-element-hidden {
+	display: none !important;
+}
 .oo-ui-buttonElement > .oo-ui-buttonElement-button {
 	cursor: pointer;
 	display: inline-block;
 	vertical-align: middle;
-	font-family: inherit;
+	font: inherit;
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
 	   -moz-user-select: none;
@@ -324,6 +327,10 @@
 	display: block;
 	background: rgba(0, 0, 0, 0.4);
 }
+.oo-ui-lookupElement > .oo-ui-menuSelectWidget {
+	z-index: 1;
+	width: 100%;
+}
 .oo-ui-bookletLayout-stackLayout.oo-ui-stackLayout-continuous > .oo-ui-panelLayout-scrollable {
 	overflow-y: hidden;
 }
@@ -427,11 +434,32 @@
 .oo-ui-fieldLayout.oo-ui-fieldLayout-align-top.oo-ui-labelElement > .oo-ui-fieldLayout-body > .oo-ui-labelElement-label {
 	padding: 0.5em 0;
 }
-.oo-ui-fieldLayout > .oo-ui-popupButtonWidget > .oo-ui-buttonElement-button > .oo-ui-iconElement-icon {
+.oo-ui-fieldLayout > .oo-ui-popupButtonWidget {
+	margin-right: 0;
 	margin-top: 0.25em;
+}
+.oo-ui-fieldLayout > .oo-ui-popupButtonWidget:last-child {
+	margin-right: 0;
 }
 .oo-ui-fieldLayout-disabled .oo-ui-labelElement-label {
 	color: #cccccc;
+}
+.oo-ui-actionFieldLayout-field {
+	display: table;
+	table-layout: fixed;
+	width: 100%;
+}
+.oo-ui-actionFieldLayout-input,
+.oo-ui-actionFieldLayout-button {
+	display: table-cell;
+	vertical-align: middle;
+}
+.oo-ui-actionFieldLayout-input {
+	padding-right: 1em;
+}
+.oo-ui-actionFieldLayout-button {
+	width: 1%;
+	white-space: nowrap;
 }
 .oo-ui-fieldsetLayout {
 	position: relative;
@@ -448,13 +476,24 @@
 .oo-ui-fieldsetLayout.oo-ui-labelElement > .oo-ui-labelElement-label {
 	display: inline-block;
 }
+.oo-ui-fieldsetLayout > .oo-ui-fieldsetLayout-help {
+	float: right;
+}
+.oo-ui-fieldsetLayout > .oo-ui-fieldsetLayout-help > .oo-ui-popupWidget > .oo-ui-popupWidget-popup {
+	z-index: 1;
+}
+.oo-ui-fieldsetLayout > .oo-ui-fieldsetLayout-help .oo-ui-fieldsetLayout-help-content {
+	padding: 0.5em 0.75em;
+	line-height: 1.5em;
+}
 .oo-ui-fieldsetLayout + .oo-ui-fieldsetLayout {
 	margin-top: 2em;
 }
 .oo-ui-fieldsetLayout > .oo-ui-labelElement-label {
-	font-size: 1.5em;
+	font-size: 1.1em;
 	margin-bottom: 0.5em;
 	padding: 0.25em 0;
+	font-weight: bold;
 }
 .oo-ui-fieldsetLayout.oo-ui-iconElement > .oo-ui-labelElement-label {
 	padding-left: 1.75em;
@@ -463,8 +502,14 @@
 .oo-ui-fieldsetLayout.oo-ui-iconElement > .oo-ui-iconElement-icon {
 	left: 0;
 	top: 0.25em;
-	width: 2em;
-	height: 2em;
+	width: 1.5em;
+	height: 1.5em;
+}
+.oo-ui-fieldsetLayout > .oo-ui-popupButtonWidget {
+	margin-right: 0;
+}
+.oo-ui-fieldsetLayout > .oo-ui-popupButtonWidget:last-child {
+	margin-right: 0;
 }
 .oo-ui-gridLayout {
 	position: absolute;
@@ -472,6 +517,68 @@
 	left: 0;
 	right: 0;
 	bottom: 0;
+}
+.oo-ui-menuLayout {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}
+.oo-ui-menuLayout-menu,
+.oo-ui-menuLayout-content {
+	position: absolute;
+	-webkit-transition: all ease-in-out 200ms;
+	   -moz-transition: all ease-in-out 200ms;
+	    -ms-transition: all ease-in-out 200ms;
+	     -o-transition: all ease-in-out 200ms;
+	        transition: all ease-in-out 200ms;
+}
+.oo-ui-menuLayout-content {
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}
+.oo-ui-menuLayout-top .oo-ui-menuLayout-menu {
+	left: 0;
+	top: 0;
+	right: 0;
+}
+.oo-ui-menuLayout-after .oo-ui-menuLayout-menu {
+	top: 0;
+	right: 0;
+	bottom: 0;
+}
+.oo-ui-menuLayout-bottom .oo-ui-menuLayout-menu {
+	right: 0;
+	bottom: 0;
+	left: 0;
+}
+.oo-ui-menuLayout-before .oo-ui-menuLayout-menu {
+	bottom: 0;
+	left: 0;
+	top: 0;
+}
+.oo-ui-menuLayout-top .oo-ui-menuLayout-content {
+	right: 0 !important;
+	bottom: 0 !important;
+	left: 0 !important;
+}
+.oo-ui-menuLayout-after .oo-ui-menuLayout-content {
+	bottom: 0 !important;
+	left: 0 !important;
+	top: 0 !important;
+}
+.oo-ui-menuLayout-bottom .oo-ui-menuLayout-content {
+	left: 0 !important;
+	top: 0 !important;
+	right: 0 !important;
+}
+.oo-ui-menuLayout-before .oo-ui-menuLayout-content {
+	top: 0 !important;
+	right: 0 !important;
+	bottom: 0 !important;
 }
 .oo-ui-panelLayout {
 	position: relative;
@@ -488,9 +595,6 @@
 }
 .oo-ui-panelLayout-padded {
 	padding: 1.25em;
-}
-.oo-ui-stackLayout > .oo-ui-panelLayout {
-	display: none;
 }
 .oo-ui-stackLayout-continuous > .oo-ui-panelLayout {
 	display: block;
@@ -937,7 +1041,9 @@
 .oo-ui-selectWidget-depressed .oo-ui-optionWidget-selected {
 	background-color: #a7dcff;
 }
-.oo-ui-selectWidget-pressed .oo-ui-optionWidget-pressed {
+.oo-ui-selectWidget-pressed .oo-ui-optionWidget-pressed,
+.oo-ui-selectWidget-pressed .oo-ui-optionWidget-pressed.oo-ui-optionWidget-highlighted,
+.oo-ui-selectWidget-pressed .oo-ui-optionWidget-pressed.oo-ui-optionWidget-highlighted.oo-ui-optionWidget-selected {
 	background-color: #a7dcff;
 }
 .oo-ui-optionWidget.oo-ui-widget-disabled {
@@ -969,6 +1075,10 @@
 	display: inline-block;
 	white-space: nowrap;
 	border-radius: 0.3em;
+	margin-right: 0.5em;
+}
+.oo-ui-buttonSelectWidget:last-child {
+	margin-right: 0;
 }
 .oo-ui-buttonSelectWidget .oo-ui-buttonOptionWidget .oo-ui-buttonElement-button {
 	border-radius: 0;
@@ -1028,9 +1138,6 @@
 .oo-ui-radioOptionWidget.oo-ui-optionWidget-highlighted {
 	background-color: transparent;
 }
-.oo-ui-radioOptionWidget > .oo-ui-labelElement-label {
-	padding: 0 0.5em;
-}
 .oo-ui-labelWidget {
 	display: inline-block;
 	padding: 0.5em 0;
@@ -1064,11 +1171,25 @@
 .oo-ui-buttonWidget {
 	display: inline-block;
 	vertical-align: middle;
+	margin-right: 0.5em;
+}
+.oo-ui-buttonWidget:last-child {
+	margin-right: 0;
 }
 .oo-ui-buttonGroupWidget {
 	display: inline-block;
 	white-space: nowrap;
 	border-radius: 0.3em;
+	margin-right: 0.5em;
+}
+.oo-ui-buttonGroupWidget:last-child {
+	margin-right: 0;
+}
+.oo-ui-buttonGroupWidget .oo-ui-buttonWidget {
+	margin-right: 0;
+}
+.oo-ui-buttonGroupWidget .oo-ui-buttonWidget:last-child {
+	margin-right: 0;
 }
 .oo-ui-buttonGroupWidget .oo-ui-buttonElement-framed .oo-ui-buttonElement-button {
 	border-radius: 0;
@@ -1102,6 +1223,7 @@
 	border-radius: 1em;
 	box-shadow: 0 0 0 white, inset 0 0.1em 0.2em #dddddd;
 	border: solid 1px #cccccc;
+	margin-right: 0.5em;
 	background: #eeeeee;
 	filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr='#dddddd', endColorstr='#ffffff');
 	background-image: -webkit-gradient(linear, right top, right bottom, color-stop(0%, #dddddd), color-stop(100%, #ffffff));
@@ -1135,6 +1257,9 @@
 }
 .oo-ui-toggleWidget-off .oo-ui-toggleSwitchWidget-glow {
 	display: none;
+}
+.oo-ui-toggleSwitchWidget:last-child {
+	margin-right: 0;
 }
 .oo-ui-toggleSwitchWidget.oo-ui-widget-disabled {
 	opacity: 0.5;
@@ -1200,13 +1325,13 @@
 }
 .oo-ui-progressBarWidget {
 	max-width: 50em;
-	border: solid 1px #a6cee1;
+	border: solid 1px #cccccc;
 	border-radius: 0.25em;
 	overflow: hidden;
 }
 .oo-ui-progressBarWidget-bar {
 	height: 1em;
-	border-right: solid 1px #a6cee1;
+	border-right: solid 1px #cccccc;
 	-webkit-transition: width 200ms, margin-left 200ms;
 	   -moz-transition: width 200ms, margin-left 200ms;
 	    -ms-transition: width 200ms, margin-left 200ms;
@@ -1284,7 +1409,7 @@
 	box-shadow: 0 0.15em 0.5em 0 rgba(0, 0, 0, 0.2);
 }
 .oo-ui-popupWidget-anchored .oo-ui-popupWidget-popup {
-	margin-top: 7px;
+	margin-top: 6px;
 }
 .oo-ui-popupWidget-anchored .oo-ui-popupWidget-anchor:before,
 .oo-ui-popupWidget-anchored .oo-ui-popupWidget-anchor:after {
@@ -1297,14 +1422,14 @@
 	border-top: 0;
 }
 .oo-ui-popupWidget-anchored .oo-ui-popupWidget-anchor:before {
-	bottom: -8px;
-	left: -7px;
+	bottom: -7px;
+	left: -6px;
 	border-bottom-color: #aaaaaa;
 	border-width: 7px;
 }
 .oo-ui-popupWidget-anchored .oo-ui-popupWidget-anchor:after {
-	bottom: -8px;
-	left: -6px;
+	bottom: -7px;
+	left: -5px;
 	border-bottom-color: #ffffff;
 	border-width: 6px;
 }
@@ -1339,6 +1464,47 @@
 }
 .oo-ui-popupButtonWidget.oo-ui-buttonElement-framed > .oo-ui-popupWidget {
 	left: 1.25em;
+}
+.oo-ui-inputWidget {
+	margin-right: 0.5em;
+}
+.oo-ui-inputWidget:last-child {
+	margin-right: 0;
+}
+.oo-ui-dropdownInputWidget {
+	position: relative;
+	vertical-align: middle;
+	-webkit-box-sizing: border-box;
+	   -moz-box-sizing: border-box;
+	        box-sizing: border-box;
+	width: 100%;
+	max-width: 50em;
+}
+.oo-ui-dropdownInputWidget select {
+	display: inline-block;
+	width: 100%;
+	resize: none;
+	-webkit-box-sizing: border-box;
+	   -moz-box-sizing: border-box;
+	        box-sizing: border-box;
+}
+.oo-ui-dropdownInputWidget select {
+	height: 2.5em;
+	padding: 0.5em;
+	font-size: 1em;
+	font-family: sans-serif;
+	border: solid 1px rgba(0, 0, 0, 0.1);
+	border-radius: 0.25em;
+}
+.oo-ui-dropdownInputWidget.oo-ui-widget-enabled select:hover,
+.oo-ui-dropdownInputWidget.oo-ui-widget-enabled select:focus {
+	border-color: rgba(0, 0, 0, 0.2);
+	outline: none;
+}
+.oo-ui-dropdownInputWidget.oo-ui-widget-disabled select {
+	color: #cccccc;
+	border-color: #dddddd;
+	background-color: #f3f3f3;
 }
 .oo-ui-textInputWidget {
 	position: relative;
@@ -1376,6 +1542,16 @@
 }
 .oo-ui-textInputWidget > .oo-ui-indicatorElement-indicator {
 	right: 0;
+}
+.oo-ui-textInputWidget > .oo-ui-labelElement-label {
+	position: absolute;
+	top: 0;
+}
+.oo-ui-textInputWidget-labelPosition-after > .oo-ui-labelElement-label {
+	right: 0;
+}
+.oo-ui-textInputWidget-labelPosition-before > .oo-ui-labelElement-label {
+	left: 0;
 }
 .oo-ui-textInputWidget input,
 .oo-ui-textInputWidget textarea {
@@ -1442,6 +1618,17 @@
 	width: 1.5em;
 	background-position: left center;
 }
+.oo-ui-textInputWidget > .oo-ui-labelElement-label {
+	padding: 0.4em;
+	line-height: 1.5em;
+	color: #888888;
+}
+.oo-ui-textInputWidget-labelPosition-after.oo-ui-indicatorElement > .oo-ui-labelElement-label {
+	padding-right: 2em;
+}
+.oo-ui-textInputWidget-labelPosition-before.oo-ui-iconElement > .oo-ui-labelElement-label {
+	padding-left: 2.5em;
+}
 .oo-ui-menuSelectWidget {
 	position: absolute;
 	background: #ffffff;
@@ -1482,11 +1669,12 @@
 	color: #888888;
 }
 .oo-ui-dropdownWidget {
-	position: relative;
 	display: inline-block;
+	position: relative;
 	margin: 0.25em 0;
 	width: 100%;
 	max-width: 50em;
+	margin-right: 0.5em;
 }
 .oo-ui-dropdownWidget-handle {
 	width: 100%;
@@ -1507,12 +1695,15 @@
 	background-position: center center;
 	background-repeat: no-repeat;
 }
-.oo-ui-dropdownWidget .oo-ui-menuSelectWidget {
+.oo-ui-dropdownWidget > .oo-ui-menuSelectWidget {
 	z-index: 1;
 	width: 100%;
 }
 .oo-ui-dropdownWidget.oo-ui-widget-disabled .oo-ui-dropdownWidget-handle {
 	cursor: default;
+}
+.oo-ui-dropdownWidget:last-child {
+	margin-right: 0;
 }
 .oo-ui-dropdownWidget-handle {
 	height: 2.5em;
@@ -1650,10 +1841,14 @@
 	position: relative;
 	width: 100%;
 	max-width: 50em;
+	margin-right: 0.5em;
 }
-.oo-ui-comboBoxWidget > .oo-ui-selectWidget {
-	width: 100%;
+.oo-ui-comboBoxWidget > .oo-ui-menuSelectWidget {
 	z-index: 1;
+	width: 100%;
+}
+.oo-ui-comboBoxWidget:last-child {
+	margin-right: 0;
 }
 .oo-ui-comboBoxWidget-handle {
 	border: solid 1px rgba(0, 0, 0, 0.1);
@@ -1707,12 +1902,6 @@
 	-webkit-box-sizing: border-box;
 	   -moz-box-sizing: border-box;
 	        box-sizing: border-box;
-}
-.oo-ui-window-frame > iframe {
-	width: 100%;
-	height: 100%;
-	margin: 0;
-	padding: 0;
 }
 .oo-ui-window-content:focus {
 	outline: none;
@@ -2040,7 +2229,7 @@
 	height: 0;
 	overflow: hidden;
 }
-.oo-ui-windowManager-modal > .oo-ui-dialog.oo-ui-window-load {
+.oo-ui-windowManager-modal > .oo-ui-dialog.oo-ui-window-active {
 	width: auto;
 	height: auto;
 	top: 0;
@@ -2057,14 +2246,6 @@
 	overflow: hidden;
 	max-width: 100%;
 	max-height: 100%;
-	visibility: visible;
-}
-.oo-ui-windowManager-modal > .oo-ui-dialog.oo-ui-window-setup > .oo-ui-window-frame > iframe {
-	width: 100%;
-	height: 100%;
-}
-.oo-ui-windowManager-modal > .oo-ui-dialog > .oo-ui-window-frame {
-	visibility: hidden;
 }
 .oo-ui-windowManager-fullscreen > .oo-ui-dialog > .oo-ui-window-frame {
 	width: 100%;
@@ -2085,6 +2266,7 @@
 	top: 1em;
 	bottom: 1em;
 	background-color: #ffffff;
+	opacity: 0;
 	-webkit-transform: scale(0.5);
 	   -moz-transform: scale(0.5);
 	    -ms-transform: scale(0.5);
@@ -2096,10 +2278,13 @@
 	     -o-transition: all 250ms ease-in-out;
 	        transition: all 250ms ease-in-out;
 }
-.oo-ui-windowManager-modal > .oo-ui-dialog.oo-ui-window-load {
+.oo-ui-windowManager-modal > .oo-ui-dialog.oo-ui-window-ready {
+	/* Fade window overlay */
 	opacity: 1;
 }
-.oo-ui-windowManager-modal > .oo-ui-dialog.oo-ui-window-setup > .oo-ui-window-frame {
+.oo-ui-windowManager-modal > .oo-ui-dialog.oo-ui-window-ready > .oo-ui-window-frame {
+	/* Fade frame */
+	opacity: 1;
 	-webkit-transform: scale(1);
 	   -moz-transform: scale(1);
 	    -ms-transform: scale(1);
@@ -2150,6 +2335,9 @@
 }
 .oo-ui-icon-link {
 	background-image: /* @embed */ url(themes/apex/images/icons/link.svg);
+}
+.oo-ui-icon-lock {
+	background-image: /* @embed */ url(themes/apex/images/icons/lock.svg);
 }
 .oo-ui-icon-menu {
 	background-image: /* @embed */ url(themes/apex/images/icons/menu.svg);
@@ -2217,25 +2405,12 @@
  * Released under the MIT license
  * http://ve.mit-license.org
  *
- * Date: 2015-02-17T15:41:33Z
+ * Date: 2015-02-17T16:02:35Z
  */
-/*!
- * VisualEditor Standalone Initialization styles.
- *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
- */
-
-.ve-ce-documentNode {
-	font-size: 0.8em;
-}
-
-.oo-ui-menuSelectWidget {
-	font-size: 0.9em;
-}
 /*!
  * VisualEditor ContentEditable FocusableNode styles.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 .ve-ce-surface-highlights-focused .ve-ce-focusableNode-highlights {
@@ -2282,10 +2457,11 @@
 	background: #000;
 	background: rgba(0, 0, 0, 1);
 }
+
 /*!
  * VisualEditor ContentEditable AlienNode styles.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 .ve-ce-alienNode-highlight {
@@ -2308,10 +2484,11 @@
 .ve-ce-surface-highlights-blurred .ve-ce-alienNode-highlights {
 	opacity: 0.5;
 }
+
 /*!
  * VisualEditor ContentEditable BranchNode styles.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 .ve-ce-branchNode-blockSlugWrapper,
@@ -2377,10 +2554,11 @@ li.ve-ce-branchNode p.ve-ce-branchNode:first-child {
 	margin: 0;
 	padding: 0;
 }
+
 /*!
  * VisualEditor ContentEditable CommentNode styles.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 .ve-ce-commentNode {
@@ -2394,10 +2572,11 @@ li.ve-ce-branchNode p.ve-ce-branchNode:first-child {
 	background-position: center center;
 	opacity: 0.5;
 }
+
 /*!
  * VisualEditor ContentEditable DocumentNode styles.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 .ve-ce-documentNode {
@@ -2419,19 +2598,21 @@ li.ve-ce-branchNode p.ve-ce-branchNode:first-child {
 .ve-ce-documentNode:focus {
 	outline: none;
 }
+
 /*!
  * VisualEditor ContentEditable GeneratedContentNode styles.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 .ve-ce-generatedContentNode-generating {
 	opacity: 0.5;
 }
+
 /*!
  * VisualEditor ContentEditable LanguageAnnotation styles.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 .ve-ce-languageAnnotation {
@@ -2443,10 +2624,11 @@ li.ve-ce-branchNode p.ve-ce-branchNode:first-child {
    text disappears if the span has dir="rtl" */
 .ve-init-target-ie .ve-ce-languageAnnotation {
 	background: none;
-}/*!
+}
+/*!
  * VisualEditor ContentEditable ResizableNode styles.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 .ve-ce-resizableNode-handles {
@@ -2466,6 +2648,13 @@ li.ve-ce-branchNode p.ve-ce-branchNode:first-child {
 	width: 11px;
 	height: 11px;
 	background-repeat: no-repeat;
+}
+
+.ve-ce-resizableNode-hide-nw .ve-ce-resizableNode-nwHandle,
+.ve-ce-resizableNode-hide-ne .ve-ce-resizableNode-neHandle,
+.ve-ce-resizableNode-hide-sw .ve-ce-resizableNode-swHandle,
+.ve-ce-resizableNode-hide-se .ve-ce-resizableNode-seHandle {
+	display: none;
 }
 
 .ve-ce-resizableNode-nwHandle {
@@ -2495,13 +2684,13 @@ li.ve-ce-branchNode p.ve-ce-branchNode:first-child {
 .ve-ce-resizableNode-nwHandle,
 .ve-ce-resizableNode-seHandle {
 	/* @embed */
-	background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMSIgaGVpZ2h0PSIxMSIgdmlld0JveD0iMCAwIDExIDExIj4KICAgIDxnIGlkPSJyZXNpemUtbnctc2UiPgogICAgICAgIDxwYXRoIGQ9Ik0yIDJ2NGwxLjUtMS41IDMgMy0xLjUgMS41aDR2LTRsLTEuNSAxLjUtMy0zIDEuNS0xLjV6IiBpZD0ic2hhZG93IiBvcGFjaXR5PSIuMjUiIHN0cm9rZT0iIzAwMCIgc3Ryb2tlLXdpZHRoPSIzLjUiIHN0cm9rZS1saW5lam9pbj0icm91bmQiIGZpbGw9Im5vbmUiLz4KICAgICAgICA8cGF0aCBkPSJNMiAydjRsMS41LTEuNSAzIDMtMS41IDEuNWg0di00bC0xLjUgMS41LTMtMyAxLjUtMS41eiIgaWQ9Im91dGxpbmUiIGZpbGw9IiNmZmYiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+CiAgICAgICAgPHBhdGggZD0iTTIgMnY0bDEuNS0xLjUgMyAzLTEuNSAxLjVoNHYtNGwtMS41IDEuNS0zLTMgMS41LTEuNXoiIGlkPSJmaWxsIi8+CiAgICA8L2c+Cjwvc3ZnPgo=");
+	background-image: url(../../../ui/styles/images/resize-nw-se.svg);
 }
 
 .ve-ce-resizableNode-neHandle,
 .ve-ce-resizableNode-swHandle {
 	/* @embed */
-	background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMSIgaGVpZ2h0PSIxMSIgdmlld0JveD0iMCAwIDExIDExIj4KICAgIDxnIGlkPSJyZXNpemUtbmUtc3ciPgogICAgICAgIDxwYXRoIGQ9Ik05IDJ2NGwtMS41LTEuNS0zIDMgMS41IDEuNWgtNHYtNGwxLjUgMS41IDMtMy0xLjUtMS41eiIgaWQ9InNoYWRvdyIgb3BhY2l0eT0iLjI1IiBzdHJva2U9IiMwMDAiIHN0cm9rZS13aWR0aD0iMy41IiBzdHJva2UtbGluZWpvaW49InJvdW5kIiBmaWxsPSJub25lIi8+CiAgICAgICAgPHBhdGggZD0iTTkgMnY0bC0xLjUtMS41LTMgMyAxLjUgMS41aC00di00bDEuNSAxLjUgMy0zLTEuNS0xLjV6IiBpZD0ib3V0bGluZSIgZmlsbD0iI2ZmZiIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KICAgICAgICA8cGF0aCBkPSJNOSAydjRsLTEuNS0xLjUtMyAzIDEuNSAxLjVoLTR2LTRsMS41IDEuNSAzLTMtMS41LTEuNXoiIGlkPSJmaWxsIi8+CiAgICA8L2c+Cjwvc3ZnPgo=");
+	background-image: url(../../../ui/styles/images/resize-ne-sw.svg);
 }
 
 
@@ -2516,7 +2705,7 @@ li.ve-ce-branchNode p.ve-ce-branchNode:first-child {
 }
 
 .ve-ce-resizableNode-sizeLabel-resizing {
-	opacity: 0.75;
+	opacity: 1;
 }
 
 .ve-ce-resizableNode-sizeText {
@@ -2538,10 +2727,11 @@ li.ve-ce-branchNode p.ve-ce-branchNode:first-child {
 	background-color: #ecc;
 	border-color: #caa;
 }
+
 /*!
  * VisualEditor ContentEditable TableCellNode styles.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 .ve-ce-tableCellNode {
@@ -2583,10 +2773,11 @@ li.ve-ce-branchNode p.ve-ce-branchNode:first-child {
 .ve-ce-tableCellNode-header {
 	background: #e7e7e7;
 }
+
 /*!
  * VisualEditor ContentEditable TableNode styles.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 .ve-ce-tableNode {
@@ -2669,10 +2860,11 @@ li.ve-ce-branchNode p.ve-ce-branchNode:first-child {
 	height: 6px;
 	border-bottom: 0;
 }
+
 /*!
  * VisualEditor ContentEditable general styles.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 /*csslint known-properties:false */
 /* Bug: https://github.com/stubbornella/csslint/issues/436 */
@@ -2682,10 +2874,11 @@ li.ve-ce-branchNode p.ve-ce-branchNode:first-child {
 	unicode-bidi: -moz-isolate;
 	unicode-bidi: -webkit-isolate;
 }
+
 /*!
  * VisualEditor ContentEditable Surface styles.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 .ve-ce-surface {
@@ -2755,10 +2948,11 @@ li.ve-ce-branchNode p.ve-ce-branchNode:first-child {
 .ve-ce-surface .thumbcaption .ve-ce-branchNode-slug {
 	display: none;
 }
+
 /*!
  * VisualEditor UserInterface ToolbarDialog styles.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 .ve-ui-toolbarDialog {
@@ -2786,10 +2980,11 @@ li.ve-ce-branchNode p.ve-ce-branchNode:first-child {
 	bottom: auto;
 	box-shadow: none;
 }
+
 /*!
  * VisualEditor UserInterface CommandHelpDialog styles.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 .ve-ui-commandHelpDialog-container {
@@ -2802,7 +2997,7 @@ li.ve-ce-branchNode p.ve-ce-branchNode:first-child {
 	 * Hack 1.1: The height isn't calculated correctly with the inline-block
 	 * hack so fix it to prevent unnecessary scroll bars.
 	 */
-	height: 39em;
+	height: 43em;
 }
 
 .ve-ui-commandHelpDialog-section {
@@ -2855,10 +3050,11 @@ li.ve-ce-branchNode p.ve-ce-branchNode:first-child {
 	margin-top: 0.5em;
 	margin-bottom: 0.5em;
 }
+
 /*!
  * VisualEditor UserInterface FindAndReplaceDialog styles.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 .ve-ui-findAndReplaceDialog-row {
@@ -2872,29 +3068,27 @@ li.ve-ce-branchNode p.ve-ce-branchNode:first-child {
 	padding-bottom: 1px;
 }
 
-.ve-ui-findAndReplaceDialog-row .ve-ui-findAndReplaceDialog-cell {
+.ve-ui-findAndReplaceDialog-cell {
 	display: table-cell;
 	vertical-align: middle;
 	white-space: nowrap;
 	padding-right: 1em;
 }
 
-.ve-ui-findAndReplaceDialog-row .ve-ui-findAndReplaceDialog-cell:last-child {
+.ve-ui-findAndReplaceDialog-cell:last-child {
 	padding-right: 0;
 }
 
-.ve-ui-findAndReplaceDialog-findText input {
-	padding-right: 6em;
+.ve-ui-findAndReplaceDialog-cell-input {
+	width: 100%;
+}
+
+.ve-ui-findAndReplaceDialog-cell-input .oo-ui-textInputWidget {
+	max-width: none;
 }
 
 .ve-ui-findAndReplaceDialog-findText-error input {
 	background-color: #edd;
-}
-
-.ve-ui-findAndReplaceDialog-focusedIndexLabel {
-	position: absolute;
-	right: 1.4em;
-	color: #888;
 }
 
 /* @noflip */
@@ -2934,10 +3128,11 @@ li.ve-ce-branchNode p.ve-ce-branchNode:first-child {
 .ve-init-target-ie .ve-ui-findAndReplaceDialog-findResult-focused > div {
 	opacity: 0.4;
 }
+
 /*!
  * VisualEditor UserInterface ProgressDialog styles.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 .ve-ui-progressDialog-row {
@@ -2957,10 +3152,11 @@ li.ve-ce-branchNode p.ve-ce-branchNode:first-child {
 	width: 1.9em;
 	padding-left: 1em;
 }
+
 /*!
  * VisualEditor FormatTool styles.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 .oo-ui-menuToolGroup .oo-ui-tool-name-paragraph .oo-ui-tool-title {
@@ -3008,10 +3204,11 @@ li.ve-ce-branchNode p.ve-ce-branchNode:first-child {
 .oo-ui-menuToolGroup .oo-ui-tool-name-tableCellHeader .oo-ui-tool-title {
 	font-weight: bold;
 }
+
 /*!
  * VisualEditor UserInterface LanguageInputWidget styles.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 .ve-ui-languageInputWidget-findLanguageButton .oo-ui-buttonElement-button > .oo-ui-labelElement-label {
@@ -3027,10 +3224,11 @@ li.ve-ce-branchNode p.ve-ce-branchNode:first-child {
 
 .ve-ui-languageInputWidget-directionSelect {
 	margin-bottom: 0.5em;
-}/*!
+}
+/*!
  * VisualEditor UserInterface LanguageSearchWidget/LanguageResultWidget styles.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /* ve.ui.LanguageResultWidget */
@@ -3042,10 +3240,11 @@ li.ve-ce-branchNode p.ve-ce-branchNode:first-child {
 .ve-ui-languageResultWidget-otherMatch {
 	float: right;
 	color: #777;
-}/*!
+}
+/*!
  * VisualEditor UserInterface ContextOptionWidget styles.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 .ve-ui-contextOptionWidget {
@@ -3073,19 +3272,21 @@ li.ve-ce-branchNode p.ve-ce-branchNode:first-child {
 .ve-ui-contextOptionWidget.oo-ui-optionWidget-highlighted .oo-ui-iconElement-icon {
 	opacity: 1;
 }
+
 /*!
  * VisualEditor UserInterface ContextSelectWidget styles.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 .ve-ui-contextSelectWidget {
 	padding: 0;
 }
+
 /*!
  * VisualEditor UserInterface DimensionsWidget styles.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 .ve-ui-dimensionsWidget,
@@ -3100,10 +3301,11 @@ li.ve-ce-branchNode p.ve-ce-branchNode:first-child {
 .ve-ui-dimensionsWidget .oo-ui-labelWidget {
 	padding: 0.5em;
 }
+
 /*!
  * VisualEditor UserInterface MediaSizeWidget styles.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 .ve-ui-mediaSizeWidget-input-hasError input[type="text"] {
@@ -3122,19 +3324,21 @@ li.ve-ce-branchNode p.ve-ce-branchNode:first-child {
 	width: 5em;
 	margin-right: 0.5em;
 }
+
 /*!
  * VisualEditor UserInterface CommentInspector styles.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 .ve-ui-commentInspector-content .oo-ui-textInputWidget {
 	width: 100%;
 }
+
 /*!
  * ObjectOriented UserInterface FragmentInspector styles.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 .ve-ui-fragmentInspector-form {
@@ -3149,25 +3353,27 @@ li.ve-ce-branchNode p.ve-ce-branchNode:first-child {
 /* Don't show scroll bars before ready for accurate measurement */
 .oo-ui-window-content-setup:not( .oo-ui-window-content-ready ) .ve-ui-fragmentInspector-container {
 	overflow: hidden;
-}/*!
+}
+/*!
  * ObjectOriented UserInterface FragmentInspector styles.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 .ve-ui-linkInspector-target {
 	width: 100%;
 }
+
 /*!
  * ObjectOriented UserInterface SpecialCharacterInspector styles.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 .ve-ui-specialCharacterInspector-spinner {
 	/* There might be a better place for a spinner? */
 	/* @embed */
-	background-image: url("data:image/gif;base64,R0lGODlhHwAfANU/APT09PPz88TExL6+vt7e3vDw8P7+/ujo6MrKysnJyb29vf39/efn58/Pz+Hh4dDQ0OLi4r+/v9/f3/z8/MjIyOnp6dzc3IKCgsfHx93d3XJycm9vb35+fpSUlG5uboODg66ursvLy9XV1by8vKmpqaWlpaurq4GBgcPDw7GxsaysrMLCwqioqKamppOTk5GRkbCwsJCQkJKSkq+vr9fX13t7e4CAgK2trXFxcXNzc3BwcPr6+mxsbMzMzLu7u////yH/C05FVFNDQVBFMi4wAwEAAAAh+QQJCgA/ACwAAAAAHwAfAAAG/8CfcEgMSB6UyE9zcaUkxKh0WEn4rtcfb7v9oBZTKQCBLWu53AshPDwMymY0ejNiG3rwuJxbMkwZPTt4eT4/HBp7LIIMUQBvgYM+AhkFOz87BSEdHlsqgj4DAERkV5AKEH5SBiI2IJ9XCG1wgQFsQgGvWAdCVmWhtkOOcAk/AXkOwEQQeUZwAmDJQgYCcAQN1dFEBHAN1GUF2UMFzgpwE+FCE3AK6OHlZefoO+veWODo42UC12Vr6NtlGgDE8izctGrG4CDLtgxOrV5YfiUTVobYjwOzdtSyhSvSlV1CSPkw5QBalAUOFEDCEivYo1wCLFS6VMBCvZUShwDKBecHoS6Ri6bc+VmIaI9Uf94Q8kloAEg2Y5YSQiAq2gGIWYY9DReAwAMMSiJgeEBgY5ggACH5BAkKAD8ALAAAAAAfAB8AAAb/wJ9wSAxIHpTIL0J5SALEqHRYSfiu1x/2mqhMpwDEFqsd+xCA7/AwMGfdvsFBbejBfWV3zzBl9HZ2bnljfy14RABtf4E+AhkFOz87BRkCWH8kPBsERGJXiwoQfFIGEAp/JjyqFwtCB4Q7UGo/ATsgqrgrQlZbA2mzQgAXuKoftGYOwEQ0HsQ8BBJjAq3KQgYdzikNY5zVQyHOMZZbBd5DBRrENQpjE+ZCExzEG+/m7Fvu7ztjCuNY5e8KSNu2pZs5AmMaINwyzZwBf1cIBEBmDoIZKLyw+KqWaEwCV7BkqanF6MocIZ58gHJALcoCB6cAYUGASJHMKwIsQJJUwIK/NEVxfg3xc9PMoC2LGEypc+co0lF92giCIwdYmKlm0Hg7kPHNlgQn3wUg8ACDkggYHkicFQQAIfkECQoAPwAsAAAAAB8AHwAABv/An3BIDEgelMgvQnlIAsSodFhJ+K7XH/aaqEynAMQWqx37EIDv8DAwZ92+wUFt6MF9ZXfPMGX0dnZueWN/PQxRAG2FWAIZBTs/OwUZAliLA2lDYleFChB8UgYQCotXCGuEO1BqPwGAY3M/VluYrEOJYwmtZg62RBBmRmMCC75DBpVbBA1jBMZEBGMNyVgFz0MFwwpjE9dCE2MK3tfbW93eOxw86zw41FfW3gUa7DwczMrjIfU8L9FbxK4Z6MAPRgBe12h44OdsFpZavgBc4PdByIFUq9S4AsFvhSZLgBQ4KCZlgQNSO0ywu0DyB65SPgRYeBSpgAVqf0jw2OCMiJ8uV4Lg/GmBJ1SgoEJB9WmD1IwcW2GabkHz7IDDN1sSxPIWgMADDEoiYHhAIOOUIAAh+QQJCgA/ACwAAAAAHwAfAAAG/8CfcEgMSB6UyC9CeUgCxKh0WEn4rtcf9pqoTKcAxBarHfsQgO/wMDBn3b7BQW3owX1ld88wZfR2dm55Y389DFEAbYVYAhkFOz87BRkCWIsDaUNiV4UKEHxSBhAKi1cIa4Q7UGo/AYBjcz9WW5isQ4ljCa1mDrZEEGZGYwILvkMGlVsEDWMExkQEYw3JWAXPQwXDCmMT10ITYwre19tb3d474dRX1t7ZWwLMyuPRWw31jMXPyM0BvNfAxkCZhaWWL1xbdP04kGqVGleBsMT6sclHJwf6oiwQcQLEK1NEcJXyIcDCo0gFEHTwwIOHilcGh/j5aOYHBw0tc/IgAehQqC2INXUKLQGqTxtBQnNuGGErDNKkF5wZO0Awi9APKDI+C0DgAQYlGk7ImCH1SxAAIfkECQoAPwAsAAAAAB8AHwAABv/An3BIDEgelMgvQnlIAsSodFhJ+K7XH/aaqEynAMQWqx37EIDv8DAwZ92+wUFt6MF9ZXfPMGX0dnZueWN/PQxRAG2FWAIZBTs/OwUZAliLA2lDYleFChB8UgYQCotXCGuEO1BqPwGAY3M/VluYrEOJYwmtZg62RBBmRmMCC75DBpVbBA1jBMZEBGMNyVgFz0MFwwpjE9dCE2MK3tfbW93eO+HUV9be2VsCzMrj0VsN9YzFz8jNAbzXwMZAmYWlli9cW3T9OJBqlRpXgbDE+rHJxx8QJ0Toi7LAAalXpojg+qOCBw8PHRA8ilTAArVLmYb42UHCpE0eOTgM2lLoUKguEjeD7uQJasqIDUFtDr0ixxaBC0l5LEVjbAGKD0JzTbwmYYaMExqWYHhAwOGUIAAh+QQJCgA/ACwAAAAAHwAfAAAG/8CfcEgMSB6UyC9CeUgCxKh0WEn4rtcf9pqoTKcAxBarHfsQgO/wMDBn3b7BQW3owX1ld88wZfR2dm55Y389DFEAbYVYAhkFOz87BRkCWIsDaUNiV4UKEHxSBhAKi1cIa4Q7UGo/AYBjcz9WW5isQ4ljCa1mDrZEEGZGYwILvkMGlVsEDWMExkQEYw3JWAXPQwXDCmMT10ITYwre1zo85jwc3d474RznPBrW3tlbAi/vPCHj0VsNMPgdij1D1owAPg8irgEbA+UDvguZbOHaouvHCnwgVNlyFQhLrAUXzpkApMCBwCgLHJB6ZQraBh4sWPoQYOFRpAIWqF2KKMRHCS6ZYwZtKXQoVEczQoeC6tNGEBw5EjcFdYPm2YFZZHLF8haAwAMMSiJgeEBg1ZcgACH5BAkKAD8ALAAAAAAfAB8AAAb/wJ9wSAxIHpTIL0J5SALEqHRYSfiu1x/2mqhMpwDEFqsd+xCA7/AwMGfdvsFBbejBfWV3zzAdtXZ2bnljPYAMUQQbPCSAWAIZBTs/OwUZAliFdgNpQgsXPKAmgAoQfFIGEAqZWAhDK6CwIDtQaj8BjVtzPx+woBectT8AbVsJPwS9PB4iwUQQZgEpyR0LzUMGl1sEMckh1kQEYw01vRoF30MFYwKKsBwT6EITYwrx6Apj8PE79NlY5/HUbRHQYAwBe+G2NEjoqNo3bAYDmHGA7tkYKFa2bLI2bIyxHwcIzQp2KxAWXT/EXMmkwIHDKAscqMJ1hkjHVVcEWIg0qYAFNH+rNhJhgNPMoC2ZDp0yafTOHjUMiDV1IydYGEFu0Hw7kJGMR5ToAhB4gEFJBAwPCND6EgQAIfkECQoAPwAsAAAAAB8AHwAABv/An3BIlKRcF80vQnlIAsSoVLhAfXhY7M/H5SYq0ynhki1vu10EIDwcbcpmNHpwYBtK8Li82zNMGT07LHkaHGd7gT0MUQADPoEqWB4dIQU7PzsFGQJ8Oz0+A2tDCJ03NiJ+UgYQColpQwdygVBsPwGecnU/CXKhtUONcgm2ew6/RBB7ARJyAgvHQwacaAQNcgTQRARyDdNdBdlDBc0KchPhQhNyCujh5Wjn6Dvr3lzg6ONoAtbU7dtoDf51cRZO2rUAxcIlkwOF1xxRv4KhGfYjFppZv259QqPrBykuiRQ4eCZlgYNWuLggIBLMFRcBFixhKmDBmytfRACl3HNIlqctRao27vHRU1aqP46GFu1CJ+JHOUt9qMl2wGGXogk6hgtA4AGGCEswPCBAK0wQADs=");
+	background-image: url(../images/spinner.gif);
 	width: 31px;
 	height: 31px;
 	margin-left: auto;
@@ -3201,10 +3407,21 @@ li.ve-ce-branchNode p.ve-ce-branchNode:first-child {
 .ve-ui-specialCharacterInspector-list-character:hover {
 	border-color: #ccc;
 }
+
+/*!
+ * VisualEditor UserInterface Context styles.
+ *
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ */
+
+/* Hide context by default, only show programmatically */
+.ve-ui-context {
+	visibility: hidden;
+}
 /*!
  * VisualEditor Overlay styles.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 .ve-ui-overlay {
@@ -3225,10 +3442,11 @@ li.ve-ce-branchNode p.ve-ce-branchNode:first-child {
 .ve-ui-overlay-global {
 	/* Toolbar is z-index 1 */
 	z-index: 2;
-}/*!
+}
+/*!
  * VisualEditor Surface styles.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 .ve-ui-surface {
@@ -3243,15 +3461,12 @@ li.ve-ce-branchNode p.ve-ce-branchNode:first-child {
 	line-height: 0;
 	height: 0;
 }
+
 /*!
  * VisualEditor UserInterface SurfaceWidget styles.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
-
-.ve-ui-surfaceWidget-surface {
-	border: 1px solid #ddd;
-}
 
 .ve-ui-surfaceWidget-surface .ve-ce-documentNode {
 	padding: 1.875em; /* 1.5/0.8 */
@@ -3261,28 +3476,14 @@ li.ve-ce-branchNode p.ve-ce-branchNode:first-child {
 	font-size: 1.25em;
 }
 
-.ve-ui-surfaceWidget-toolbar > .oo-ui-toolbar-bar {
-	border: 1px solid #ddd;
-	border-radius: 0.25em;
-	border-bottom-right-radius: 0;
-	border-bottom-left-radius: 0;
-	border-bottom-width: 0;
-}
-
 .ve-ui-surfaceWidget > .ve-ui-debugBar {
-	border: 1px solid #ddd;
-	border-top-width: 0;
 	margin: 0;
 }
 
-.ve-ui-surfaceWidget > div:last-child {
-	border-radius: 0.25em;
-	border-top-right-radius: 0;
-	border-top-left-radius: 0;
-}/*!
+/*!
  * VisualEditor UserInterface Table Context styles.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 .ve-ui-tableContext {
@@ -3323,10 +3524,11 @@ li.ve-ce-branchNode p.ve-ce-branchNode:first-child {
 	left: -0.6em;
 	top: 0.3em;
 }
+
 /*!
  * VisualEditor Toolbar styles.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 .ve-ui-toolbar {
@@ -3348,10 +3550,11 @@ li.ve-ce-branchNode p.ve-ce-branchNode:first-child {
 .ve-ui-toolbar-floating .oo-ui-toolbar-shadow {
 	opacity: 0.5;
 }
+
 /*!
  * VisualEditor UserInterface icon styles.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 /*csslint duplicate-background-images:false */
 
@@ -3703,10 +3906,11 @@ li.ve-ce-branchNode p.ve-ce-branchNode:first-child {
 	/* @embed */
 	background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij4KICAgIDxnIGlkPSJ0YWJsZS1jYXB0aW9uIj4KICAgICAgPHBhdGggaWQ9ImNhcHRpb24iIGQ9Ik02IDZoMTJ2M0g2eiIvPgogICAgICA8cGF0aCBpZD0idGFibGUiIGQ9Ik00IDEwdjdoMTZ2LTdINHptMSAxaDR2Mkg1di0yem01IDBoNHYyaC00di0yem01IDBoNHYyaC00di0yek01IDE0aDR2Mkg1di0yem01IDBoNHYyaC00di0yem01IDBoNHYyaC00di0yeiIvPgogICAgPC9nPgo8L3N2Zz4K");
 }
+
 /*!
  * VisualEditor UserInterface Context styles.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 .ve-ui-desktopContext {
@@ -3761,10 +3965,11 @@ li.ve-ce-branchNode p.ve-ce-branchNode:first-child {
 .oo-ui-window-content .ve-ui-desktopContext .oo-ui-popupWidget {
 	font-size: 1.25em;
 }
+
 /*!
  * VisualEditor UserInterface MobileSurface styles.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /* Most vendor prefixes are not needed on mobile devices */
@@ -3795,10 +4000,11 @@ li.ve-ce-branchNode p.ve-ce-branchNode:first-child {
 .ve-ui-mobileSurface-overlay-global-visible .oo-ui-window-frame iframe {
 	width: 100%;
 }
+
 /*!
  * VisualEditor UserInterface MobileContextOptionWidget styles.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 .ve-ui-mobileContextOptionWidget .oo-ui-labelElement-label {

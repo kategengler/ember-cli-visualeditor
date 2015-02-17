@@ -14,7 +14,7 @@ module.exports = function ( grunt ) {
     subgrunt: {
       visualeditor: {
         projects: {
-          'node_modules/visualeditor': [ 'clean', 'cssUrlEmbed', 'concat', 'cssjanus', 'copy' ]
+          'node_modules/visualeditor': [ 'build' ]
         }
       }
     },
