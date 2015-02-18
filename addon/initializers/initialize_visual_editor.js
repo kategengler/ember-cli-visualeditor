@@ -52,7 +52,7 @@ var loadScriptWithEval = function(src) {
 };
 
 var initializeVisualEditor = function(env) {
-  var options = env.APP["ember-cli-visualeditor"] || {};
+  var options = env["ember-cli-visualeditor"] || {};
 
   if (options.manual) return;
 
