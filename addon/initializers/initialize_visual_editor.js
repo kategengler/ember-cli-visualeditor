@@ -52,6 +52,8 @@ var loadScriptWithEval = function(src) {
 };
 
 var initializeVisualEditor = function(env) {
+  // TODO: is there a way to get the addon name programmatically
+  // so that we do not have 'ember-cli-visualeditor' as literal here
   var options = env["ember-cli-visualeditor"] || {};
 
   if (options.manual) return;
@@ -104,7 +106,7 @@ var initializeVisualEditor = function(env) {
     }
 
     promise.done(function() {
-      var stylesheet = assetsRoot + "ember-cli-visualeditor/visualEditor.css";
+      var stylesheet = assetsRoot + "ember-cli-visualeditor/styles/visualEditor.css";
       if (!_loadedScripts[stylesheet]) {
         $('<link/>', {
            rel: 'stylesheet',
