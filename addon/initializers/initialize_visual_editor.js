@@ -56,8 +56,6 @@ var initializeVisualEditor = function(env) {
   // so that we do not have 'ember-cli-visualeditor' as literal here
   var options = env["ember-cli-visualeditor"] || {};
 
-  if (options.manual) return;
-
   if (options.useMock) {
     window.ve = veMock;
     return;

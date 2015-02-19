@@ -9,6 +9,11 @@ module.exports = {
   treeForPublic: function() {
     var options = this.getOptions(this.app);
 
+    // do not add assets if configured manually
+    if (options.manual) {
+      return;
+    }
+
     var visualEditorScript;
     if (this.app.env === "production" && !options.forceUnminified) {
       visualEditorScript = "visualEditor.min.js";
@@ -51,7 +56,7 @@ module.exports = {
     }
 
     var options = this.getOptions(app);
-    // skip if controlling manually
+    // do not add assets if configured manually
     if (options.manual) {
       return;
     }
