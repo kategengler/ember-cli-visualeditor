@@ -59,7 +59,7 @@ module.exports = {
     // Note: including assets is necessary if you have VE extensions as source files (not as addons)
     // in your app
     if (options.includeAssets) {
-      app.import("vendor/visualEditor.css");
+      app.import("vendor/styles/visualEditor.css");
       if (app.env === "production" && !options.forceUnminified) {
         app.import("vendor/visualEditor.min.js");
       } else {
