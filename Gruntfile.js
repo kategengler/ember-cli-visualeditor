@@ -14,7 +14,7 @@ module.exports = function ( grunt ) {
     subgrunt: {
       visualeditor: {
         projects: {
-          'node_modules/visualeditor': [ 'clean', 'cssUrlEmbed', 'concat', 'cssjanus', 'copy' ]
+          'node_modules/visualeditor': [ 'build' ]
         }
       }
     },
@@ -43,7 +43,7 @@ module.exports = function ( grunt ) {
       },
       "oojs-ui": {
         files: [
-          { expand: true, cwd: 'node_modules/visualeditor/lib/oojs-ui/', src: 'themes/apex/**', dest: 'vendor/' },
+          { expand: true, cwd: 'node_modules/visualeditor/lib/oojs-ui/', src: 'themes/apex/**', dest: 'vendor/styles/' },
           { src: 'node_modules/visualeditor/lib/oojs-ui/oojs-ui-apex.svg.css', dest: 'tmp/oojs-ui.css' }
         ]
       }
@@ -100,7 +100,7 @@ module.exports = function ( grunt ) {
         ]
       },
       "one-css-file": {
-        dest: 'vendor/visualEditor.css',
+        dest: 'vendor/styles/visualEditor.css',
         src: [
           'tmp/oojs-ui.css',
           'tmp/visualEditor.css',
