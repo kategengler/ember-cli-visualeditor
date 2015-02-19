@@ -1975,14 +1975,14 @@
 } ( jQuery ) );
 
 /*!
- * OOjs v1.1.3 optimised for jQuery
+ * OOjs v1.1.4 optimised for jQuery
  * https://www.mediawiki.org/wiki/OOjs
  *
- * Copyright 2011-2014 OOjs Team and other contributors.
+ * Copyright 2011-2015 OOjs Team and other contributors.
  * Released under the MIT license
  * http://oojs.mit-license.org
  *
- * Date: 2014-11-17T19:17:29Z
+ * Date: 2015-01-23T20:11:25Z
  */
 ( function ( global ) {
 
@@ -2146,7 +2146,7 @@ oo.mixinClass = function ( targetFn, originFn ) {
  *
  * @param {Object} obj
  * @param {Mixed...} [keys]
- * @returns obj[arguments[1]][arguments[2]].... or undefined
+ * @return obj[arguments[1]][arguments[2]].... or undefined
  */
 oo.getProp = function ( obj ) {
 	var i,
@@ -2663,12 +2663,15 @@ oo.isPlainObject = $.isPlainObject;
 	 * @return {boolean} If event was handled by at least one listener
 	 */
 	oo.EventEmitter.prototype.emit = function ( event ) {
-		var i, len, binding, bindings, args, method;
+		var args = [],
+			i, len, binding, bindings, method;
 
 		if ( hasOwn.call( this.bindings, event ) ) {
 			// Slicing ensures that we don't get tripped up by event handlers that add/remove bindings
 			bindings = this.bindings[event].slice();
-			args = Array.prototype.slice.call( arguments, 1 );
+			for ( i = 1, len = arguments.length; i < len; i++ ) {
+				args.push( arguments[i] );
+			}
 			for ( i = 0, len = bindings.length; i < len; i++ ) {
 				binding = bindings[i];
 				if ( typeof binding.method === 'string' ) {
@@ -2882,7 +2885,8 @@ oo.Factory.prototype.register = function ( constructor ) {
  * @throws {Error} Unknown object name
  */
 oo.Factory.prototype.create = function ( name ) {
-	var args, obj,
+	var obj, i,
+		args = [],
 		constructor = this.lookup( name );
 
 	if ( !constructor ) {
@@ -2890,7 +2894,9 @@ oo.Factory.prototype.create = function ( name ) {
 	}
 
 	// Convert arguments to array and shift the first argument (name) off
-	args = Array.prototype.slice.call( arguments, 1 );
+	for ( i = 1; i < arguments.length; i++ ) {
+		args.push( arguments[i] );
+	}
 
 	// We can't use the "new" operator with .apply directly because apply needs a
 	// context. So instead just do what "new" does: create an object that inherits from
@@ -2912,14 +2918,14 @@ if ( typeof module !== 'undefined' && module.exports ) {
 }( this ) );
 
 /*!
- * OOjs UI v0.6.0
+ * OOjs UI v0.7.0
  * https://www.mediawiki.org/wiki/OOjs_UI
  *
- * Copyright 2011–2014 OOjs Team and other contributors.
+ * Copyright 2011–2015 OOjs Team and other contributors.
  * Released under the MIT license
  * http://oojs.mit-license.org
  *
- * Date: 2014-12-16T21:00:55Z
+ * Date: 2015-02-12T00:04:43Z
  */
 ( function ( OO ) {
 
@@ -2983,24 +2989,24 @@ OO.ui.getLocalValue = function ( obj, lang, fallback ) {
 	var i, len, langs;
 
 	// Requested language
-	if ( obj[lang] ) {
-		return obj[lang];
+	if ( obj[ lang ] ) {
+		return obj[ lang ];
 	}
 	// Known user language
 	langs = OO.ui.getUserLanguages();
 	for ( i = 0, len = langs.length; i < len; i++ ) {
-		lang = langs[i];
-		if ( obj[lang] ) {
-			return obj[lang];
+		lang = langs[ i ];
+		if ( obj[ lang ] ) {
+			return obj[ lang ];
 		}
 	}
 	// Fallback language
-	if ( obj[fallback] ) {
-		return obj[fallback];
+	if ( obj[ fallback ] ) {
+		return obj[ fallback ];
 	}
 	// First existing language
 	for ( lang in obj ) {
-		return obj[lang];
+		return obj[ lang ];
 	}
 
 	return undefined;
@@ -3023,7 +3029,7 @@ OO.ui.contains = function ( containers, contained, matchContainers ) {
 		containers = [ containers ];
 	}
 	for ( i = containers.length - 1; i >= 0; i-- ) {
-		if ( ( matchContainers && contained === containers[i] ) || $.contains( containers[i], contained ) ) {
+		if ( ( matchContainers && contained === containers[ i ] ) || $.contains( containers[ i ], contained ) ) {
 			return true;
 		}
 	}
@@ -3084,12 +3090,13 @@ OO.ui.contains = function ( containers, contained, matchContainers ) {
 	 * @return {string} Translated message with parameters substituted
 	 */
 	OO.ui.msg = function ( key ) {
-		var message = messages[key], params = Array.prototype.slice.call( arguments, 1 );
+		var message = messages[ key ],
+			params = Array.prototype.slice.call( arguments, 1 );
 		if ( typeof message === 'string' ) {
 			// Perform $1 substitution
 			message = message.replace( /\$(\d+)/g, function ( unused, n ) {
 				var i = parseInt( n, 10 );
-				return params[i - 1] !== undefined ? params[i - 1] : '$' + n;
+				return params[ i - 1 ] !== undefined ? params[ i - 1 ] : '$' + n;
 			} );
 		} else {
 			// Return placeholder if message not found
@@ -3316,7 +3323,7 @@ OO.ui.ActionSet.prototype.isSpecial = function ( action ) {
 	var flag;
 
 	for ( flag in this.special ) {
-		if ( action === this.special[flag] ) {
+		if ( action === this.special[ flag ] ) {
 			return true;
 		}
 	}
@@ -3344,13 +3351,13 @@ OO.ui.ActionSet.prototype.get = function ( filters ) {
 		// Collect category candidates
 		matches = [];
 		for ( category in this.categorized ) {
-			list = filters[category];
+			list = filters[ category ];
 			if ( list ) {
 				if ( !Array.isArray( list ) ) {
 					list = [ list ];
 				}
 				for ( i = 0, len = list.length; i < len; i++ ) {
-					actions = this.categorized[category][list[i]];
+					actions = this.categorized[ category ][ list[ i ] ];
 					if ( Array.isArray( actions ) ) {
 						matches.push.apply( matches, actions );
 					}
@@ -3359,7 +3366,7 @@ OO.ui.ActionSet.prototype.get = function ( filters ) {
 		}
 		// Remove by boolean filters
 		for ( i = 0, len = matches.length; i < len; i++ ) {
-			match = matches[i];
+			match = matches[ i ];
 			if (
 				( filters.visible !== undefined && match.isVisible() !== filters.visible ) ||
 				( filters.disabled !== undefined && match.isDisabled() !== filters.disabled )
@@ -3371,7 +3378,7 @@ OO.ui.ActionSet.prototype.get = function ( filters ) {
 		}
 		// Remove duplicates
 		for ( i = 0, len = matches.length; i < len; i++ ) {
-			match = matches[i];
+			match = matches[ i ];
 			index = matches.lastIndexOf( match );
 			while ( index !== i ) {
 				matches.splice( index, 1 );
@@ -3425,7 +3432,7 @@ OO.ui.ActionSet.prototype.setMode = function ( mode ) {
 
 	this.changing = true;
 	for ( i = 0, len = this.list.length; i < len; i++ ) {
-		action = this.list[i];
+		action = this.list[ i ];
 		action.toggle( action.hasMode( mode ) );
 	}
 
@@ -3449,10 +3456,10 @@ OO.ui.ActionSet.prototype.setAbilities = function ( actions ) {
 	var i, len, action, item;
 
 	for ( i = 0, len = this.list.length; i < len; i++ ) {
-		item = this.list[i];
+		item = this.list[ i ];
 		action = item.getAction();
-		if ( actions[action] !== undefined ) {
-			item.setDisabled( !actions[action] );
+		if ( actions[ action ] !== undefined ) {
+			item.setDisabled( !actions[ action ] );
 		}
 	}
 
@@ -3495,7 +3502,7 @@ OO.ui.ActionSet.prototype.add = function ( actions ) {
 
 	this.changing = true;
 	for ( i = 0, len = actions.length; i < len; i++ ) {
-		action = actions[i];
+		action = actions[ i ];
 		action.connect( this, {
 			click: [ 'emit', 'click', action ],
 			resize: [ 'emit', 'resize', action ],
@@ -3524,7 +3531,7 @@ OO.ui.ActionSet.prototype.remove = function ( actions ) {
 
 	this.changing = true;
 	for ( i = 0, len = actions.length; i < len; i++ ) {
-		action = actions[i];
+		action = actions[ i ];
 		index = this.list.indexOf( action );
 		if ( index !== -1 ) {
 			action.disconnect( this );
@@ -3552,7 +3559,7 @@ OO.ui.ActionSet.prototype.clear = function () {
 
 	this.changing = true;
 	for ( i = 0, len = this.list.length; i < len; i++ ) {
-		action = this.list[i];
+		action = this.list[ i ];
 		action.disconnect( this );
 	}
 
@@ -3584,31 +3591,31 @@ OO.ui.ActionSet.prototype.organize = function () {
 		this.special = {};
 		this.others = [];
 		for ( i = 0, iLen = this.list.length; i < iLen; i++ ) {
-			action = this.list[i];
+			action = this.list[ i ];
 			if ( action.isVisible() ) {
 				// Populate categories
 				for ( category in this.categories ) {
-					if ( !this.categorized[category] ) {
-						this.categorized[category] = {};
+					if ( !this.categorized[ category ] ) {
+						this.categorized[ category ] = {};
 					}
-					list = action[this.categories[category]]();
+					list = action[ this.categories[ category ] ]();
 					if ( !Array.isArray( list ) ) {
 						list = [ list ];
 					}
 					for ( j = 0, jLen = list.length; j < jLen; j++ ) {
-						item = list[j];
-						if ( !this.categorized[category][item] ) {
-							this.categorized[category][item] = [];
+						item = list[ j ];
+						if ( !this.categorized[ category ][ item ] ) {
+							this.categorized[ category ][ item ] = [];
 						}
-						this.categorized[category][item].push( action );
+						this.categorized[ category ][ item ].push( action );
 					}
 				}
 				// Populate special/others
 				special = false;
 				for ( j = 0, jLen = specialFlags.length; j < jLen; j++ ) {
-					flag = specialFlags[j];
-					if ( !this.special[flag] && action.hasFlag( flag ) ) {
-						this.special[flag] = action;
+					flag = specialFlags[ j ];
+					if ( !this.special[ flag ] && action.hasFlag( flag ) ) {
+						this.special[ flag ] = action;
 						special = true;
 						break;
 					}
@@ -3632,8 +3639,8 @@ OO.ui.ActionSet.prototype.organize = function () {
  *
  * @constructor
  * @param {Object} [config] Configuration options
- * @cfg {Function} [$] jQuery for the frame the widget is in
  * @cfg {string[]} [classes] CSS class names to add
+ * @cfg {string} [id] HTML id attribute
  * @cfg {string} [text] Text to insert
  * @cfg {jQuery} [$content] Content elements to append (after text)
  * @cfg {Mixed} [data] Element data
@@ -3643,9 +3650,9 @@ OO.ui.Element = function OoUiElement( config ) {
 	config = config || {};
 
 	// Properties
-	this.$ = config.$ || OO.ui.Element.static.getJQuery( document );
+	this.$ = $;
 	this.data = config.data;
-	this.$element = this.$( this.$.context.createElement( this.getTagName() ) );
+	this.$element = $( document.createElement( this.getTagName() ) );
 	this.elementGroup = null;
 	this.debouncedUpdateThemeClassesHandler = this.debouncedUpdateThemeClasses.bind( this );
 	this.updateThemeClassesPending = false;
@@ -3653,6 +3660,9 @@ OO.ui.Element = function OoUiElement( config ) {
 	// Initialization
 	if ( $.isArray( config.classes ) ) {
 		this.$element.addClass( config.classes.join( ' ' ) );
+	}
+	if ( config.id ) {
+		this.$element.attr( 'id', config.id );
 	}
 	if ( config.text ) {
 		this.$element.text( config.text );
@@ -3713,7 +3723,7 @@ OO.ui.Element.static.getJQuery = function ( context, $iframe ) {
  */
 OO.ui.Element.static.getDocument = function ( obj ) {
 	// jQuery - selections created "offscreen" won't have a context, so .context isn't reliable
-	return ( obj[0] && obj[0].ownerDocument ) ||
+	return ( obj[ 0 ] && obj[ 0 ].ownerDocument ) ||
 		// Empty jQuery selections might have a context
 		obj.context ||
 		// HTMLElement
@@ -3748,7 +3758,7 @@ OO.ui.Element.static.getDir = function ( obj ) {
 	var isDoc, isWin;
 
 	if ( obj instanceof jQuery ) {
-		obj = obj[0];
+		obj = obj[ 0 ];
 	}
 	isDoc = obj.nodeType === 9;
 	isWin = obj.document !== undefined;
@@ -3788,8 +3798,8 @@ OO.ui.Element.static.getFrameOffset = function ( from, to, offset ) {
 	// Get iframe element
 	frames = from.parent.document.getElementsByTagName( 'iframe' );
 	for ( i = 0, len = frames.length; i < len; i++ ) {
-		if ( frames[i].contentWindow === from ) {
-			frame = frames[i];
+		if ( frames[ i ].contentWindow === from ) {
+			frame = frames[ i ];
 			break;
 		}
 	}
@@ -3860,10 +3870,10 @@ OO.ui.Element.static.getBorders = function ( el ) {
 		right = parseFloat( style ? style.borderRightWidth : $el.css( 'borderRightWidth' ) ) || 0;
 
 	return {
-		top: Math.round( top ),
-		left: Math.round( left ),
-		bottom: Math.round( bottom ),
-		right: Math.round( right )
+		top: top,
+		left: left,
+		bottom: bottom,
+		right: right
 	};
 };
 
@@ -3965,14 +3975,14 @@ OO.ui.Element.static.getClosestScrollableContainer = function ( el, dimension ) 
 	}
 
 	while ( $parent.length ) {
-		if ( $parent[0] === this.getRootScrollableElement( el ) ) {
-			return $parent[0];
+		if ( $parent[ 0 ] === this.getRootScrollableElement( el ) ) {
+			return $parent[ 0 ];
 		}
 		i = props.length;
 		while ( i-- ) {
-			val = $parent.css( props[i] );
+			val = $parent.css( props[ i ] );
 			if ( val === 'auto' || val === 'scroll' ) {
-				return $parent[0];
+				return $parent[ 0 ];
 			}
 		}
 		$parent = $parent.parent();
@@ -4051,6 +4061,33 @@ OO.ui.Element.static.scrollIntoView = function ( el, config ) {
 	}
 };
 
+/**
+ * Force the browser to reconsider whether it really needs to render scrollbars inside the element
+ * and reserve space for them, because it probably doesn't.
+ *
+ * Workaround primarily for <https://code.google.com/p/chromium/issues/detail?id=387290>, but also
+ * similar bugs in other browsers. "Just" forcing a reflow is not sufficient in all cases, we need
+ * to first actually detach (or hide, but detaching is simpler) all children, *then* force a reflow,
+ * and then reattach (or show) them back.
+ *
+ * @static
+ * @param {HTMLElement} el Element to reconsider the scrollbars on
+ */
+OO.ui.Element.static.reconsiderScrollbars = function ( el ) {
+	var i, len, nodes = [];
+	// Detach all children
+	while ( el.firstChild ) {
+		nodes.push( el.firstChild );
+		el.removeChild( el.firstChild );
+	}
+	// Force reflow
+	void el.offsetHeight;
+	// Reattach all children
+	for ( i = 0, len = nodes.length; i < len; i++ ) {
+		el.appendChild( nodes[ i ] );
+	}
+};
+
 /* Methods */
 
 /**
@@ -4085,7 +4122,7 @@ OO.ui.Element.prototype.supports = function ( methods ) {
 
 	methods = $.isArray( methods ) ? methods : [ methods ];
 	for ( i = 0, len = methods.length; i < len; i++ ) {
-		if ( $.isFunction( this[methods[i]] ) ) {
+		if ( $.isFunction( this[ methods[ i ] ] ) ) {
 			support++;
 		}
 	}
@@ -4131,7 +4168,7 @@ OO.ui.Element.prototype.getTagName = function () {
  * @return {boolean} The element is attached to the DOM
  */
 OO.ui.Element.prototype.isElementAttached = function () {
-	return $.contains( this.getElementDocument(), this.$element[0] );
+	return $.contains( this.getElementDocument(), this.$element[ 0 ] );
 };
 
 /**
@@ -4140,7 +4177,6 @@ OO.ui.Element.prototype.isElementAttached = function () {
  * @return {HTMLDocument} Document object
  */
 OO.ui.Element.prototype.getElementDocument = function () {
-	// Don't use this.$.context because subclasses can rebind this.$
 	// Don't cache this in other ways either because subclasses could can change this.$element
 	return OO.ui.Element.static.getDocument( this.$element );
 };
@@ -4158,7 +4194,7 @@ OO.ui.Element.prototype.getElementWindow = function () {
  * Get closest scrollable container.
  */
 OO.ui.Element.prototype.getClosestScrollableElementContainer = function () {
-	return OO.ui.Element.static.getClosestScrollableContainer( this.$element[0] );
+	return OO.ui.Element.static.getClosestScrollableContainer( this.$element[ 0 ] );
 };
 
 /**
@@ -4187,7 +4223,7 @@ OO.ui.Element.prototype.setElementGroup = function ( group ) {
  * @param {Object} [config] Configuration options
  */
 OO.ui.Element.prototype.scrollElementIntoView = function ( config ) {
-	return OO.ui.Element.static.scrollIntoView( this.$element[0], config );
+	return OO.ui.Element.static.scrollIntoView( this.$element[ 0 ], config );
 };
 
 /**
@@ -4305,6 +4341,7 @@ OO.ui.Widget.prototype.setDisabled = function ( disabled ) {
 	if ( isDisabled !== this.wasDisabled ) {
 		this.$element.toggleClass( 'oo-ui-widget-disabled', isDisabled );
 		this.$element.toggleClass( 'oo-ui-widget-enabled', !isDisabled );
+		this.$element.attr( 'aria-disabled', isDisabled.toString() );
 		this.emit( 'disable', isDisabled );
 		this.updateThemeClasses();
 	}
@@ -4325,7 +4362,7 @@ OO.ui.Widget.prototype.toggle = function ( show ) {
 
 	if ( show !== this.isVisible() ) {
 		this.visible = show;
-		this.$element.toggle( show );
+		this.$element.toggleClass( 'oo-ui-element-hidden', !this.visible );
 		this.emit( 'toggle', show );
 	}
 
@@ -4343,7 +4380,7 @@ OO.ui.Widget.prototype.updateDisabled = function () {
 };
 
 /**
- * Container for elements in a child frame.
+ * Encapsulation of an user interface.
  *
  * Use together with OO.ui.WindowManager.
  *
@@ -4379,8 +4416,8 @@ OO.ui.Widget.prototype.updateDisabled = function () {
  *
  * @constructor
  * @param {Object} [config] Configuration options
- * @cfg {string} [size] Symbolic name of dialog size, `small`, `medium`, `large` or `full`; omit to
- *   use #static-size
+ * @cfg {string} [size] Symbolic name of dialog size, `small`, `medium`, `large`, `larger` or
+ *  `full`; omit to use #static-size
  */
 OO.ui.Window = function OoUiWindow( config ) {
 	// Configuration initialization
@@ -4394,25 +4431,29 @@ OO.ui.Window = function OoUiWindow( config ) {
 
 	// Properties
 	this.manager = null;
-	this.initialized = false;
-	this.visible = false;
-	this.opening = null;
-	this.closing = null;
-	this.opened = null;
-	this.timing = null;
-	this.loading = null;
 	this.size = config.size || this.constructor.static.size;
-	this.$frame = this.$( '<div>' );
-	this.$overlay = this.$( '<div>' );
+	this.$frame = $( '<div>' );
+	this.$overlay = $( '<div>' );
+	this.$content = $( '<div>' );
 
 	// Initialization
+	this.$overlay.addClass( 'oo-ui-window-overlay' );
+	this.$content
+		.addClass( 'oo-ui-window-content' )
+		.attr( 'tabIndex', 0 );
+	this.$frame
+		.addClass( 'oo-ui-window-frame' )
+		.append( this.$content );
+
 	this.$element
 		.addClass( 'oo-ui-window' )
 		.append( this.$frame, this.$overlay );
-	this.$frame.addClass( 'oo-ui-window-frame' );
-	this.$overlay.addClass( 'oo-ui-window-overlay' );
 
-	// NOTE: Additional initialization will occur when #setManager is called
+	// Initially hidden - using #toggle may cause errors if subclasses override toggle with methods
+	// that reference properties not initialized at that time of parent class construction
+	// TODO: Find a better way to handle post-constructor setup
+	this.visible = false;
+	this.$element.addClass( 'oo-ui-element-hidden' );
 };
 
 /* Setup */
@@ -4433,118 +4474,6 @@ OO.mixinClass( OO.ui.Window, OO.EventEmitter );
  */
 OO.ui.Window.static.size = 'medium';
 
-/* Static Methods */
-
-/**
- * Transplant the CSS styles from as parent document to a frame's document.
- *
- * This loops over the style sheets in the parent document, and copies their nodes to the
- * frame's document. It then polls the document to see when all styles have loaded, and once they
- * have, resolves the promise.
- *
- * If the styles still haven't loaded after a long time (5 seconds by default), we give up waiting
- * and resolve the promise anyway. This protects against cases like a display: none; iframe in
- * Firefox, where the styles won't load until the iframe becomes visible.
- *
- * For details of how we arrived at the strategy used in this function, see #load.
- *
- * @static
- * @inheritable
- * @param {HTMLDocument} parentDoc Document to transplant styles from
- * @param {HTMLDocument} frameDoc Document to transplant styles to
- * @param {number} [timeout=5000] How long to wait before giving up (in ms). If 0, never give up.
- * @return {jQuery.Promise} Promise resolved when styles have loaded
- */
-OO.ui.Window.static.transplantStyles = function ( parentDoc, frameDoc, timeout ) {
-	var i, numSheets, styleNode, styleText, newNode, timeoutID, pollNodeId, $pendingPollNodes,
-		$pollNodes = $( [] ),
-		// Fake font-family value
-		fontFamily = 'oo-ui-frame-transplantStyles-loaded',
-		nextIndex = parentDoc.oouiFrameTransplantStylesNextIndex || 0,
-		deferred = $.Deferred();
-
-	for ( i = 0, numSheets = parentDoc.styleSheets.length; i < numSheets; i++ ) {
-		styleNode = parentDoc.styleSheets[i].ownerNode;
-		if ( styleNode.disabled ) {
-			continue;
-		}
-
-		if ( styleNode.nodeName.toLowerCase() === 'link' ) {
-			// External stylesheet; use @import
-			styleText = '@import url(' + styleNode.href + ');';
-		} else {
-			// Internal stylesheet; just copy the text
-			// For IE10 we need to fall back to .cssText, BUT that's undefined in
-			// other browsers, so fall back to '' rather than 'undefined'
-			styleText = styleNode.textContent || parentDoc.styleSheets[i].cssText || '';
-		}
-
-		// Create a node with a unique ID that we're going to monitor to see when the CSS
-		// has loaded
-		if ( styleNode.oouiFrameTransplantStylesId ) {
-			// If we're nesting transplantStyles operations and this node already has
-			// a CSS rule to wait for loading, reuse it
-			pollNodeId = styleNode.oouiFrameTransplantStylesId;
-		} else {
-			// Otherwise, create a new ID
-			pollNodeId = 'oo-ui-frame-transplantStyles-loaded-' + nextIndex;
-			nextIndex++;
-
-			// Add #pollNodeId { font-family: ... } to the end of the stylesheet / after the @import
-			// The font-family rule will only take effect once the @import finishes
-			styleText += '\n' + '#' + pollNodeId + ' { font-family: ' + fontFamily + '; }';
-		}
-
-		// Create a node with id=pollNodeId
-		$pollNodes = $pollNodes.add( $( '<div>', frameDoc )
-			.attr( 'id', pollNodeId )
-			.appendTo( frameDoc.body )
-		);
-
-		// Add our modified CSS as a <style> tag
-		newNode = frameDoc.createElement( 'style' );
-		newNode.textContent = styleText;
-		newNode.oouiFrameTransplantStylesId = pollNodeId;
-		frameDoc.head.appendChild( newNode );
-	}
-	frameDoc.oouiFrameTransplantStylesNextIndex = nextIndex;
-
-	// Poll every 100ms until all external stylesheets have loaded
-	$pendingPollNodes = $pollNodes;
-	timeoutID = setTimeout( function pollExternalStylesheets() {
-		while (
-			$pendingPollNodes.length > 0 &&
-			$pendingPollNodes.eq( 0 ).css( 'font-family' ) === fontFamily
-		) {
-			$pendingPollNodes = $pendingPollNodes.slice( 1 );
-		}
-
-		if ( $pendingPollNodes.length === 0 ) {
-			// We're done!
-			if ( timeoutID !== null ) {
-				timeoutID = null;
-				$pollNodes.remove();
-				deferred.resolve();
-			}
-		} else {
-			timeoutID = setTimeout( pollExternalStylesheets, 100 );
-		}
-	}, 100 );
-	// ...but give up after a while
-	if ( timeout !== 0 ) {
-		setTimeout( function () {
-			if ( timeoutID ) {
-				clearTimeout( timeoutID );
-				timeoutID = null;
-				$pollNodes.remove();
-				deferred.reject();
-			}
-		}, timeout || 5000 );
-	}
-
-	return deferred.promise();
-};
-
 /* Methods */
 
 /**
@@ -4554,7 +4483,7 @@ OO.ui.Window.static.transplantStyles = function ( parentDoc, frameDoc, timeout )
  */
 OO.ui.Window.prototype.onMouseDown = function ( e ) {
 	// Prevent clicking on the click-block from stealing focus
-	if ( e.target === this.$element[0] ) {
+	if ( e.target === this.$element[ 0 ] ) {
 		return false;
 	}
 };
@@ -4562,10 +4491,12 @@ OO.ui.Window.prototype.onMouseDown = function ( e ) {
 /**
  * Check if window has been initialized.
  *
+ * Initialization occurs when a window is added to a manager.
+ *
  * @return {boolean} Window has been initialized
  */
 OO.ui.Window.prototype.isInitialized = function () {
-	return this.initialized;
+	return !!this.manager;
 };
 
 /**
@@ -4575,24 +4506,6 @@ OO.ui.Window.prototype.isInitialized = function () {
  */
 OO.ui.Window.prototype.isVisible = function () {
 	return this.visible;
-};
-
-/**
- * Check if window is loading.
- *
- * @return {boolean} Window is loading
- */
-OO.ui.Window.prototype.isLoading = function () {
-	return this.loading && this.loading.state() === 'pending';
-};
-
-/**
- * Check if window is loaded.
- *
- * @return {boolean} Window is loaded
- */
-OO.ui.Window.prototype.isLoaded = function () {
-	return this.loading && this.loading.state() === 'resolved';
 };
 
 /**
@@ -4640,7 +4553,7 @@ OO.ui.Window.prototype.getManager = function () {
 /**
  * Get the window size.
  *
- * @return {string} Symbolic size name, e.g. 'small', 'medium', 'large', 'full'
+ * @return {string} Symbolic size name, e.g. `small`, `medium`, `large`, `larger`, `full`
  */
 OO.ui.Window.prototype.getSize = function () {
 	return this.size;
@@ -4657,7 +4570,7 @@ OO.ui.Window.prototype.withoutSizeTransitions = function ( callback ) {
 	// Temporarily resize the frame so getBodyHeight() can use scrollHeight measurements.
 	// Disable transitions first, otherwise we'll get values from when the window was animating.
 	var oldTransition,
-		styleObj = this.$frame[0].style;
+		styleObj = this.$frame[ 0 ].style;
 	oldTransition = styleObj.transition || styleObj.OTransition || styleObj.MsTransition ||
 		styleObj.MozTransition || styleObj.WebkitTransition;
 	styleObj.transition = styleObj.OTransition = styleObj.MsTransition =
@@ -4677,13 +4590,14 @@ OO.ui.Window.prototype.withoutSizeTransitions = function ( callback ) {
 OO.ui.Window.prototype.getContentHeight = function () {
 	var bodyHeight,
 		win = this,
-		bodyStyleObj = this.$body[0].style,
-		frameStyleObj = this.$frame[0].style;
+		bodyStyleObj = this.$body[ 0 ].style,
+		frameStyleObj = this.$frame[ 0 ].style;
 
 	// Temporarily resize the frame so getBodyHeight() can use scrollHeight measurements.
 	// Disable transitions first, otherwise we'll get values from when the window was animating.
 	this.withoutSizeTransitions( function () {
-		var oldHeight = frameStyleObj.height, oldPosition = bodyStyleObj.position;
+		var oldHeight = frameStyleObj.height,
+			oldPosition = bodyStyleObj.position;
 		frameStyleObj.height = '1px';
 		// Force body to resize to new width
 		bodyStyleObj.position = 'relative';
@@ -4692,7 +4606,7 @@ OO.ui.Window.prototype.getContentHeight = function () {
 		bodyStyleObj.position = oldPosition;
 	} );
 
-	return Math.round(
+	return (
 		// Add buffer for border
 		( this.$frame.outerHeight() - this.$frame.innerHeight() ) +
 		// Use combined heights of children
@@ -4709,7 +4623,7 @@ OO.ui.Window.prototype.getContentHeight = function () {
  * @return {number} Height of content
  */
 OO.ui.Window.prototype.getBodyHeight = function () {
-	return this.$body[0].scrollHeight;
+	return this.$body[ 0 ].scrollHeight;
 };
 
 /**
@@ -4792,9 +4706,6 @@ OO.ui.Window.prototype.getTeardownProcess = function () {
 /**
  * Toggle visibility of window.
  *
- * If the window is isolated and hasn't fully loaded yet, the visibility property will be used
- * instead of display.
- *
  * @param {boolean} [show] Make window visible, omit to toggle visibility
  * @fires toggle
  * @chainable
@@ -4804,14 +4715,7 @@ OO.ui.Window.prototype.toggle = function ( show ) {
 
 	if ( show !== this.isVisible() ) {
 		this.visible = show;
-
-		if ( this.isolated && !this.isLoaded() ) {
-			// Hide the window using visibility instead of display until loading is complete
-			// Can't use display: none; because that prevents the iframe from loading in Firefox
-			this.$element.css( 'visibility', show ? 'visible' : 'hidden' );
-		} else {
-			this.$element.toggle( show ).css( 'visibility', '' );
-		}
+		this.$element.toggleClass( 'oo-ui-element-hidden', !this.visible );
 		this.emit( 'toggle', show );
 	}
 
@@ -4821,7 +4725,7 @@ OO.ui.Window.prototype.toggle = function ( show ) {
 /**
  * Set the window manager.
  *
- * This must be called before initialize. Calling it more than once will cause an error.
+ * This will cause the window to initialize. Calling it more than once will cause an error.
  *
  * @param {OO.ui.WindowManager} manager Manager for this window
  * @throws {Error} If called more than once
@@ -4832,29 +4736,8 @@ OO.ui.Window.prototype.setManager = function ( manager ) {
 		throw new Error( 'Cannot set window manager, window already has a manager' );
 	}
 
-	// Properties
 	this.manager = manager;
-	this.isolated = manager.shouldIsolate();
-
-	// Initialization
-	if ( this.isolated ) {
-		this.$iframe = this.$( '<iframe>' );
-		this.$iframe.attr( { frameborder: 0, scrolling: 'no' } );
-		this.$frame.append( this.$iframe );
-		this.$ = function () {
-			throw new Error( 'this.$() cannot be used until the frame has been initialized.' );
-		};
-		// WARNING: Do not use this.$ again until #initialize is called
-	} else {
-		this.$content = this.$( '<div>' );
-		this.$document = $( this.getElementDocument() );
-		this.$content.addClass( 'oo-ui-window-content' ).attr( 'tabIndex', 0 );
-		this.$frame.append( this.$content );
-	}
-	this.toggle( false );
-
-	// Figure out directionality:
-	this.dir = OO.ui.Element.static.getDir( this.$iframe || this.$content ) || 'ltr';
+	this.initialize();
 
 	return this;
 };
@@ -4867,7 +4750,23 @@ OO.ui.Window.prototype.setManager = function ( manager ) {
  */
 OO.ui.Window.prototype.setSize = function ( size ) {
 	this.size = size;
+	this.updateSize();
+	return this;
+};
+
+/**
+ * Update the window size.
+ *
+ * @throws {Error} If not attached to a manager
+ * @chainable
+ */
+OO.ui.Window.prototype.updateSize = function () {
+	if ( !this.manager ) {
+		throw new Error( 'Cannot update window size, must be attached to a manager' );
+	}
+
 	this.manager.updateWindowSize( this );
+
 	return this;
 };
 
@@ -4888,7 +4787,7 @@ OO.ui.Window.prototype.setSize = function ( size ) {
 OO.ui.Window.prototype.setDimensions = function ( dim ) {
 	var height,
 		win = this,
-		styleObj = this.$frame[0].style;
+		styleObj = this.$frame[ 0 ].style;
 
 	// Calculate the height we need to set using the correct width
 	if ( dim.height === undefined ) {
@@ -4917,10 +4816,9 @@ OO.ui.Window.prototype.setDimensions = function ( dim ) {
 /**
  * Initialize window contents.
  *
- * The first time the window is opened, #initialize is called when it's safe to begin populating
- * its contents. See #getSetupProcess for a way to make changes each time the window opens.
- *
- * Once this method is called, this.$ can be used to create elements within the frame.
+ * The first time the window is opened, #initialize is called so that changes to the window that
+ * will persist between openings can be made. See #getSetupProcess for a way to make changes each
+ * time the window opens.
  *
  * @throws {Error} If not attached to a manager
  * @chainable
@@ -4931,10 +4829,12 @@ OO.ui.Window.prototype.initialize = function () {
 	}
 
 	// Properties
-	this.$head = this.$( '<div>' );
-	this.$body = this.$( '<div>' );
-	this.$foot = this.$( '<div>' );
-	this.$innerOverlay = this.$( '<div>' );
+	this.$head = $( '<div>' );
+	this.$body = $( '<div>' );
+	this.$foot = $( '<div>' );
+	this.$innerOverlay = $( '<div>' );
+	this.dir = OO.ui.Element.static.getDir( this.$content ) || 'ltr';
+	this.$document = $( this.getElementDocument() );
 
 	// Events
 	this.$element.on( 'mousedown', this.onMouseDown.bind( this ) );
@@ -4958,8 +4858,13 @@ OO.ui.Window.prototype.initialize = function () {
  * @param {Object} [data] Window opening data
  * @return {jQuery.Promise} Promise resolved when window is opened; when the promise is resolved the
  *   first argument will be a promise which will be resolved when the window begins closing
+ * @throws {Error} If not attached to a manager
  */
 OO.ui.Window.prototype.open = function ( data ) {
+	if ( !this.manager ) {
+		throw new Error( 'Cannot open window, must be attached to a manager' );
+	}
+
 	return this.manager.openWindow( this, data );
 };
 
@@ -4971,8 +4876,13 @@ OO.ui.Window.prototype.open = function ( data ) {
  *
  * @param {Object} [data] Window closing data
  * @return {jQuery.Promise} Promise resolved when window is closed
+ * @throws {Error} If not attached to a manager
  */
 OO.ui.Window.prototype.close = function ( data ) {
+	if ( !this.manager ) {
+		throw new Error( 'Cannot close window, must be attached to a manager' );
+	}
+
 	return this.manager.closeWindow( this, data );
 };
 
@@ -4989,11 +4899,11 @@ OO.ui.Window.prototype.setup = function ( data ) {
 	var win = this,
 		deferred = $.Deferred();
 
-	this.$element.show();
-	this.visible = true;
+	this.toggle( true );
+
 	this.getSetupProcess( data ).execute().done( function () {
 		// Force redraw by asking the browser to measure the elements' widths
-		win.$element.addClass( 'oo-ui-window-setup' ).width();
+		win.$element.addClass( 'oo-ui-window-active oo-ui-window-setup' ).width();
 		win.$content.addClass( 'oo-ui-window-content-setup' ).width();
 		deferred.resolve();
 	} );
@@ -5044,7 +4954,7 @@ OO.ui.Window.prototype.hold = function ( data ) {
 
 		// Blur the focused element
 		if ( $focus.length ) {
-			$focus[0].blur();
+			$focus[ 0 ].blur();
 		}
 
 		// Force redraw by asking the browser to measure the elements' widths
@@ -5066,117 +4976,15 @@ OO.ui.Window.prototype.hold = function ( data ) {
  * @return {jQuery.Promise} Promise resolved when window is torn down
  */
 OO.ui.Window.prototype.teardown = function ( data ) {
-	var win = this,
-		deferred = $.Deferred();
+	var win = this;
 
-	this.getTeardownProcess( data ).execute().done( function () {
-		// Force redraw by asking the browser to measure the elements' widths
-		win.$element.removeClass( 'oo-ui-window-load oo-ui-window-setup' ).width();
-		win.$content.removeClass( 'oo-ui-window-content-setup' ).width();
-		win.$element.hide();
-		win.visible = false;
-		deferred.resolve();
-	} );
-
-	return deferred.promise();
-};
-
-/**
- * Load the frame contents.
- *
- * Once the iframe's stylesheets are loaded the returned promise will be resolved. Calling while
- * loading will return a promise but not trigger a new loading cycle. Calling after loading is
- * complete will return a promise that's already been resolved.
- *
- * Sounds simple right? Read on...
- *
- * When you create a dynamic iframe using open/write/close, the window.load event for the
- * iframe is triggered when you call close, and there's no further load event to indicate that
- * everything is actually loaded.
- *
- * In Chrome, stylesheets don't show up in document.styleSheets until they have loaded, so we could
- * just poll that array and wait for it to have the right length. However, in Firefox, stylesheets
- * are added to document.styleSheets immediately, and the only way you can determine whether they've
- * loaded is to attempt to access .cssRules and wait for that to stop throwing an exception. But
- * cross-domain stylesheets never allow .cssRules to be accessed even after they have loaded.
- *
- * The workaround is to change all `<link href="...">` tags to `<style>@import url(...)</style>`
- * tags. Because `@import` is blocking, Chrome won't add the stylesheet to document.styleSheets
- * until the `@import` has finished, and Firefox won't allow .cssRules to be accessed until the
- * `@import` has finished. And because the contents of the `<style>` tag are from the same origin,
- * accessing .cssRules is allowed.
- *
- * However, now that we control the styles we're injecting, we might as well do away with
- * browser-specific polling hacks like document.styleSheets and .cssRules, and instead inject
- * `<style>@import url(...); #foo { font-family: someValue; }</style>`, then create `<div id="foo">`
- * and wait for its font-family to change to someValue. Because `@import` is blocking, the
- * font-family rule is not applied until after the `@import` finishes.
- *
- * All this stylesheet injection and polling magic is in #transplantStyles.
- *
- * @return {jQuery.Promise} Promise resolved when loading is complete
- */
-OO.ui.Window.prototype.load = function () {
-	var sub, doc, loading,
-		win = this;
-
-	this.$element.addClass( 'oo-ui-window-load' );
-
-	// Non-isolated windows are already "loaded"
-	if ( !this.loading && !this.isolated ) {
-		this.loading = $.Deferred().resolve();
-		this.initialize();
-		// Set initialized state after so sub-classes aren't confused by it being set by calling
-		// their parent initialize method
-		this.initialized = true;
-	}
-
-	// Return existing promise if already loading or loaded
-	if ( this.loading ) {
-		return this.loading.promise();
-	}
-
-	// Load the frame
-	loading = this.loading = $.Deferred();
-	sub = this.$iframe.prop( 'contentWindow' );
-	doc = sub.document;
-
-	// Initialize contents
-	doc.open();
-	doc.write(
-		'<!doctype html>' +
-		'<html>' +
-			'<body class="oo-ui-window-isolated oo-ui-' + this.dir + '"' +
-				' style="direction:' + this.dir + ';" dir="' + this.dir + '">' +
-				'<div class="oo-ui-window-content"></div>' +
-			'</body>' +
-		'</html>'
-	);
-	doc.close();
-
-	// Properties
-	this.$ = OO.ui.Element.static.getJQuery( doc, this.$iframe );
-	this.$content = this.$( '.oo-ui-window-content' ).attr( 'tabIndex', 0 );
-	this.$document = this.$( doc );
-
-	// Initialization
-	this.constructor.static.transplantStyles( this.getElementDocument(), this.$document[0] )
-		.always( function () {
-			// Initialize isolated windows
-			win.initialize();
-			// Set initialized state after so sub-classes aren't confused by it being set by calling
-			// their parent initialize method
-			win.initialized = true;
-			// Undo the visibility: hidden; hack and apply display: none;
-			// We can do this safely now that the iframe has initialized
-			// (don't do this from within #initialize because it has to happen
-			// after the all subclasses have been handled as well).
-			win.toggle( win.isVisible() );
-
-			loading.resolve();
+	return this.getTeardownProcess( data ).execute()
+		.done( function () {
+			// Force redraw by asking the browser to measure the elements' widths
+			win.$element.removeClass( 'oo-ui-window-active oo-ui-window-setup' ).width();
+			win.$content.removeClass( 'oo-ui-window-content-setup' ).width();
+			win.toggle( false );
 		} );
-
-	return loading.promise();
 };
 
 /**
@@ -5380,7 +5188,7 @@ OO.ui.Dialog.prototype.getSetupProcess = function ( data ) {
 			);
 			for ( i = 0, len = actions.length; i < len; i++ ) {
 				items.push(
-					new OO.ui.ActionWidget( $.extend( { $: this.$ }, actions[i] ) )
+					new OO.ui.ActionWidget( actions[ i ] )
 				);
 			}
 			this.actions.add( items );
@@ -5415,7 +5223,7 @@ OO.ui.Dialog.prototype.initialize = function () {
 	OO.ui.Dialog.super.prototype.initialize.call( this );
 
 	// Properties
-	this.title = new OO.ui.LabelWidget( { $: this.$ } );
+	this.title = new OO.ui.LabelWidget();
 
 	// Initialization
 	this.$content.addClass( 'oo-ui-dialog-content' );
@@ -5440,7 +5248,7 @@ OO.ui.Dialog.prototype.detachActions = function () {
 
 	// Detach all actions that may have been previously attached
 	for ( i = 0, len = this.attachedActions.length; i < len; i++ ) {
-		this.attachedActions[i].$element.detach();
+		this.attachedActions[ i ].$element.detach();
 	}
 	this.attachedActions = [];
 };
@@ -5497,7 +5305,6 @@ OO.ui.Dialog.prototype.executeAction = function ( action ) {
  *
  * @constructor
  * @param {Object} [config] Configuration options
- * @cfg {boolean} [isolate] Configure managed windows to isolate their content using inline frames
  * @cfg {OO.Factory} [factory] Window factory to use for automatic instantiation
  * @cfg {boolean} [modal=true] Prevent interaction outside the dialog
  */
@@ -5514,22 +5321,17 @@ OO.ui.WindowManager = function OoUiWindowManager( config ) {
 	// Properties
 	this.factory = config.factory;
 	this.modal = config.modal === undefined || !!config.modal;
-	this.isolate = !!config.isolate;
 	this.windows = {};
 	this.opening = null;
 	this.opened = null;
 	this.closing = null;
 	this.preparingToOpen = null;
 	this.preparingToClose = null;
-	this.size = null;
 	this.currentWindow = null;
 	this.$ariaHidden = null;
-	this.requestedSize = null;
 	this.onWindowResizeTimeout = null;
 	this.onWindowResizeHandler = this.onWindowResize.bind( this );
 	this.afterWindowResizeHandler = this.afterWindowResize.bind( this );
-	this.onWindowMouseWheelHandler = this.onWindowMouseWheel.bind( this );
-	this.onDocumentKeyDownHandler = this.onDocumentKeyDown.bind( this );
 
 	// Initialization
 	this.$element
@@ -5597,6 +5399,9 @@ OO.ui.WindowManager.static.sizes = {
 	large: {
 		width: 700
 	},
+	larger: {
+		width: 900
+	},
 	full: {
 		// These can be non-numeric because they are never used in calculations
 		width: '100%',
@@ -5639,36 +5444,6 @@ OO.ui.WindowManager.prototype.afterWindowResize = function () {
 };
 
 /**
- * Handle window mouse wheel events.
- *
- * @param {jQuery.Event} e Mouse wheel event
- */
-OO.ui.WindowManager.prototype.onWindowMouseWheel = function () {
-	// Kill all events in the parent window if the child window is isolated
-	return !this.shouldIsolate();
-};
-
-/**
- * Handle document key down events.
- *
- * @param {jQuery.Event} e Key down event
- */
-OO.ui.WindowManager.prototype.onDocumentKeyDown = function ( e ) {
-	switch ( e.which ) {
-		case OO.ui.Keys.PAGEUP:
-		case OO.ui.Keys.PAGEDOWN:
-		case OO.ui.Keys.END:
-		case OO.ui.Keys.HOME:
-		case OO.ui.Keys.LEFT:
-		case OO.ui.Keys.UP:
-		case OO.ui.Keys.RIGHT:
-		case OO.ui.Keys.DOWN:
-			// Kill all events in the parent window if the child window is isolated
-			return !this.shouldIsolate();
-	}
-};
-
-/**
  * Check if window is opening.
  *
  * @return {boolean} Window is opening
@@ -5696,17 +5471,6 @@ OO.ui.WindowManager.prototype.isOpened = function ( win ) {
 };
 
 /**
- * Check if window contents should be isolated.
- *
- * Window content isolation is done using inline frames.
- *
- * @return {boolean} Window contents should be isolated
- */
-OO.ui.WindowManager.prototype.shouldIsolate = function () {
-	return this.isolate;
-};
-
-/**
  * Check if a window is being managed.
  *
  * @param {OO.ui.Window} win Window to check
@@ -5716,7 +5480,7 @@ OO.ui.WindowManager.prototype.hasWindow = function ( win ) {
 	var name;
 
 	for ( name in this.windows ) {
-		if ( this.windows[name] === win ) {
+		if ( this.windows[ name ] === win ) {
 			return true;
 		}
 	}
@@ -5780,7 +5544,7 @@ OO.ui.WindowManager.prototype.getTeardownDelay = function () {
  */
 OO.ui.WindowManager.prototype.getWindow = function ( name ) {
 	var deferred = $.Deferred(),
-		win = this.windows[name];
+		win = this.windows[ name ];
 
 	if ( !( win instanceof OO.ui.Window ) ) {
 		if ( this.factory ) {
@@ -5789,7 +5553,7 @@ OO.ui.WindowManager.prototype.getWindow = function ( name ) {
 					'Cannot auto-instantiate window: symbolic name is unrecognized by the factory'
 				) );
 			} else {
-				win = this.factory.create( name, this, { $: this.$ } );
+				win = this.factory.create( name, this );
 				this.addWindows( [ win ] );
 				deferred.resolve( win );
 			}
@@ -5825,7 +5589,6 @@ OO.ui.WindowManager.prototype.getCurrentWindow = function () {
  */
 OO.ui.WindowManager.prototype.openWindow = function ( win, data ) {
 	var manager = this,
-		preparing = [],
 		opening = $.Deferred();
 
 	// Argument handling
@@ -5848,17 +5611,8 @@ OO.ui.WindowManager.prototype.openWindow = function ( win, data ) {
 
 	// Window opening
 	if ( opening.state() !== 'rejected' ) {
-		if ( !win.getManager() ) {
-			win.setManager( this );
-		}
-		preparing.push( win.load() );
-
-		if ( this.closing ) {
-			// If a window is currently closing, wait for it to complete
-			preparing.push( this.closing );
-		}
-
-		this.preparingToOpen = $.when.apply( $, preparing );
+		// If a window is currently closing, wait for it to complete
+		this.preparingToOpen = $.when( this.closing );
 		// Ensure handlers get called after preparingToOpen is set
 		this.preparingToOpen.done( function () {
 			if ( manager.modal ) {
@@ -5901,13 +5655,12 @@ OO.ui.WindowManager.prototype.openWindow = function ( win, data ) {
  */
 OO.ui.WindowManager.prototype.closeWindow = function ( win, data ) {
 	var manager = this,
-		preparing = [],
 		closing = $.Deferred(),
 		opened;
 
 	// Argument handling
 	if ( typeof win === 'string' ) {
-		win = this.windows[win];
+		win = this.windows[ win ];
 	} else if ( !this.hasWindow( win ) ) {
 		win = null;
 	}
@@ -5929,12 +5682,8 @@ OO.ui.WindowManager.prototype.closeWindow = function ( win, data ) {
 
 	// Window closing
 	if ( closing.state() !== 'rejected' ) {
-		if ( this.opening ) {
-			// If the window is currently opening, close it when it's done
-			preparing.push( this.opening );
-		}
-
-		this.preparingToClose = $.when.apply( $, preparing );
+		// If the window is currently opening, close it when it's done
+		this.preparingToClose = $.when( this.opening );
 		// Ensure handlers get called after preparingToClose is set
 		this.preparingToClose.done( function () {
 			manager.closing = closing;
@@ -5980,11 +5729,11 @@ OO.ui.WindowManager.prototype.addWindows = function ( windows ) {
 		// Convert to map of windows by looking up symbolic names from static configuration
 		list = {};
 		for ( i = 0, len = windows.length; i < len; i++ ) {
-			name = windows[i].constructor.static.name;
+			name = windows[ i ].constructor.static.name;
 			if ( typeof name !== 'string' ) {
 				throw new Error( 'Cannot add window' );
 			}
-			list[name] = windows[i];
+			list[ name ] = windows[ i ];
 		}
 	} else if ( $.isPlainObject( windows ) ) {
 		list = windows;
@@ -5992,9 +5741,10 @@ OO.ui.WindowManager.prototype.addWindows = function ( windows ) {
 
 	// Add windows
 	for ( name in list ) {
-		win = list[name];
-		this.windows[name] = win;
+		win = list[ name ];
+		this.windows[ name ] = win.toggle( false );
 		this.$element.append( win.$element );
+		win.setManager( this );
 	}
 };
 
@@ -6003,7 +5753,7 @@ OO.ui.WindowManager.prototype.addWindows = function ( windows ) {
  *
  * Windows will be closed before they are removed.
  *
- * @param {string} name Symbolic name of window to remove
+ * @param {string[]} names Symbolic names of windows to remove
  * @return {jQuery.Promise} Promise resolved when window is closed and removed
  * @throws {Error} If windows being removed are not being managed
  */
@@ -6012,13 +5762,13 @@ OO.ui.WindowManager.prototype.removeWindows = function ( names ) {
 		manager = this,
 		promises = [],
 		cleanup = function ( name, win ) {
-			delete manager.windows[name];
+			delete manager.windows[ name ];
 			win.$element.detach();
 		};
 
 	for ( i = 0, len = names.length; i < len; i++ ) {
-		name = names[i];
-		win = this.windows[name];
+		name = names[ i ];
+		win = this.windows[ name ];
 		if ( !win ) {
 			throw new Error( 'Cannot remove window' );
 		}
@@ -6057,16 +5807,16 @@ OO.ui.WindowManager.prototype.updateWindowSize = function ( win ) {
 		sizes = this.constructor.static.sizes,
 		size = win.getSize();
 
-	if ( !sizes[size] ) {
+	if ( !sizes[ size ] ) {
 		size = this.constructor.static.defaultSize;
 	}
-	if ( size !== 'full' && viewport.rect.right - viewport.rect.left < sizes[size].width ) {
+	if ( size !== 'full' && viewport.rect.right - viewport.rect.left < sizes[ size ].width ) {
 		size = 'full';
 	}
 
 	this.$element.toggleClass( 'oo-ui-windowManager-fullscreen', size === 'full' );
 	this.$element.toggleClass( 'oo-ui-windowManager-floating', size !== 'full' );
-	win.setDimensions( sizes[size] );
+	win.setDimensions( sizes[ size ] );
 
 	this.emit( 'resize', win );
 
@@ -6084,37 +5834,19 @@ OO.ui.WindowManager.prototype.toggleGlobalEvents = function ( on ) {
 
 	if ( on ) {
 		if ( !this.globalEvents ) {
-			this.$( this.getElementDocument() ).on( {
-				// Prevent scrolling by keys in top-level window
-				keydown: this.onDocumentKeyDownHandler
-			} );
-			this.$( this.getElementWindow() ).on( {
-				// Prevent scrolling by wheel in top-level window
-				mousewheel: this.onWindowMouseWheelHandler,
+			$( this.getElementWindow() ).on( {
 				// Start listening for top-level window dimension changes
 				'orientationchange resize': this.onWindowResizeHandler
 			} );
-			// Disable window scrolling in isolated windows
-			if ( !this.shouldIsolate() ) {
-				$( this.getElementDocument().body ).css( 'overflow', 'hidden' );
-			}
+			$( this.getElementDocument().body ).css( 'overflow', 'hidden' );
 			this.globalEvents = true;
 		}
 	} else if ( this.globalEvents ) {
-		// Unbind global events
-		this.$( this.getElementDocument() ).off( {
-			// Allow scrolling by keys in top-level window
-			keydown: this.onDocumentKeyDownHandler
-		} );
-		this.$( this.getElementWindow() ).off( {
-			// Allow scrolling by wheel in top-level window
-			mousewheel: this.onWindowMouseWheelHandler,
+		$( this.getElementWindow() ).off( {
 			// Stop listening for top-level window dimension changes
 			'orientationchange resize': this.onWindowResizeHandler
 		} );
-		if ( !this.shouldIsolate() ) {
-			$( this.getElementDocument().body ).css( 'overflow', '' );
-		}
+		$( this.getElementDocument().body ).css( 'overflow', '' );
 		this.globalEvents = false;
 	}
 
@@ -6149,17 +5881,15 @@ OO.ui.WindowManager.prototype.toggleAriaIsolation = function ( isolate ) {
 
 /**
  * Destroy window manager.
- *
- * Windows will not be closed, only removed from the DOM.
  */
 OO.ui.WindowManager.prototype.destroy = function () {
 	this.toggleGlobalEvents( false );
 	this.toggleAriaIsolation( false );
+	this.clearWindows();
 	this.$element.remove();
 };
 
 /**
- * @abstract
  * @class
  *
  * @constructor
@@ -6294,7 +6024,7 @@ OO.ui.Process.prototype.execute = function () {
 				// Use rejected promise for error
 				return $.Deferred().reject( [ result ] ).promise();
 			}
-			if ( $.isArray( result ) && result.length && result[0] instanceof OO.ui.Error ) {
+			if ( $.isArray( result ) && result.length && result[ 0 ] instanceof OO.ui.Error ) {
 				// Use rejected promise for list of errors
 				return $.Deferred().reject( result ).promise();
 			}
@@ -6310,9 +6040,9 @@ OO.ui.Process.prototype.execute = function () {
 
 	if ( this.steps.length ) {
 		// Generate a chain reaction of promises
-		promise = proceed( this.steps[0] )();
+		promise = proceed( this.steps[ 0 ] )();
 		for ( i = 1, len = this.steps.length; i < len; i++ ) {
-			promise = promise.then( proceed( this.steps[i] ) );
+			promise = promise.then( proceed( this.steps[ i ] ) );
 		}
 	} else {
 		promise = $.Deferred().resolve().promise();
@@ -6422,8 +6152,8 @@ OO.ui.ToolFactory.prototype.getTools = function ( include, exclude, promote, dem
 
 	// Auto
 	for ( i = 0, len = included.length; i < len; i++ ) {
-		if ( !used[included[i]] ) {
-			auto.push( included[i] );
+		if ( !used[ included[ i ] ] ) {
+			auto.push( included[ i ] );
 		}
 	}
 
@@ -6451,22 +6181,22 @@ OO.ui.ToolFactory.prototype.extract = function ( collection, used ) {
 
 	if ( collection === '*' ) {
 		for ( name in this.registry ) {
-			tool = this.registry[name];
+			tool = this.registry[ name ];
 			if (
 				// Only add tools by group name when auto-add is enabled
 				tool.static.autoAddToCatchall &&
 				// Exclude already used tools
-				( !used || !used[name] )
+				( !used || !used[ name ] )
 			) {
 				names.push( name );
 				if ( used ) {
-					used[name] = true;
+					used[ name ] = true;
 				}
 			}
 		}
 	} else if ( $.isArray( collection ) ) {
 		for ( i = 0, len = collection.length; i < len; i++ ) {
-			item = collection[i];
+			item = collection[ i ];
 			// Allow plain strings as shorthand for named tools
 			if ( typeof item === 'string' ) {
 				item = { name: item };
@@ -6474,26 +6204,26 @@ OO.ui.ToolFactory.prototype.extract = function ( collection, used ) {
 			if ( OO.isPlainObject( item ) ) {
 				if ( item.group ) {
 					for ( name in this.registry ) {
-						tool = this.registry[name];
+						tool = this.registry[ name ];
 						if (
 							// Include tools with matching group
 							tool.static.group === item.group &&
 							// Only add tools by group name when auto-add is enabled
 							tool.static.autoAddToGroup &&
 							// Exclude already used tools
-							( !used || !used[name] )
+							( !used || !used[ name ] )
 						) {
 							names.push( name );
 							if ( used ) {
-								used[name] = true;
+								used[ name ] = true;
 							}
 						}
 					}
 				// Include tools with matching name and exclude already used tools
-				} else if ( item.name && ( !used || !used[item.name] ) ) {
+				} else if ( item.name && ( !used || !used[ item.name ] ) ) {
 					names.push( item.name );
 					if ( used ) {
-						used[item.name] = true;
+						used[ item.name ] = true;
 					}
 				}
 			}
@@ -6518,7 +6248,7 @@ OO.ui.ToolGroupFactory = function OoUiToolGroupFactory() {
 
 	// Register default toolgroups
 	for ( i = 0, l = defaultClasses.length; i < l; i++ ) {
-		this.register( defaultClasses[i] );
+		this.register( defaultClasses[ i ] );
 	}
 };
 
@@ -6591,6 +6321,116 @@ OO.ui.Theme.prototype.updateElementClasses = function ( element ) {
 };
 
 /**
+ * Element supporting "sequential focus navigation" using the 'tabindex' attribute.
+ *
+ * @abstract
+ * @class
+ *
+ * @constructor
+ * @param {Object} [config] Configuration options
+ * @cfg {jQuery} [$tabIndexed] tabIndexed node, assigned to #$tabIndexed, omit to use #$element
+ * @cfg {number|Function} [tabIndex=0] Tab index value. Use 0 to use default ordering, use -1 to
+ *  prevent tab focusing. (default: 0)
+ */
+OO.ui.TabIndexedElement = function OoUiTabIndexedElement( config ) {
+	// Configuration initialization
+	config = config || {};
+
+	// Properties
+	this.$tabIndexed = null;
+	this.tabIndex = null;
+
+	// Events
+	this.connect( this, { disable: 'onDisable' } );
+
+	// Initialization
+	this.setTabIndex( config.tabIndex || 0 );
+	this.setTabIndexedElement( config.$tabIndexed || this.$element );
+};
+
+/* Setup */
+
+OO.initClass( OO.ui.TabIndexedElement );
+
+/* Methods */
+
+/**
+ * Set the element with 'tabindex' attribute.
+ *
+ * If an element is already set, it will be cleaned up before setting up the new element.
+ *
+ * @param {jQuery} $tabIndexed Element to set tab index on
+ */
+OO.ui.TabIndexedElement.prototype.setTabIndexedElement = function ( $tabIndexed ) {
+	if ( this.$tabIndexed ) {
+		this.$tabIndexed.removeAttr( 'tabindex aria-disabled' );
+	}
+
+	this.$tabIndexed = $tabIndexed;
+	if ( this.tabIndex !== null ) {
+		this.$tabIndexed.attr( {
+			// Do not index over disabled elements
+			tabindex: this.isDisabled() ? -1 : this.tabIndex,
+			// ChromeVox and NVDA do not seem to inherit this from parent elements
+			'aria-disabled': this.isDisabled().toString()
+		} );
+	}
+};
+
+/**
+ * Set tab index value.
+ *
+ * @param {number|null} tabIndex Tab index value or null for no tabIndex
+ * @chainable
+ */
+OO.ui.TabIndexedElement.prototype.setTabIndex = function ( tabIndex ) {
+	tabIndex = typeof tabIndex === 'number' ? tabIndex : null;
+
+	if ( this.tabIndex !== tabIndex ) {
+		if ( this.$tabIndexed ) {
+			if ( tabIndex !== null ) {
+				this.$tabIndexed.attr( {
+					// Do not index over disabled elements
+					tabindex: this.isDisabled() ? -1 : tabIndex,
+					// ChromeVox and NVDA do not seem to inherit this from parent elements
+					'aria-disabled': this.isDisabled().toString()
+				} );
+			} else {
+				this.$tabIndexed.removeAttr( 'tabindex aria-disabled' );
+			}
+		}
+		this.tabIndex = tabIndex;
+	}
+
+	return this;
+};
+
+/**
+ * Handle disable events.
+ *
+ * @param {boolean} disabled Element is disabled
+ */
+OO.ui.TabIndexedElement.prototype.onDisable = function ( disabled ) {
+	if ( this.$tabIndexed && this.tabIndex !== null ) {
+		this.$tabIndexed.attr( {
+			// Do not index over disabled elements
+			tabindex: disabled ? -1 : this.tabIndex,
+			// ChromeVox and NVDA do not seem to inherit this from parent elements
+			'aria-disabled': disabled.toString()
+		} );
+	}
+};
+
+/**
+ * Get tab index value.
+ *
+ * @return {number} Tab index value
+ */
+OO.ui.TabIndexedElement.prototype.getTabIndex = function () {
+	return this.tabIndex;
+};
+
+/**
  * Element with a button.
  *
  * Buttons are used for controls which can be clicked. They can be configured to use tab indexing
@@ -6603,8 +6443,6 @@ OO.ui.Theme.prototype.updateElementClasses = function ( element ) {
  * @param {Object} [config] Configuration options
  * @cfg {jQuery} [$button] Button node, assigned to #$button, omit to use a generated `<a>`
  * @cfg {boolean} [framed=true] Render button with a frame
- * @cfg {number} [tabIndex=0] Button's tab index. Use 0 to use default ordering, use -1 to prevent
- *   tab focusing.
  * @cfg {string} [accessKey] Button's access key
  */
 OO.ui.ButtonElement = function OoUiButtonElement( config ) {
@@ -6612,20 +6450,22 @@ OO.ui.ButtonElement = function OoUiButtonElement( config ) {
 	config = config || {};
 
 	// Properties
-	this.$button = null;
+	this.$button = config.$button || $( '<a>' );
 	this.framed = null;
-	this.tabIndex = null;
 	this.accessKey = null;
 	this.active = false;
 	this.onMouseUpHandler = this.onMouseUp.bind( this );
 	this.onMouseDownHandler = this.onMouseDown.bind( this );
+	this.onKeyDownHandler = this.onKeyDown.bind( this );
+	this.onKeyUpHandler = this.onKeyUp.bind( this );
+	this.onClickHandler = this.onClick.bind( this );
+	this.onKeyPressHandler = this.onKeyPress.bind( this );
 
 	// Initialization
 	this.$element.addClass( 'oo-ui-buttonElement' );
 	this.toggleFramed( config.framed === undefined || config.framed );
-	this.setTabIndex( config.tabIndex || 0 );
 	this.setAccessKey( config.accessKey );
-	this.setButtonElement( config.$button || this.$( '<a>' ) );
+	this.setButtonElement( this.$button );
 };
 
 /* Setup */
@@ -6643,6 +6483,12 @@ OO.initClass( OO.ui.ButtonElement );
  */
 OO.ui.ButtonElement.static.cancelButtonMouseDownEvents = true;
 
+/* Events */
+
+/**
+ * @event click
+ */
+
 /* Methods */
 
 /**
@@ -6656,14 +6502,24 @@ OO.ui.ButtonElement.prototype.setButtonElement = function ( $button ) {
 	if ( this.$button ) {
 		this.$button
 			.removeClass( 'oo-ui-buttonElement-button' )
-			.removeAttr( 'role accesskey tabindex' )
-			.off( 'mousedown', this.onMouseDownHandler );
+			.removeAttr( 'role accesskey' )
+			.off( {
+				mousedown: this.onMouseDownHandler,
+				keydown: this.onKeyDownHandler,
+				click: this.onClickHandler,
+				keypress: this.onKeyPressHandler
+			} );
 	}
 
 	this.$button = $button
 		.addClass( 'oo-ui-buttonElement-button' )
-		.attr( { role: 'button', accesskey: this.accessKey, tabindex: this.tabIndex } )
-		.on( 'mousedown', this.onMouseDownHandler );
+		.attr( { role: 'button', accesskey: this.accessKey } )
+		.on( {
+			mousedown: this.onMouseDownHandler,
+			keydown: this.onKeyDownHandler,
+			click: this.onClickHandler,
+			keypress: this.onKeyPressHandler
+		} );
 };
 
 /**
@@ -6673,13 +6529,11 @@ OO.ui.ButtonElement.prototype.setButtonElement = function ( $button ) {
  */
 OO.ui.ButtonElement.prototype.onMouseDown = function ( e ) {
 	if ( this.isDisabled() || e.which !== 1 ) {
-		return false;
+		return;
 	}
-	// Remove the tab-index while the button is down to prevent the button from stealing focus
-	this.$button.removeAttr( 'tabindex' );
 	this.$element.addClass( 'oo-ui-buttonElement-pressed' );
 	// Run the mouseup handler no matter where the mouse is when the button is let go, so we can
-	// reliably reapply the tabindex and remove the pressed class
+	// reliably remove the pressed class
 	this.getElementDocument().addEventListener( 'mouseup', this.onMouseUpHandler, true );
 	// Prevent change of focus unless specifically configured otherwise
 	if ( this.constructor.static.cancelButtonMouseDownEvents ) {
@@ -6694,13 +6548,66 @@ OO.ui.ButtonElement.prototype.onMouseDown = function ( e ) {
  */
 OO.ui.ButtonElement.prototype.onMouseUp = function ( e ) {
 	if ( this.isDisabled() || e.which !== 1 ) {
-		return false;
+		return;
 	}
-	// Restore the tab-index after the button is up to restore the button's accessibility
-	this.$button.attr( 'tabindex', this.tabIndex );
 	this.$element.removeClass( 'oo-ui-buttonElement-pressed' );
 	// Stop listening for mouseup, since we only needed this once
 	this.getElementDocument().removeEventListener( 'mouseup', this.onMouseUpHandler, true );
+};
+
+/**
+ * Handles mouse click events.
+ *
+ * @param {jQuery.Event} e Mouse click event
+ * @fires click
+ */
+OO.ui.ButtonElement.prototype.onClick = function ( e ) {
+	if ( !this.isDisabled() && e.which === 1 ) {
+		this.emit( 'click' );
+	}
+	return false;
+};
+
+/**
+ * Handles key down events.
+ *
+ * @param {jQuery.Event} e Key down event
+ */
+OO.ui.ButtonElement.prototype.onKeyDown = function ( e ) {
+	if ( this.isDisabled() || ( e.which !== OO.ui.Keys.SPACE && e.which !== OO.ui.Keys.ENTER ) ) {
+		return;
+	}
+	this.$element.addClass( 'oo-ui-buttonElement-pressed' );
+	// Run the keyup handler no matter where the key is when the button is let go, so we can
+	// reliably remove the pressed class
+	this.getElementDocument().addEventListener( 'keyup', this.onKeyUpHandler, true );
+};
+
+/**
+ * Handles key up events.
+ *
+ * @param {jQuery.Event} e Key up event
+ */
+OO.ui.ButtonElement.prototype.onKeyUp = function ( e ) {
+	if ( this.isDisabled() || ( e.which !== OO.ui.Keys.SPACE && e.which !== OO.ui.Keys.ENTER ) ) {
+		return;
+	}
+	this.$element.removeClass( 'oo-ui-buttonElement-pressed' );
+	// Stop listening for keyup, since we only needed this once
+	this.getElementDocument().removeEventListener( 'keyup', this.onKeyUpHandler, true );
+};
+
+/**
+ * Handles key press events.
+ *
+ * @param {jQuery.Event} e Key press event
+ * @fires click
+ */
+OO.ui.ButtonElement.prototype.onKeyPress = function ( e ) {
+	if ( !this.isDisabled() && ( e.which === OO.ui.Keys.SPACE || e.which === OO.ui.Keys.ENTER ) ) {
+		this.emit( 'click' );
+	}
+	return false;
 };
 
 /**
@@ -6726,29 +6633,6 @@ OO.ui.ButtonElement.prototype.toggleFramed = function ( framed ) {
 			.toggleClass( 'oo-ui-buttonElement-frameless', !framed )
 			.toggleClass( 'oo-ui-buttonElement-framed', framed );
 		this.updateThemeClasses();
-	}
-
-	return this;
-};
-
-/**
- * Set tab index.
- *
- * @param {number|null} tabIndex Button's tab index, use null to remove
- * @chainable
- */
-OO.ui.ButtonElement.prototype.setTabIndex = function ( tabIndex ) {
-	tabIndex = typeof tabIndex === 'number' && tabIndex >= 0 ? tabIndex : null;
-
-	if ( this.tabIndex !== tabIndex ) {
-		if ( this.$button ) {
-			if ( tabIndex !== null ) {
-				this.$button.attr( 'tabindex', tabIndex );
-			} else {
-				this.$button.removeAttr( 'tabindex' );
-			}
-		}
-		this.tabIndex = tabIndex;
 	}
 
 	return this;
@@ -6808,7 +6692,7 @@ OO.ui.GroupElement = function OoUiGroupElement( config ) {
 	this.aggregateItemEvents = {};
 
 	// Initialization
-	this.setGroupElement( config.$group || this.$( '<div>' ) );
+	this.setGroupElement( config.$group || $( '<div>' ) );
 };
 
 /* Methods */
@@ -6825,7 +6709,7 @@ OO.ui.GroupElement.prototype.setGroupElement = function ( $group ) {
 
 	this.$group = $group;
 	for ( i = 0, len = this.items.length; i < len; i++ ) {
-		this.$group.append( this.items[i].$element );
+		this.$group.append( this.items[ i ].$element );
 	}
 };
 
@@ -6860,7 +6744,7 @@ OO.ui.GroupElement.prototype.getItemFromData = function ( data ) {
 		hash = OO.getHash( data );
 
 	for ( i = 0, len = this.items.length; i < len; i++ ) {
-		item = this.items[i];
+		item = this.items[ i ];
 		if ( hash === OO.getHash( item.getData() ) ) {
 			return item;
 		}
@@ -6883,7 +6767,7 @@ OO.ui.GroupElement.prototype.getItemsFromData = function ( data ) {
 		items = [];
 
 	for ( i = 0, len = this.items.length; i < len; i++ ) {
-		item = this.items[i];
+		item = this.items[ i ];
 		if ( hash === OO.getHash( item.getData() ) ) {
 			items.push( item );
 		}
@@ -6907,7 +6791,7 @@ OO.ui.GroupElement.prototype.aggregate = function ( events ) {
 	var i, len, item, add, remove, itemEvent, groupEvent;
 
 	for ( itemEvent in events ) {
-		groupEvent = events[itemEvent];
+		groupEvent = events[ itemEvent ];
 
 		// Remove existing aggregated event
 		if ( Object.prototype.hasOwnProperty.call( this.aggregateItemEvents, itemEvent ) ) {
@@ -6917,27 +6801,27 @@ OO.ui.GroupElement.prototype.aggregate = function ( events ) {
 			}
 			// Remove event aggregation from existing items
 			for ( i = 0, len = this.items.length; i < len; i++ ) {
-				item = this.items[i];
+				item = this.items[ i ];
 				if ( item.connect && item.disconnect ) {
 					remove = {};
-					remove[itemEvent] = [ 'emit', groupEvent, item ];
+					remove[ itemEvent ] = [ 'emit', groupEvent, item ];
 					item.disconnect( this, remove );
 				}
 			}
 			// Prevent future items from aggregating event
-			delete this.aggregateItemEvents[itemEvent];
+			delete this.aggregateItemEvents[ itemEvent ];
 		}
 
 		// Add new aggregate event
 		if ( groupEvent ) {
 			// Make future items aggregate event
-			this.aggregateItemEvents[itemEvent] = groupEvent;
+			this.aggregateItemEvents[ itemEvent ] = groupEvent;
 			// Add event aggregation to existing items
 			for ( i = 0, len = this.items.length; i < len; i++ ) {
-				item = this.items[i];
+				item = this.items[ i ];
 				if ( item.connect && item.disconnect ) {
 					add = {};
-					add[itemEvent] = [ 'emit', groupEvent, item ];
+					add[ itemEvent ] = [ 'emit', groupEvent, item ];
 					item.connect( this, add );
 				}
 			}
@@ -6959,7 +6843,7 @@ OO.ui.GroupElement.prototype.addItems = function ( items, index ) {
 		itemElements = [];
 
 	for ( i = 0, len = items.length; i < len; i++ ) {
-		item = items[i];
+		item = items[ i ];
 
 		// Check if item exists then remove it first, effectively "moving" it
 		currentIndex = $.inArray( item, this.items );
@@ -6974,7 +6858,7 @@ OO.ui.GroupElement.prototype.addItems = function ( items, index ) {
 		if ( item.connect && item.disconnect && !$.isEmptyObject( this.aggregateItemEvents ) ) {
 			events = {};
 			for ( event in this.aggregateItemEvents ) {
-				events[event] = [ 'emit', this.aggregateItemEvents[event], item ];
+				events[ event ] = [ 'emit', this.aggregateItemEvents[ event ], item ];
 			}
 			item.connect( this, events );
 		}
@@ -6989,7 +6873,7 @@ OO.ui.GroupElement.prototype.addItems = function ( items, index ) {
 		this.$group.prepend( itemElements );
 		this.items.unshift.apply( this.items, items );
 	} else {
-		this.items[index].$element.before( itemElements );
+		this.items[ index ].$element.before( itemElements );
 		this.items.splice.apply( this.items, [ index, 0 ].concat( items ) );
 	}
 
@@ -7009,7 +6893,7 @@ OO.ui.GroupElement.prototype.removeItems = function ( items ) {
 
 	// Remove specific items
 	for ( i = 0, len = items.length; i < len; i++ ) {
-		item = items[i];
+		item = items[ i ];
 		index = $.inArray( item, this.items );
 		if ( index !== -1 ) {
 			if (
@@ -7018,7 +6902,7 @@ OO.ui.GroupElement.prototype.removeItems = function ( items ) {
 			) {
 				remove = {};
 				if ( Object.prototype.hasOwnProperty.call( this.aggregateItemEvents, itemEvent ) ) {
-					remove[itemEvent] = [ 'emit', this.aggregateItemEvents[itemEvent], item ];
+					remove[ itemEvent ] = [ 'emit', this.aggregateItemEvents[ itemEvent ], item ];
 				}
 				item.disconnect( this, remove );
 			}
@@ -7043,14 +6927,14 @@ OO.ui.GroupElement.prototype.clearItems = function () {
 
 	// Remove all items
 	for ( i = 0, len = this.items.length; i < len; i++ ) {
-		item = this.items[i];
+		item = this.items[ i ];
 		if (
 			item.connect && item.disconnect &&
 			!$.isEmptyObject( this.aggregateItemEvents )
 		) {
 			remove = {};
 			if ( Object.prototype.hasOwnProperty.call( this.aggregateItemEvents, itemEvent ) ) {
-				remove[itemEvent] = [ 'emit', this.aggregateItemEvents[itemEvent], item ];
+				remove[ itemEvent ] = [ 'emit', this.aggregateItemEvents[ itemEvent ], item ];
 			}
 			item.disconnect( this, remove );
 		}
@@ -7087,6 +6971,8 @@ OO.ui.DraggableElement = function OoUiDraggableElement() {
 		} );
 };
 
+OO.initClass( OO.ui.DraggableElement );
+
 /* Events */
 
 /**
@@ -7101,6 +6987,13 @@ OO.ui.DraggableElement = function OoUiDraggableElement() {
 /**
  * @event drop
  */
+
+/* Static Properties */
+
+/**
+ * @inheritdoc OO.ui.ButtonElement
+ */
+OO.ui.DraggableElement.static.cancelButtonMouseDownEvents = false;
 
 /* Methods */
 
@@ -7253,7 +7146,7 @@ OO.ui.DraggableGroupElement.prototype.onItemDragStart = function ( item ) {
 
 	// Map the index of each object
 	for ( i = 0, len = this.items.length; i < len; i++ ) {
-		this.items[i].setIndex( i );
+		this.items[ i ].setIndex( i );
 	}
 
 	if ( this.orientation === 'horizontal' ) {
@@ -7299,6 +7192,7 @@ OO.ui.DraggableGroupElement.prototype.onItemDrop = function ( item ) {
 		// Emit change event
 		this.emit( 'reorder', this.getDragItem(), toIndex );
 	}
+	this.unsetDragItem();
 	// Return false to prevent propogation
 	return false;
 };
@@ -7310,7 +7204,7 @@ OO.ui.DraggableGroupElement.prototype.onDragLeave = function () {
 	// This means the item was dragged outside the widget
 	this.$placeholder
 		.css( 'left', 0 )
-		.hide();
+		.addClass( 'oo-ui-element-hidden' );
 };
 
 /**
@@ -7326,9 +7220,9 @@ OO.ui.DraggableGroupElement.prototype.onDragOver = function ( e ) {
 	// Get the OptionWidget item we are dragging over
 	dragOverObj = this.getElementDocument().elementFromPoint( clientX, clientY );
 	$optionWidget = $( dragOverObj ).closest( '.oo-ui-draggableElement' );
-	if ( $optionWidget[0] ) {
+	if ( $optionWidget[ 0 ] ) {
 		itemOffset = $optionWidget.offset();
-		itemBoundingRect = $optionWidget[0].getBoundingClientRect();
+		itemBoundingRect = $optionWidget[ 0 ].getBoundingClientRect();
 		itemPosition = $optionWidget.position();
 		itemIndex = $optionWidget.data( 'index' );
 	}
@@ -7371,23 +7265,14 @@ OO.ui.DraggableGroupElement.prototype.onDragOver = function ( e ) {
 			this.sideInsertion = dragPosition < itemMidpoint ? 'before' : 'after';
 		}
 		// Add drop indicator between objects
-		if ( this.sideInsertion ) {
-			this.$placeholder
-				.css( cssOutput )
-				.show();
-		} else {
-			this.$placeholder
-				.css( {
-					left: 0,
-					top: 0
-				} )
-				.hide();
-		}
+		this.$placeholder
+			.css( cssOutput )
+			.removeClass( 'oo-ui-element-hidden' );
 	} else {
 		// This means the item was dragged outside the widget
 		this.$placeholder
 			.css( 'left', 0 )
-			.hide();
+			.addClass( 'oo-ui-element-hidden' );
 	}
 	// Prevent default
 	e.preventDefault();
@@ -7407,7 +7292,7 @@ OO.ui.DraggableGroupElement.prototype.setDragItem = function ( item ) {
 OO.ui.DraggableGroupElement.prototype.unsetDragItem = function () {
 	this.dragItem = null;
 	this.itemDragOver = null;
-	this.$placeholder.hide();
+	this.$placeholder.addClass( 'oo-ui-element-hidden' );
 	this.sideInsertion = '';
 };
 
@@ -7458,7 +7343,7 @@ OO.ui.IconElement = function OoUiIconElement( config ) {
 	// Initialization
 	this.setIcon( config.icon || this.constructor.static.icon );
 	this.setIconTitle( config.iconTitle || this.constructor.static.iconTitle );
-	this.setIconElement( config.$icon || this.$( '<span>' ) );
+	this.setIconElement( config.$icon || $( '<span>' ) );
 };
 
 /* Setup */
@@ -7624,7 +7509,7 @@ OO.ui.IndicatorElement = function OoUiIndicatorElement( config ) {
 	// Initialization
 	this.setIndicator( config.indicator || this.constructor.static.indicator );
 	this.setIndicatorTitle( config.indicatorTitle || this.constructor.static.indicatorTitle );
-	this.setIndicatorElement( config.$indicator || this.$( '<span>' ) );
+	this.setIndicatorElement( config.$indicator || $( '<span>' ) );
 };
 
 /* Setup */
@@ -7672,7 +7557,7 @@ OO.ui.IndicatorElement.prototype.setIndicatorElement = function ( $indicator ) {
 		.addClass( 'oo-ui-indicatorElement-indicator' )
 		.toggleClass( 'oo-ui-indicator-' + this.indicator, !!this.indicator );
 	if ( this.indicatorTitle !== null ) {
-		this.$indicatorTitle.attr( 'title', this.indicatorTitle );
+		this.$indicator.attr( 'title', this.indicatorTitle );
 	}
 };
 
@@ -7770,12 +7655,19 @@ OO.ui.LabelElement = function OoUiLabelElement( config ) {
 
 	// Initialization
 	this.setLabel( config.label || this.constructor.static.label );
-	this.setLabelElement( config.$label || this.$( '<span>' ) );
+	this.setLabelElement( config.$label || $( '<span>' ) );
 };
 
 /* Setup */
 
 OO.initClass( OO.ui.LabelElement );
+
+/* Events */
+
+/**
+ * @event labelChange
+ * @param {string} value
+ */
 
 /* Static Properties */
 
@@ -7821,14 +7713,15 @@ OO.ui.LabelElement.prototype.setLabel = function ( label ) {
 	label = typeof label === 'function' ? OO.ui.resolveMsg( label ) : label;
 	label = ( typeof label === 'string' && label.length ) || label instanceof jQuery ? label : null;
 
+	this.$element.toggleClass( 'oo-ui-labelElement', !!label );
+
 	if ( this.label !== label ) {
 		if ( this.$label ) {
 			this.setLabelContent( label );
 		}
 		this.label = label;
+		this.emit( 'labelChange' );
 	}
-
-	this.$element.toggleClass( 'oo-ui-labelElement', !!this.label );
 
 	return this;
 };
@@ -7881,6 +7774,331 @@ OO.ui.LabelElement.prototype.setLabelContent = function ( label ) {
 };
 
 /**
+ * Mixin that adds a menu showing suggested values for a OO.ui.TextInputWidget.
+ *
+ * Subclasses that set the value of #lookupInput from #onLookupMenuItemChoose should
+ * be aware that this will cause new suggestions to be looked up for the new value. If this is
+ * not desired, disable lookups with #setLookupsDisabled, then set the value, then re-enable lookups.
+ *
+ * @class
+ * @abstract
+ *
+ * @constructor
+ * @param {Object} [config] Configuration options
+ * @cfg {jQuery} [$overlay] Overlay for dropdown; defaults to relative positioning
+ * @cfg {jQuery} [$container=this.$element] Element to render menu under
+ */
+OO.ui.LookupElement = function OoUiLookupElement( config ) {
+	// Configuration initialization
+	config = config || {};
+
+	// Properties
+	this.$overlay = config.$overlay || this.$element;
+	this.lookupMenu = new OO.ui.TextInputMenuSelectWidget( this, {
+		$container: config.$container
+	} );
+	this.lookupCache = {};
+	this.lookupQuery = null;
+	this.lookupRequest = null;
+	this.lookupsDisabled = false;
+	this.lookupInputFocused = false;
+
+	// Events
+	this.$input.on( {
+		focus: this.onLookupInputFocus.bind( this ),
+		blur: this.onLookupInputBlur.bind( this ),
+		mousedown: this.onLookupInputMouseDown.bind( this )
+	} );
+	this.connect( this, { change: 'onLookupInputChange' } );
+	this.lookupMenu.connect( this, {
+		toggle: 'onLookupMenuToggle',
+		choose: 'onLookupMenuItemChoose'
+	} );
+
+	// Initialization
+	this.$element.addClass( 'oo-ui-lookupElement' );
+	this.lookupMenu.$element.addClass( 'oo-ui-lookupElement-menu' );
+	this.$overlay.append( this.lookupMenu.$element );
+};
+
+/* Methods */
+
+/**
+ * Handle input focus event.
+ *
+ * @param {jQuery.Event} e Input focus event
+ */
+OO.ui.LookupElement.prototype.onLookupInputFocus = function () {
+	this.lookupInputFocused = true;
+	this.populateLookupMenu();
+};
+
+/**
+ * Handle input blur event.
+ *
+ * @param {jQuery.Event} e Input blur event
+ */
+OO.ui.LookupElement.prototype.onLookupInputBlur = function () {
+	this.closeLookupMenu();
+	this.lookupInputFocused = false;
+};
+
+/**
+ * Handle input mouse down event.
+ *
+ * @param {jQuery.Event} e Input mouse down event
+ */
+OO.ui.LookupElement.prototype.onLookupInputMouseDown = function () {
+	// Only open the menu if the input was already focused.
+	// This way we allow the user to open the menu again after closing it with Esc
+	// by clicking in the input. Opening (and populating) the menu when initially
+	// clicking into the input is handled by the focus handler.
+	if ( this.lookupInputFocused && !this.lookupMenu.isVisible() ) {
+		this.populateLookupMenu();
+	}
+};
+
+/**
+ * Handle input change event.
+ *
+ * @param {string} value New input value
+ */
+OO.ui.LookupElement.prototype.onLookupInputChange = function () {
+	if ( this.lookupInputFocused ) {
+		this.populateLookupMenu();
+	}
+};
+
+/**
+ * Handle the lookup menu being shown/hidden.
+ *
+ * @param {boolean} visible Whether the lookup menu is now visible.
+ */
+OO.ui.LookupElement.prototype.onLookupMenuToggle = function ( visible ) {
+	if ( !visible ) {
+		// When the menu is hidden, abort any active request and clear the menu.
+		// This has to be done here in addition to closeLookupMenu(), because
+		// MenuSelectWidget will close itself when the user presses Esc.
+		this.abortLookupRequest();
+		this.lookupMenu.clearItems();
+	}
+};
+
+/**
+ * Handle menu item 'choose' event, updating the text input value to the value of the clicked item.
+ *
+ * @param {OO.ui.MenuOptionWidget|null} item Selected item
+ */
+OO.ui.LookupElement.prototype.onLookupMenuItemChoose = function ( item ) {
+	if ( item ) {
+		this.setValue( item.getData() );
+	}
+};
+
+/**
+ * Get lookup menu.
+ *
+ * @return {OO.ui.TextInputMenuSelectWidget}
+ */
+OO.ui.LookupElement.prototype.getLookupMenu = function () {
+	return this.lookupMenu;
+};
+
+/**
+ * Disable or re-enable lookups.
+ *
+ * When lookups are disabled, calls to #populateLookupMenu will be ignored.
+ *
+ * @param {boolean} disabled Disable lookups
+ */
+OO.ui.LookupElement.prototype.setLookupsDisabled = function ( disabled ) {
+	this.lookupsDisabled = !!disabled;
+};
+
+/**
+ * Open the menu. If there are no entries in the menu, this does nothing.
+ *
+ * @chainable
+ */
+OO.ui.LookupElement.prototype.openLookupMenu = function () {
+	if ( !this.lookupMenu.isEmpty() ) {
+		this.lookupMenu.toggle( true );
+	}
+	return this;
+};
+
+/**
+ * Close the menu, empty it, and abort any pending request.
+ *
+ * @chainable
+ */
+OO.ui.LookupElement.prototype.closeLookupMenu = function () {
+	this.lookupMenu.toggle( false );
+	this.abortLookupRequest();
+	this.lookupMenu.clearItems();
+	return this;
+};
+
+/**
+ * Request menu items based on the input's current value, and when they arrive,
+ * populate the menu with these items and show the menu.
+ *
+ * If lookups have been disabled with #setLookupsDisabled, this function does nothing.
+ *
+ * @chainable
+ */
+OO.ui.LookupElement.prototype.populateLookupMenu = function () {
+	var widget = this,
+		value = this.getValue();
+
+	if ( this.lookupsDisabled ) {
+		return;
+	}
+
+	// If the input is empty, clear the menu
+	if ( value === '' ) {
+		this.closeLookupMenu();
+	// Skip population if there is already a request pending for the current value
+	} else if ( value !== this.lookupQuery ) {
+		this.getLookupMenuItems()
+			.done( function ( items ) {
+				widget.lookupMenu.clearItems();
+				if ( items.length ) {
+					widget.lookupMenu
+						.addItems( items )
+						.toggle( true );
+					widget.initializeLookupMenuSelection();
+				} else {
+					widget.lookupMenu.toggle( false );
+				}
+			} )
+			.fail( function () {
+				widget.lookupMenu.clearItems();
+			} );
+	}
+
+	return this;
+};
+
+/**
+ * Select and highlight the first selectable item in the menu.
+ *
+ * @chainable
+ */
+OO.ui.LookupElement.prototype.initializeLookupMenuSelection = function () {
+	if ( !this.lookupMenu.getSelectedItem() ) {
+		this.lookupMenu.selectItem( this.lookupMenu.getFirstSelectableItem() );
+	}
+	this.lookupMenu.highlightItem( this.lookupMenu.getSelectedItem() );
+};
+
+/**
+ * Get lookup menu items for the current query.
+ *
+ * @return {jQuery.Promise} Promise object which will be passed menu items as the first argument of
+ *   the done event. If the request was aborted to make way for a subsequent request, this promise
+ *   will not be rejected: it will remain pending forever.
+ */
+OO.ui.LookupElement.prototype.getLookupMenuItems = function () {
+	var widget = this,
+		value = this.getValue(),
+		deferred = $.Deferred(),
+		ourRequest;
+
+	this.abortLookupRequest();
+	if ( Object.prototype.hasOwnProperty.call( this.lookupCache, value ) ) {
+		deferred.resolve( this.getLookupMenuOptionsFromData( this.lookupCache[ value ] ) );
+	} else {
+		this.pushPending();
+		this.lookupQuery = value;
+		ourRequest = this.lookupRequest = this.getLookupRequest();
+		ourRequest
+			.always( function () {
+				// We need to pop pending even if this is an old request, otherwise
+				// the widget will remain pending forever.
+				// TODO: this assumes that an aborted request will fail or succeed soon after
+				// being aborted, or at least eventually. It would be nice if we could popPending()
+				// at abort time, but only if we knew that we hadn't already called popPending()
+				// for that request.
+				widget.popPending();
+			} )
+			.done( function ( data ) {
+				// If this is an old request (and aborting it somehow caused it to still succeed),
+				// ignore its success completely
+				if ( ourRequest === widget.lookupRequest ) {
+					widget.lookupQuery = null;
+					widget.lookupRequest = null;
+					widget.lookupCache[ value ] = widget.getLookupCacheDataFromResponse( data );
+					deferred.resolve( widget.getLookupMenuOptionsFromData( widget.lookupCache[ value ] ) );
+				}
+			} )
+			.fail( function () {
+				// If this is an old request (or a request failing because it's being aborted),
+				// ignore its failure completely
+				if ( ourRequest === widget.lookupRequest ) {
+					widget.lookupQuery = null;
+					widget.lookupRequest = null;
+					deferred.reject();
+				}
+			} );
+	}
+	return deferred.promise();
+};
+
+/**
+ * Abort the currently pending lookup request, if any.
+ */
+OO.ui.LookupElement.prototype.abortLookupRequest = function () {
+	var oldRequest = this.lookupRequest;
+	if ( oldRequest ) {
+		// First unset this.lookupRequest to the fail handler will notice
+		// that the request is no longer current
+		this.lookupRequest = null;
+		this.lookupQuery = null;
+		oldRequest.abort();
+	}
+};
+
+/**
+ * Get a new request object of the current lookup query value.
+ *
+ * @abstract
+ * @return {jQuery.Promise} jQuery AJAX object, or promise object with an .abort() method
+ */
+OO.ui.LookupElement.prototype.getLookupRequest = function () {
+	// Stub, implemented in subclass
+	return null;
+};
+
+/**
+ * Pre-process data returned by the request from #getLookupRequest.
+ *
+ * The return value of this function will be cached, and any further queries for the given value
+ * will use the cache rather than doing API requests.
+ *
+ * @abstract
+ * @param {Mixed} data Response from server
+ * @return {Mixed} Cached result data
+ */
+OO.ui.LookupElement.prototype.getLookupCacheDataFromResponse = function () {
+	// Stub, implemented in subclass
+	return [];
+};
+
+/**
+ * Get a list of menu option widgets from the (possibly cached) data returned by
+ * #getLookupCacheDataFromResponse.
+ *
+ * @abstract
+ * @param {Mixed} data Cached result data, usually an array
+ * @return {OO.ui.MenuOptionWidget[]} Menu items
+ */
+OO.ui.LookupElement.prototype.getLookupMenuOptionsFromData = function () {
+	// Stub, implemented in subclass
+	return [];
+};
+
+/**
  * Element containing an OO.ui.PopupWidget object.
  *
  * @abstract
@@ -7889,7 +8107,7 @@ OO.ui.LabelElement.prototype.setLabelContent = function ( label ) {
  * @constructor
  * @param {Object} [config] Configuration options
  * @cfg {Object} [popup] Configuration to pass to popup
- * @cfg {boolean} [autoClose=true] Popup auto-closes when it loses focus
+ * @cfg {boolean} [popup.autoClose=true] Popup auto-closes when it loses focus
  */
 OO.ui.PopupElement = function OoUiPopupElement( config ) {
 	// Configuration initialization
@@ -7899,7 +8117,7 @@ OO.ui.PopupElement = function OoUiPopupElement( config ) {
 	this.popup = new OO.ui.PopupWidget( $.extend(
 		{ autoClose: true },
 		config.popup,
-		{ $: this.$, $autoCloseIgnore: this.$element }
+		{ $autoCloseIgnore: this.$element }
 	) );
 };
 
@@ -8004,8 +8222,8 @@ OO.ui.FlaggedElement.prototype.clearFlags = function () {
 
 	for ( flag in this.flags ) {
 		className = classPrefix + flag;
-		changes[flag] = false;
-		delete this.flags[flag];
+		changes[ flag ] = false;
+		delete this.flags[ flag ];
 		remove.push( className );
 	}
 
@@ -8037,36 +8255,36 @@ OO.ui.FlaggedElement.prototype.setFlags = function ( flags ) {
 	if ( typeof flags === 'string' ) {
 		className = classPrefix + flags;
 		// Set
-		if ( !this.flags[flags] ) {
-			this.flags[flags] = true;
+		if ( !this.flags[ flags ] ) {
+			this.flags[ flags ] = true;
 			add.push( className );
 		}
 	} else if ( $.isArray( flags ) ) {
 		for ( i = 0, len = flags.length; i < len; i++ ) {
-			flag = flags[i];
+			flag = flags[ i ];
 			className = classPrefix + flag;
 			// Set
-			if ( !this.flags[flag] ) {
-				changes[flag] = true;
-				this.flags[flag] = true;
+			if ( !this.flags[ flag ] ) {
+				changes[ flag ] = true;
+				this.flags[ flag ] = true;
 				add.push( className );
 			}
 		}
 	} else if ( OO.isPlainObject( flags ) ) {
 		for ( flag in flags ) {
 			className = classPrefix + flag;
-			if ( flags[flag] ) {
+			if ( flags[ flag ] ) {
 				// Set
-				if ( !this.flags[flag] ) {
-					changes[flag] = true;
-					this.flags[flag] = true;
+				if ( !this.flags[ flag ] ) {
+					changes[ flag ] = true;
+					this.flags[ flag ] = true;
 					add.push( className );
 				}
 			} else {
 				// Remove
-				if ( this.flags[flag] ) {
-					changes[flag] = false;
-					delete this.flags[flag];
+				if ( this.flags[ flag ] ) {
+					changes[ flag ] = false;
+					delete this.flags[ flag ];
 					remove.push( className );
 				}
 			}
@@ -8226,9 +8444,8 @@ OO.ui.ClippableElement = function OoUiClippableElement( config ) {
 OO.ui.ClippableElement.prototype.setClippableElement = function ( $clippable ) {
 	if ( this.$clippable ) {
 		this.$clippable.removeClass( 'oo-ui-clippableElement-clippable' );
-		this.$clippable.css( { width: '', height: '' } );
-		this.$clippable.width(); // Force reflow for https://code.google.com/p/chromium/issues/detail?id=387290
-		this.$clippable.css( { overflowX: '', overflowY: '' } );
+		this.$clippable.css( { width: '', height: '', overflowX: '', overflowY: '' } );
+		OO.ui.Element.static.reconsiderScrollbars( this.$clippable[ 0 ] );
 	}
 
 	this.$clippable = $clippable.addClass( 'oo-ui-clippableElement-clippable' );
@@ -8249,21 +8466,20 @@ OO.ui.ClippableElement.prototype.toggleClipping = function ( clipping ) {
 	if ( this.clipping !== clipping ) {
 		this.clipping = clipping;
 		if ( clipping ) {
-			this.$clippableContainer = this.$( this.getClosestScrollableElementContainer() );
+			this.$clippableContainer = $( this.getClosestScrollableElementContainer() );
 			// If the clippable container is the root, we have to listen to scroll events and check
 			// jQuery.scrollTop on the window because of browser inconsistencies
 			this.$clippableScroller = this.$clippableContainer.is( 'html, body' ) ?
-				this.$( OO.ui.Element.static.getWindow( this.$clippableContainer ) ) :
+				$( OO.ui.Element.static.getWindow( this.$clippableContainer ) ) :
 				this.$clippableContainer;
 			this.$clippableScroller.on( 'scroll', this.onClippableContainerScrollHandler );
-			this.$clippableWindow = this.$( this.getElementWindow() )
+			this.$clippableWindow = $( this.getElementWindow() )
 				.on( 'resize', this.onClippableWindowResizeHandler );
 			// Initial clip after visible
 			this.clip();
 		} else {
-			this.$clippable.css( { width: '', height: '' } );
-			this.$clippable.width(); // Force reflow for https://code.google.com/p/chromium/issues/detail?id=387290
-			this.$clippable.css( { overflowX: '', overflowY: '' } );
+			this.$clippable.css( { width: '', height: '', overflowX: '', overflowY: '' } );
+			OO.ui.Element.static.reconsiderScrollbars( this.$clippable[ 0 ] );
 
 			this.$clippableContainer = null;
 			this.$clippableScroller.off( 'scroll', this.onClippableContainerScrollHandler );
@@ -8369,16 +8585,17 @@ OO.ui.ClippableElement.prototype.clip = function () {
 	if ( clipWidth ) {
 		this.$clippable.css( { overflowX: 'scroll', width: desiredWidth } );
 	} else {
-		this.$clippable.css( 'width', this.idealWidth || '' );
-		this.$clippable.width(); // Force reflow for https://code.google.com/p/chromium/issues/detail?id=387290
-		this.$clippable.css( 'overflowX', '' );
+		this.$clippable.css( { width: this.idealWidth || '', overflowX: '' } );
 	}
 	if ( clipHeight ) {
 		this.$clippable.css( { overflowY: 'scroll', height: desiredHeight } );
 	} else {
-		this.$clippable.css( 'height', this.idealHeight || '' );
-		this.$clippable.height(); // Force reflow for https://code.google.com/p/chromium/issues/detail?id=387290
-		this.$clippable.css( 'overflowY', '' );
+		this.$clippable.css( { height: this.idealHeight || '', overflowY: '' } );
+	}
+
+	// If we stopped clipping in at least one of the dimensions
+	if ( !clipWidth || !clipHeight ) {
+		OO.ui.Element.static.reconsiderScrollbars( this.$clippable[ 0 ] );
 	}
 
 	this.clippedHorizontally = clipWidth;
@@ -8416,9 +8633,9 @@ OO.ui.Tool = function OoUiTool( toolGroup, config ) {
 	this.toolGroup = toolGroup;
 	this.toolbar = this.toolGroup.getToolbar();
 	this.active = false;
-	this.$title = this.$( '<span>' );
-	this.$accel = this.$( '<span>' );
-	this.$link = this.$( '<a>' );
+	this.$title = $( '<span>' );
+	this.$accel = $( '<span>' );
+	this.$link = $( '<a>' );
 	this.title = null;
 
 	// Events
@@ -8679,8 +8896,8 @@ OO.ui.Toolbar = function OoUiToolbar( toolFactory, toolGroupFactory, config ) {
 	this.toolGroupFactory = toolGroupFactory;
 	this.groups = [];
 	this.tools = {};
-	this.$bar = this.$( '<div>' );
-	this.$actions = this.$( '<div>' );
+	this.$bar = $( '<div>' );
+	this.$actions = $( '<div>' );
 	this.initialized = false;
 
 	// Events
@@ -8734,16 +8951,16 @@ OO.ui.Toolbar.prototype.getToolGroupFactory = function () {
  * @param {jQuery.Event} e Mouse down event
  */
 OO.ui.Toolbar.prototype.onPointerDown = function ( e ) {
-	var $closestWidgetToEvent = this.$( e.target ).closest( '.oo-ui-widget' ),
+	var $closestWidgetToEvent = $( e.target ).closest( '.oo-ui-widget' ),
 		$closestWidgetToToolbar = this.$element.closest( '.oo-ui-widget' );
-	if ( !$closestWidgetToEvent.length || $closestWidgetToEvent[0] === $closestWidgetToToolbar[0] ) {
+	if ( !$closestWidgetToEvent.length || $closestWidgetToEvent[ 0 ] === $closestWidgetToToolbar[ 0 ] ) {
 		return false;
 	}
 };
 
 /**
  * Sets up handles and preloads required information for the toolbar to work.
- * This must be called immediately after it is attached to a visible document.
+ * This must be called after it is attached to a visible document and before doing anything else.
  */
 OO.ui.Toolbar.prototype.initialize = function () {
 	this.initialized = true;
@@ -8774,7 +8991,7 @@ OO.ui.Toolbar.prototype.setup = function ( groups ) {
 
 	// Build out new groups
 	for ( i = 0, len = groups.length; i < len; i++ ) {
-		group = groups[i];
+		group = groups[ i ];
 		if ( group.include === '*' ) {
 			// Apply defaults to catch-all groups
 			if ( group.type === undefined ) {
@@ -8787,7 +9004,7 @@ OO.ui.Toolbar.prototype.setup = function ( groups ) {
 		// Check type has been registered
 		type = this.getToolGroupFactory().lookup( group.type ) ? group.type : defaultType;
 		items.push(
-			this.getToolGroupFactory().create( type, this, $.extend( { $: this.$ }, group ) )
+			this.getToolGroupFactory().create( type, this, group )
 		);
 	}
 	this.addItems( items );
@@ -8802,7 +9019,7 @@ OO.ui.Toolbar.prototype.reset = function () {
 	this.groups = [];
 	this.tools = {};
 	for ( i = 0, len = this.items.length; i < len; i++ ) {
-		this.items[i].destroy();
+		this.items[ i ].destroy();
 	}
 	this.clearItems();
 };
@@ -8824,7 +9041,7 @@ OO.ui.Toolbar.prototype.destroy = function () {
  * @return {boolean} Tool is available
  */
 OO.ui.Toolbar.prototype.isToolAvailable = function ( name ) {
-	return !this.tools[name];
+	return !this.tools[ name ];
 };
 
 /**
@@ -8833,7 +9050,7 @@ OO.ui.Toolbar.prototype.isToolAvailable = function ( name ) {
  * @param {OO.ui.Tool} tool Tool to reserve
  */
 OO.ui.Toolbar.prototype.reserveTool = function ( tool ) {
-	this.tools[tool.getName()] = tool;
+	this.tools[ tool.getName() ] = tool;
 };
 
 /**
@@ -8842,7 +9059,7 @@ OO.ui.Toolbar.prototype.reserveTool = function ( tool ) {
  * @param {OO.ui.Tool} tool Tool to release
  */
 OO.ui.Toolbar.prototype.releaseTool = function ( tool ) {
-	delete this.tools[tool.getName()];
+	delete this.tools[ tool.getName() ];
 };
 
 /**
@@ -8976,7 +9193,7 @@ OO.ui.ToolGroup.prototype.updateDisabled = function () {
 
 	if ( this.constructor.static.autoDisable ) {
 		for ( i = this.items.length - 1; i >= 0; i-- ) {
-			item = this.items[i];
+			item = this.items[ i ];
 			if ( !item.isDisabled() ) {
 				allDisabled = false;
 				break;
@@ -9073,7 +9290,7 @@ OO.ui.ToolGroup.prototype.onMouseOut = function ( e ) {
  */
 OO.ui.ToolGroup.prototype.getTargetTool = function ( e ) {
 	var tool,
-		$item = this.$( e.target ).closest( '.oo-ui-tool-link' );
+		$item = $( e.target ).closest( '.oo-ui-tool-link' );
 
 	if ( $item.length ) {
 		tool = $item.parent().data( 'oo-ui-tool' );
@@ -9120,31 +9337,31 @@ OO.ui.ToolGroup.prototype.populate = function () {
 
 	// Build a list of needed tools
 	for ( i = 0, len = list.length; i < len; i++ ) {
-		name = list[i];
+		name = list[ i ];
 		if (
 			// Tool exists
 			toolFactory.lookup( name ) &&
 			// Tool is available or is already in this group
-			( this.toolbar.isToolAvailable( name ) || this.tools[name] )
+			( this.toolbar.isToolAvailable( name ) || this.tools[ name ] )
 		) {
-			tool = this.tools[name];
+			tool = this.tools[ name ];
 			if ( !tool ) {
 				// Auto-initialize tools on first use
-				this.tools[name] = tool = toolFactory.create( name, this );
+				this.tools[ name ] = tool = toolFactory.create( name, this );
 				tool.updateTitle();
 			}
 			this.toolbar.reserveTool( tool );
 			add.push( tool );
-			names[name] = true;
+			names[ name ] = true;
 		}
 	}
 	// Remove tools that are no longer needed
 	for ( name in this.tools ) {
-		if ( !names[name] ) {
-			this.tools[name].destroy();
-			this.toolbar.releaseTool( this.tools[name] );
-			remove.push( this.tools[name] );
-			delete this.tools[name];
+		if ( !names[ name ] ) {
+			this.tools[ name ].destroy();
+			this.toolbar.releaseTool( this.tools[ name ] );
+			remove.push( this.tools[ name ] );
+			delete this.tools[ name ];
 		}
 	}
 	if ( remove.length ) {
@@ -9171,9 +9388,9 @@ OO.ui.ToolGroup.prototype.destroy = function () {
 	this.clearItems();
 	this.toolbar.getToolFactory().disconnect( this );
 	for ( name in this.tools ) {
-		this.toolbar.releaseTool( this.tools[name] );
-		this.tools[name].disconnect( this ).destroy();
-		delete this.tools[name];
+		this.toolbar.releaseTool( this.tools[ name ] );
+		this.tools[ name ].disconnect( this ).destroy();
+		delete this.tools[ name ];
 	}
 	this.$element.remove();
 };
@@ -9344,16 +9561,13 @@ OO.ui.MessageDialog.prototype.getBodyHeight = function () {
 	var bodyHeight, oldOverflow,
 		$scrollable = this.container.$element;
 
-	oldOverflow = $scrollable[0].style.overflow;
-	$scrollable[0].style.overflow = 'hidden';
+	oldOverflow = $scrollable[ 0 ].style.overflow;
+	$scrollable[ 0 ].style.overflow = 'hidden';
 
-	// Force… ugh… something to happen
-	$scrollable.contents().hide();
-	$scrollable.height();
-	$scrollable.contents().show();
+	OO.ui.Element.static.reconsiderScrollbars( $scrollable[ 0 ] );
 
-	bodyHeight = Math.round( this.text.$element.outerHeight( true ) );
-	$scrollable[0].style.overflow = oldOverflow;
+	bodyHeight = this.text.$element.outerHeight( true );
+	$scrollable[ 0 ].style.overflow = oldOverflow;
 
 	return bodyHeight;
 };
@@ -9368,15 +9582,12 @@ OO.ui.MessageDialog.prototype.setDimensions = function ( dim ) {
 	// Twiddle the overflow property, otherwise an unnecessary scrollbar will be produced.
 	// Need to do it after transition completes (250ms), add 50ms just in case.
 	setTimeout( function () {
-		var oldOverflow = $scrollable[0].style.overflow;
-		$scrollable[0].style.overflow = 'hidden';
+		var oldOverflow = $scrollable[ 0 ].style.overflow;
+		$scrollable[ 0 ].style.overflow = 'hidden';
 
-		// Force… ugh… something to happen
-		$scrollable.contents().hide();
-		$scrollable.height();
-		$scrollable.contents().show();
+		OO.ui.Element.static.reconsiderScrollbars( $scrollable[ 0 ] );
 
-		$scrollable[0].style.overflow = oldOverflow;
+		$scrollable[ 0 ].style.overflow = oldOverflow;
 	}, 300 );
 
 	return this;
@@ -9390,15 +9601,15 @@ OO.ui.MessageDialog.prototype.initialize = function () {
 	OO.ui.MessageDialog.super.prototype.initialize.call( this );
 
 	// Properties
-	this.$actions = this.$( '<div>' );
+	this.$actions = $( '<div>' );
 	this.container = new OO.ui.PanelLayout( {
-		$: this.$, scrollable: true, classes: [ 'oo-ui-messageDialog-container' ]
+		scrollable: true, classes: [ 'oo-ui-messageDialog-container' ]
 	} );
 	this.text = new OO.ui.PanelLayout( {
-		$: this.$, padded: true, expanded: false, classes: [ 'oo-ui-messageDialog-text' ]
+		padded: true, expanded: false, classes: [ 'oo-ui-messageDialog-text' ]
 	} );
 	this.message = new OO.ui.LabelWidget( {
-		$: this.$, classes: [ 'oo-ui-messageDialog-message' ]
+		classes: [ 'oo-ui-messageDialog-message' ]
 	} );
 
 	// Initialization
@@ -9428,7 +9639,7 @@ OO.ui.MessageDialog.prototype.attachActions = function () {
 	}
 	if ( others.length ) {
 		for ( i = 0, len = others.length; i < len; i++ ) {
-			other = others[i];
+			other = others[ i ];
 			this.$actions.append( other.$element );
 			other.toggleFramed( false );
 		}
@@ -9441,7 +9652,7 @@ OO.ui.MessageDialog.prototype.attachActions = function () {
 	if ( !this.isOpening() ) {
 		// If the dialog is currently opening, this will be called automatically soon.
 		// This also calls #fitActions.
-		this.manager.updateWindowSize( this );
+		this.updateSize();
 	}
 };
 
@@ -9458,17 +9669,19 @@ OO.ui.MessageDialog.prototype.fitActions = function () {
 	// Detect clipping
 	this.toggleVerticalActionLayout( false );
 	for ( i = 0, len = actions.length; i < len; i++ ) {
-		action = actions[i];
+		action = actions[ i ];
 		if ( action.$element.innerWidth() < action.$label.outerWidth( true ) ) {
 			this.toggleVerticalActionLayout( true );
 			break;
 		}
 	}
 
+	// Move the body out of the way of the foot
+	this.$body.css( 'bottom', this.$foot.outerHeight( true ) );
+
 	if ( this.verticalActionLayout !== previous ) {
-		this.$body.css( 'bottom', this.$foot.outerHeight( true ) );
 		// We changed the layout, window height might need to be updated.
-		this.manager.updateWindowSize( this );
+		this.updateSize();
 	}
 };
 
@@ -9549,18 +9762,17 @@ OO.ui.ProcessDialog.prototype.initialize = function () {
 	OO.ui.ProcessDialog.super.prototype.initialize.call( this );
 
 	// Properties
-	this.$navigation = this.$( '<div>' );
-	this.$location = this.$( '<div>' );
-	this.$safeActions = this.$( '<div>' );
-	this.$primaryActions = this.$( '<div>' );
-	this.$otherActions = this.$( '<div>' );
+	this.$navigation = $( '<div>' );
+	this.$location = $( '<div>' );
+	this.$safeActions = $( '<div>' );
+	this.$primaryActions = $( '<div>' );
+	this.$otherActions = $( '<div>' );
 	this.dismissButton = new OO.ui.ButtonWidget( {
-		$: this.$,
 		label: OO.ui.msg( 'ooui-dialog-process-dismiss' )
 	} );
-	this.retryButton = new OO.ui.ButtonWidget( { $: this.$ } );
-	this.$errors = this.$( '<div>' );
-	this.$errorsTitle = this.$( '<div>' );
+	this.retryButton = new OO.ui.ButtonWidget();
+	this.$errors = $( '<div>' );
+	this.$errorsTitle = $( '<div>' );
 
 	// Events
 	this.dismissButton.connect( this, { click: 'onDismissErrorButtonClick' } );
@@ -9607,7 +9819,7 @@ OO.ui.ProcessDialog.prototype.attachActions = function () {
 	}
 	if ( others.length ) {
 		for ( i = 0, len = others.length; i < len; i++ ) {
-			other = others[i];
+			other = others[ i ];
 			this.$otherActions.append( other.$element );
 			other.toggleFramed( true );
 		}
@@ -9656,18 +9868,18 @@ OO.ui.ProcessDialog.prototype.showErrors = function ( errors ) {
 		warning = false;
 
 	for ( i = 0, len = errors.length; i < len; i++ ) {
-		if ( !errors[i].isRecoverable() ) {
+		if ( !errors[ i ].isRecoverable() ) {
 			recoverable = false;
 		}
-		if ( errors[i].isWarning() ) {
+		if ( errors[ i ].isWarning() ) {
 			warning = true;
 		}
-		$item = this.$( '<div>' )
+		$item = $( '<div>' )
 			.addClass( 'oo-ui-processDialog-error' )
-			.append( errors[i].getMessage() );
-		items.push( $item[0] );
+			.append( errors[ i ].getMessage() );
+		items.push( $item[ 0 ] );
 	}
-	this.$errorItems = this.$( items );
+	this.$errorItems = $( items );
 	if ( recoverable ) {
 		this.retryButton.clearFlags().setFlags( this.currentAction.getFlags() );
 	} else {
@@ -9680,460 +9892,16 @@ OO.ui.ProcessDialog.prototype.showErrors = function ( errors ) {
 	}
 	this.retryButton.toggle( recoverable );
 	this.$errorsTitle.after( this.$errorItems );
-	this.$errors.show().scrollTop( 0 );
+	this.$errors.removeClass( 'oo-ui-widget-hidden' ).scrollTop( 0 );
 };
 
 /**
  * Hide errors.
  */
 OO.ui.ProcessDialog.prototype.hideErrors = function () {
-	this.$errors.hide();
+	this.$errors.addClass( 'oo-ui-widget-hidden' );
 	this.$errorItems.remove();
 	this.$errorItems = null;
-};
-
-/**
- * Layout containing a series of pages.
- *
- * @class
- * @extends OO.ui.Layout
- *
- * @constructor
- * @param {Object} [config] Configuration options
- * @cfg {boolean} [continuous=false] Show all pages, one after another
- * @cfg {boolean} [autoFocus=true] Focus on the first focusable element when changing to a page
- * @cfg {boolean} [outlined=false] Show an outline
- * @cfg {boolean} [editable=false] Show controls for adding, removing and reordering pages
- */
-OO.ui.BookletLayout = function OoUiBookletLayout( config ) {
-	// Configuration initialization
-	config = config || {};
-
-	// Parent constructor
-	OO.ui.BookletLayout.super.call( this, config );
-
-	// Properties
-	this.currentPageName = null;
-	this.pages = {};
-	this.ignoreFocus = false;
-	this.stackLayout = new OO.ui.StackLayout( { $: this.$, continuous: !!config.continuous } );
-	this.autoFocus = config.autoFocus === undefined || !!config.autoFocus;
-	this.outlineVisible = false;
-	this.outlined = !!config.outlined;
-	if ( this.outlined ) {
-		this.editable = !!config.editable;
-		this.outlineControlsWidget = null;
-		this.outlineSelectWidget = new OO.ui.OutlineSelectWidget( { $: this.$ } );
-		this.outlinePanel = new OO.ui.PanelLayout( { $: this.$, scrollable: true } );
-		this.gridLayout = new OO.ui.GridLayout(
-			[ this.outlinePanel, this.stackLayout ],
-			{ $: this.$, widths: [ 1, 2 ] }
-		);
-		this.outlineVisible = true;
-		if ( this.editable ) {
-			this.outlineControlsWidget = new OO.ui.OutlineControlsWidget(
-				this.outlineSelectWidget, { $: this.$ }
-			);
-		}
-	}
-
-	// Events
-	this.stackLayout.connect( this, { set: 'onStackLayoutSet' } );
-	if ( this.outlined ) {
-		this.outlineSelectWidget.connect( this, { select: 'onOutlineSelectWidgetSelect' } );
-	}
-	if ( this.autoFocus ) {
-		// Event 'focus' does not bubble, but 'focusin' does
-		this.stackLayout.$element.on( 'focusin', this.onStackLayoutFocus.bind( this ) );
-	}
-
-	// Initialization
-	this.$element.addClass( 'oo-ui-bookletLayout' );
-	this.stackLayout.$element.addClass( 'oo-ui-bookletLayout-stackLayout' );
-	if ( this.outlined ) {
-		this.outlinePanel.$element
-			.addClass( 'oo-ui-bookletLayout-outlinePanel' )
-			.append( this.outlineSelectWidget.$element );
-		if ( this.editable ) {
-			this.outlinePanel.$element
-				.addClass( 'oo-ui-bookletLayout-outlinePanel-editable' )
-				.append( this.outlineControlsWidget.$element );
-		}
-		this.$element.append( this.gridLayout.$element );
-	} else {
-		this.$element.append( this.stackLayout.$element );
-	}
-};
-
-/* Setup */
-
-OO.inheritClass( OO.ui.BookletLayout, OO.ui.Layout );
-
-/* Events */
-
-/**
- * @event set
- * @param {OO.ui.PageLayout} page Current page
- */
-
-/**
- * @event add
- * @param {OO.ui.PageLayout[]} page Added pages
- * @param {number} index Index pages were added at
- */
-
-/**
- * @event remove
- * @param {OO.ui.PageLayout[]} pages Removed pages
- */
-
-/* Methods */
-
-/**
- * Handle stack layout focus.
- *
- * @param {jQuery.Event} e Focusin event
- */
-OO.ui.BookletLayout.prototype.onStackLayoutFocus = function ( e ) {
-	var name, $target;
-
-	// Find the page that an element was focused within
-	$target = $( e.target ).closest( '.oo-ui-pageLayout' );
-	for ( name in this.pages ) {
-		// Check for page match, exclude current page to find only page changes
-		if ( this.pages[name].$element[0] === $target[0] && name !== this.currentPageName ) {
-			this.setPage( name );
-			break;
-		}
-	}
-};
-
-/**
- * Handle stack layout set events.
- *
- * @param {OO.ui.PanelLayout|null} page The page panel that is now the current panel
- */
-OO.ui.BookletLayout.prototype.onStackLayoutSet = function ( page ) {
-	var layout = this;
-	if ( page ) {
-		page.scrollElementIntoView( { complete: function () {
-			if ( layout.autoFocus ) {
-				layout.focus();
-			}
-		} } );
-	}
-};
-
-/**
- * Focus the first input in the current page.
- *
- * If no page is selected, the first selectable page will be selected.
- * If the focus is already in an element on the current page, nothing will happen.
- */
-OO.ui.BookletLayout.prototype.focus = function () {
-	var $input, page = this.stackLayout.getCurrentItem();
-	if ( !page && this.outlined ) {
-		this.selectFirstSelectablePage();
-		page = this.stackLayout.getCurrentItem();
-		if ( !page ) {
-			return;
-		}
-	}
-	// Only change the focus if is not already in the current page
-	if ( !page.$element.find( ':focus' ).length ) {
-		$input = page.$element.find( ':input:first' );
-		if ( $input.length ) {
-			$input[0].focus();
-		}
-	}
-};
-
-/**
- * Handle outline widget select events.
- *
- * @param {OO.ui.OptionWidget|null} item Selected item
- */
-OO.ui.BookletLayout.prototype.onOutlineSelectWidgetSelect = function ( item ) {
-	if ( item ) {
-		this.setPage( item.getData() );
-	}
-};
-
-/**
- * Check if booklet has an outline.
- *
- * @return {boolean}
- */
-OO.ui.BookletLayout.prototype.isOutlined = function () {
-	return this.outlined;
-};
-
-/**
- * Check if booklet has editing controls.
- *
- * @return {boolean}
- */
-OO.ui.BookletLayout.prototype.isEditable = function () {
-	return this.editable;
-};
-
-/**
- * Check if booklet has a visible outline.
- *
- * @return {boolean}
- */
-OO.ui.BookletLayout.prototype.isOutlineVisible = function () {
-	return this.outlined && this.outlineVisible;
-};
-
-/**
- * Hide or show the outline.
- *
- * @param {boolean} [show] Show outline, omit to invert current state
- * @chainable
- */
-OO.ui.BookletLayout.prototype.toggleOutline = function ( show ) {
-	if ( this.outlined ) {
-		show = show === undefined ? !this.outlineVisible : !!show;
-		this.outlineVisible = show;
-		this.gridLayout.layout( show ? [ 1, 2 ] : [ 0, 1 ], [ 1 ] );
-	}
-
-	return this;
-};
-
-/**
- * Get the outline widget.
- *
- * @param {OO.ui.PageLayout} page Page to be selected
- * @return {OO.ui.PageLayout|null} Closest page to another
- */
-OO.ui.BookletLayout.prototype.getClosestPage = function ( page ) {
-	var next, prev, level,
-		pages = this.stackLayout.getItems(),
-		index = $.inArray( page, pages );
-
-	if ( index !== -1 ) {
-		next = pages[index + 1];
-		prev = pages[index - 1];
-		// Prefer adjacent pages at the same level
-		if ( this.outlined ) {
-			level = this.outlineSelectWidget.getItemFromData( page.getName() ).getLevel();
-			if (
-				prev &&
-				level === this.outlineSelectWidget.getItemFromData( prev.getName() ).getLevel()
-			) {
-				return prev;
-			}
-			if (
-				next &&
-				level === this.outlineSelectWidget.getItemFromData( next.getName() ).getLevel()
-			) {
-				return next;
-			}
-		}
-	}
-	return prev || next || null;
-};
-
-/**
- * Get the outline widget.
- *
- * @return {OO.ui.OutlineSelectWidget|null} Outline widget, or null if booklet has no outline
- */
-OO.ui.BookletLayout.prototype.getOutline = function () {
-	return this.outlineSelectWidget;
-};
-
-/**
- * Get the outline controls widget. If the outline is not editable, null is returned.
- *
- * @return {OO.ui.OutlineControlsWidget|null} The outline controls widget.
- */
-OO.ui.BookletLayout.prototype.getOutlineControls = function () {
-	return this.outlineControlsWidget;
-};
-
-/**
- * Get a page by name.
- *
- * @param {string} name Symbolic name of page
- * @return {OO.ui.PageLayout|undefined} Page, if found
- */
-OO.ui.BookletLayout.prototype.getPage = function ( name ) {
-	return this.pages[name];
-};
-
-/**
- * Get the current page name.
- *
- * @return {string|null} Current page name
- */
-OO.ui.BookletLayout.prototype.getCurrentPageName = function () {
-	return this.currentPageName;
-};
-
-/**
- * Add a page to the layout.
- *
- * When pages are added with the same names as existing pages, the existing pages will be
- * automatically removed before the new pages are added.
- *
- * @param {OO.ui.PageLayout[]} pages Pages to add
- * @param {number} index Index to insert pages after
- * @fires add
- * @chainable
- */
-OO.ui.BookletLayout.prototype.addPages = function ( pages, index ) {
-	var i, len, name, page, item, currentIndex,
-		stackLayoutPages = this.stackLayout.getItems(),
-		remove = [],
-		items = [];
-
-	// Remove pages with same names
-	for ( i = 0, len = pages.length; i < len; i++ ) {
-		page = pages[i];
-		name = page.getName();
-
-		if ( Object.prototype.hasOwnProperty.call( this.pages, name ) ) {
-			// Correct the insertion index
-			currentIndex = $.inArray( this.pages[name], stackLayoutPages );
-			if ( currentIndex !== -1 && currentIndex + 1 < index ) {
-				index--;
-			}
-			remove.push( this.pages[name] );
-		}
-	}
-	if ( remove.length ) {
-		this.removePages( remove );
-	}
-
-	// Add new pages
-	for ( i = 0, len = pages.length; i < len; i++ ) {
-		page = pages[i];
-		name = page.getName();
-		this.pages[page.getName()] = page;
-		if ( this.outlined ) {
-			item = new OO.ui.OutlineOptionWidget( { $: this.$, data: name } );
-			page.setOutlineItem( item );
-			items.push( item );
-		}
-	}
-
-	if ( this.outlined && items.length ) {
-		this.outlineSelectWidget.addItems( items, index );
-		this.selectFirstSelectablePage();
-	}
-	this.stackLayout.addItems( pages, index );
-	this.emit( 'add', pages, index );
-
-	return this;
-};
-
-/**
- * Remove a page from the layout.
- *
- * @fires remove
- * @chainable
- */
-OO.ui.BookletLayout.prototype.removePages = function ( pages ) {
-	var i, len, name, page,
-		items = [];
-
-	for ( i = 0, len = pages.length; i < len; i++ ) {
-		page = pages[i];
-		name = page.getName();
-		delete this.pages[name];
-		if ( this.outlined ) {
-			items.push( this.outlineSelectWidget.getItemFromData( name ) );
-			page.setOutlineItem( null );
-		}
-	}
-	if ( this.outlined && items.length ) {
-		this.outlineSelectWidget.removeItems( items );
-		this.selectFirstSelectablePage();
-	}
-	this.stackLayout.removeItems( pages );
-	this.emit( 'remove', pages );
-
-	return this;
-};
-
-/**
- * Clear all pages from the layout.
- *
- * @fires remove
- * @chainable
- */
-OO.ui.BookletLayout.prototype.clearPages = function () {
-	var i, len,
-		pages = this.stackLayout.getItems();
-
-	this.pages = {};
-	this.currentPageName = null;
-	if ( this.outlined ) {
-		this.outlineSelectWidget.clearItems();
-		for ( i = 0, len = pages.length; i < len; i++ ) {
-			pages[i].setOutlineItem( null );
-		}
-	}
-	this.stackLayout.clearItems();
-
-	this.emit( 'remove', pages );
-
-	return this;
-};
-
-/**
- * Set the current page by name.
- *
- * @fires set
- * @param {string} name Symbolic name of page
- */
-OO.ui.BookletLayout.prototype.setPage = function ( name ) {
-	var selectedItem,
-		$focused,
-		page = this.pages[name];
-
-	if ( name !== this.currentPageName ) {
-		if ( this.outlined ) {
-			selectedItem = this.outlineSelectWidget.getSelectedItem();
-			if ( selectedItem && selectedItem.getData() !== name ) {
-				this.outlineSelectWidget.selectItem( this.outlineSelectWidget.getItemFromData( name ) );
-			}
-		}
-		if ( page ) {
-			if ( this.currentPageName && this.pages[this.currentPageName] ) {
-				this.pages[this.currentPageName].setActive( false );
-				// Blur anything focused if the next page doesn't have anything focusable - this
-				// is not needed if the next page has something focusable because once it is focused
-				// this blur happens automatically
-				if ( this.autoFocus && !page.$element.find( ':input' ).length ) {
-					$focused = this.pages[this.currentPageName].$element.find( ':focus' );
-					if ( $focused.length ) {
-						$focused[0].blur();
-					}
-				}
-			}
-			this.currentPageName = name;
-			this.stackLayout.setItem( page );
-			page.setActive( true );
-			this.emit( 'set', page );
-		}
-	}
-};
-
-/**
- * Select the first selectable page.
- *
- * @chainable
- */
-OO.ui.BookletLayout.prototype.selectFirstSelectablePage = function () {
-	if ( !this.outlineSelectWidget.getSelectedItem() ) {
-		this.outlineSelectWidget.selectItem( this.outlineSelectWidget.getFirstSelectableItem() );
-	}
-
-	return this;
 };
 
 /**
@@ -10175,25 +9943,24 @@ OO.ui.FieldLayout = function OoUiFieldLayout( fieldWidget, config ) {
 	OO.ui.LabelElement.call( this, config );
 
 	// Properties
-	this.$field = this.$( '<div>' );
-	this.$body = this.$( '<' + ( hasInputWidget ? 'label' : 'div' ) + '>' );
+	this.$field = $( '<div>' );
+	this.$body = $( '<' + ( hasInputWidget ? 'label' : 'div' ) + '>' );
 	this.align = null;
 	if ( config.help ) {
 		this.popupButtonWidget = new OO.ui.PopupButtonWidget( {
-			$: this.$,
 			classes: [ 'oo-ui-fieldLayout-help' ],
 			framed: false,
 			icon: 'info'
 		} );
 
 		this.popupButtonWidget.getPopup().$body.append(
-			this.$( '<div>' )
+			$( '<div>' )
 				.text( config.help )
 				.addClass( 'oo-ui-fieldLayout-help-content' )
 		);
 		this.$help = this.popupButtonWidget.$element;
 	} else {
-		this.$help = this.$( [] );
+		this.$help = $( [] );
 	}
 
 	// Events
@@ -10285,6 +10052,51 @@ OO.ui.FieldLayout.prototype.setAlignment = function ( value ) {
 };
 
 /**
+ * Layout made of a field, a button, and an optional label.
+ *
+ * @class
+ * @extends OO.ui.FieldLayout
+ *
+ * @constructor
+ * @param {OO.ui.Widget} fieldWidget Field widget
+ * @param {OO.ui.ButtonWidget} buttonWidget Button widget
+ * @param {Object} [config] Configuration options
+ * @cfg {string} [align='left'] Alignment mode, either 'left', 'right', 'top' or 'inline'
+ * @cfg {string} [help] Explanatory text shown as a '?' icon.
+ */
+OO.ui.ActionFieldLayout = function OoUiActionFieldLayout( fieldWidget, buttonWidget, config ) {
+	// Configuration initialization
+	config = $.extend( { align: 'left' }, config );
+
+	// Properties (must be set before parent constructor, which calls #getTagName)
+	this.fieldWidget = fieldWidget;
+	this.buttonWidget = buttonWidget;
+
+	// Parent constructor
+	OO.ui.ActionFieldLayout.super.call( this, fieldWidget, config );
+
+	// Mixin constructors
+	OO.ui.LabelElement.call( this, config );
+
+	// Properties
+	this.$button = $( '<div>' )
+		.addClass( 'oo-ui-actionFieldLayout-button' )
+		.append( this.buttonWidget.$element );
+
+	this.$input = $( '<div>' )
+		.addClass( 'oo-ui-actionFieldLayout-input' )
+		.append( this.fieldWidget.$element );
+
+	this.$field
+		.addClass( 'oo-ui-actionFieldLayout' )
+		.append( this.$input, this.$button );
+};
+
+/* Setup */
+
+OO.inheritClass( OO.ui.ActionFieldLayout, OO.ui.FieldLayout );
+
+/**
  * Layout made of a fieldset and optional legend.
  *
  * Just add OO.ui.FieldLayout items.
@@ -10311,10 +10123,27 @@ OO.ui.FieldsetLayout = function OoUiFieldsetLayout( config ) {
 	OO.ui.LabelElement.call( this, config );
 	OO.ui.GroupElement.call( this, config );
 
+	if ( config.help ) {
+		this.popupButtonWidget = new OO.ui.PopupButtonWidget( {
+			classes: [ 'oo-ui-fieldsetLayout-help' ],
+			framed: false,
+			icon: 'info'
+		} );
+
+		this.popupButtonWidget.getPopup().$body.append(
+			$( '<div>' )
+				.text( config.help )
+				.addClass( 'oo-ui-fieldsetLayout-help-content' )
+		);
+		this.$help = this.popupButtonWidget.$element;
+	} else {
+		this.$help = $( [] );
+	}
+
 	// Initialization
 	this.$element
 		.addClass( 'oo-ui-fieldsetLayout' )
-		.prepend( this.$icon, this.$label, this.$group );
+		.prepend( this.$help, this.$icon, this.$label, this.$group );
 	if ( $.isArray( config.items ) ) {
 		this.addItems( config.items );
 	}
@@ -10391,6 +10220,7 @@ OO.ui.FormLayout.prototype.onFormSubmit = function () {
  *
  * @class
  * @extends OO.ui.Layout
+ * @deprecated Use OO.ui.MenuLayout or plain CSS instead.
  *
  * @constructor
  * @param {OO.ui.PanelLayout[]} panels Panels in the grid
@@ -10415,8 +10245,8 @@ OO.ui.GridLayout = function OoUiGridLayout( panels, config ) {
 	// Initialization
 	this.$element.addClass( 'oo-ui-gridLayout' );
 	for ( i = 0, len = panels.length; i < len; i++ ) {
-		this.panels.push( panels[i] );
-		this.$element.append( panels[i].$element );
+		this.panels.push( panels[ i ] );
+		this.$element.append( panels[ i ].$element );
 	}
 	if ( config.widths || config.heights ) {
 		this.layout( config.widths || [ 1 ], config.heights || [ 1 ] );
@@ -10465,19 +10295,19 @@ OO.ui.GridLayout.prototype.layout = function ( widths, heights ) {
 
 	// Sum up denominators
 	for ( x = 0; x < cols; x++ ) {
-		xd += widths[x];
+		xd += widths[ x ];
 	}
 	for ( y = 0; y < rows; y++ ) {
-		yd += heights[y];
+		yd += heights[ y ];
 	}
 	// Store factors
 	this.widths = [];
 	this.heights = [];
 	for ( x = 0; x < cols; x++ ) {
-		this.widths[x] = widths[x] / xd;
+		this.widths[ x ] = widths[ x ] / xd;
 	}
 	for ( y = 0; y < rows; y++ ) {
-		this.heights[y] = heights[y] / yd;
+		this.heights[ y ] = heights[ y ] / yd;
 	}
 	// Synchronize view
 	this.update();
@@ -10498,17 +10328,17 @@ OO.ui.GridLayout.prototype.update = function () {
 		rows = this.heights.length;
 
 	for ( y = 0; y < rows; y++ ) {
-		height = this.heights[y];
+		height = this.heights[ y ];
 		for ( x = 0; x < cols; x++ ) {
-			width = this.widths[x];
-			panel = this.panels[i];
+			width = this.widths[ x ];
+			panel = this.panels[ i ];
 			dimensions = {
 				width: ( width * 100 ) + '%',
 				height: ( height * 100 ) + '%',
 				top: ( top * 100 ) + '%'
 			};
 			// If RTL, reverse:
-			if ( OO.ui.Element.static.getDir( this.$.context ) === 'rtl' ) {
+			if ( OO.ui.Element.static.getDir( document ) === 'rtl' ) {
 				dimensions.right = ( left * 100 ) + '%';
 			} else {
 				dimensions.left = ( left * 100 ) + '%';
@@ -10541,6 +10371,651 @@ OO.ui.GridLayout.prototype.update = function () {
  */
 OO.ui.GridLayout.prototype.getPanel = function ( x, y ) {
 	return this.panels[ ( x * this.widths.length ) + y ];
+};
+
+/**
+ * Layout with a content and menu area.
+ *
+ * The menu area can be positioned at the top, after, bottom or before. The content area will fill
+ * all remaining space.
+ *
+ * @class
+ * @extends OO.ui.Layout
+ *
+ * @constructor
+ * @param {Object} [config] Configuration options
+ * @cfg {number|string} [menuSize='18em'] Size of menu in pixels or any CSS unit
+ * @cfg {boolean} [showMenu=true] Show menu
+ * @cfg {string} [position='before'] Position of menu, either `top`, `after`, `bottom` or `before`
+ * @cfg {boolean} [collapse] Collapse the menu out of view
+ */
+OO.ui.MenuLayout = function OoUiMenuLayout( config ) {
+	var positions = this.constructor.static.menuPositions;
+
+	// Configuration initialization
+	config = config || {};
+
+	// Parent constructor
+	OO.ui.MenuLayout.super.call( this, config );
+
+	// Properties
+	this.showMenu = config.showMenu !== false;
+	this.menuSize = config.menuSize || '18em';
+	this.menuPosition = positions[ config.menuPosition ] || positions.before;
+
+	/**
+	 * Menu DOM node
+	 *
+	 * @property {jQuery}
+	 */
+	this.$menu = $( '<div>' );
+	/**
+	 * Content DOM node
+	 *
+	 * @property {jQuery}
+	 */
+	this.$content = $( '<div>' );
+
+	// Initialization
+	this.toggleMenu( this.showMenu );
+	this.updateSizes();
+	this.$menu
+		.addClass( 'oo-ui-menuLayout-menu' )
+		.css( this.menuPosition.sizeProperty, this.menuSize );
+	this.$content.addClass( 'oo-ui-menuLayout-content' );
+	this.$element
+		.addClass( 'oo-ui-menuLayout ' + this.menuPosition.className )
+		.append( this.$content, this.$menu );
+};
+
+/* Setup */
+
+OO.inheritClass( OO.ui.MenuLayout, OO.ui.Layout );
+
+/* Static Properties */
+
+OO.ui.MenuLayout.static.menuPositions = {
+	top: {
+		sizeProperty: 'height',
+		className: 'oo-ui-menuLayout-top'
+	},
+	after: {
+		sizeProperty: 'width',
+		className: 'oo-ui-menuLayout-after'
+	},
+	bottom: {
+		sizeProperty: 'height',
+		className: 'oo-ui-menuLayout-bottom'
+	},
+	before: {
+		sizeProperty: 'width',
+		className: 'oo-ui-menuLayout-before'
+	}
+};
+
+/* Methods */
+
+/**
+ * Toggle menu.
+ *
+ * @param {boolean} showMenu Show menu, omit to toggle
+ * @chainable
+ */
+OO.ui.MenuLayout.prototype.toggleMenu = function ( showMenu ) {
+	showMenu = showMenu === undefined ? !this.showMenu : !!showMenu;
+
+	if ( this.showMenu !== showMenu ) {
+		this.showMenu = showMenu;
+		this.updateSizes();
+	}
+
+	return this;
+};
+
+/**
+ * Check if menu is visible
+ *
+ * @return {boolean} Menu is visible
+ */
+OO.ui.MenuLayout.prototype.isMenuVisible = function () {
+	return this.showMenu;
+};
+
+/**
+ * Set menu size.
+ *
+ * @param {number|string} size Size of menu in pixels or any CSS unit
+ * @chainable
+ */
+OO.ui.MenuLayout.prototype.setMenuSize = function ( size ) {
+	this.menuSize = size;
+	this.updateSizes();
+
+	return this;
+};
+
+/**
+ * Update menu and content CSS based on current menu size and visibility
+ *
+ * This method is called internally when size or position is changed.
+ */
+OO.ui.MenuLayout.prototype.updateSizes = function () {
+	if ( this.showMenu ) {
+		this.$menu
+			.css( this.menuPosition.sizeProperty, this.menuSize )
+			.css( 'overflow', '' );
+		// Set offsets on all sides. CSS resets all but one with
+		// 'important' rules so directionality flips are supported
+		this.$content.css( {
+			top: this.menuSize,
+			right: this.menuSize,
+			bottom: this.menuSize,
+			left: this.menuSize
+		} );
+	} else {
+		this.$menu
+			.css( this.menuPosition.sizeProperty, 0 )
+			.css( 'overflow', 'hidden' );
+		this.$content.css( {
+			top: 0,
+			right: 0,
+			bottom: 0,
+			left: 0
+		} );
+	}
+};
+
+/**
+ * Get menu size.
+ *
+ * @return {number|string} Menu size
+ */
+OO.ui.MenuLayout.prototype.getMenuSize = function () {
+	return this.menuSize;
+};
+
+/**
+ * Set menu position.
+ *
+ * @param {string} position Position of menu, either `top`, `after`, `bottom` or `before`
+ * @throws {Error} If position value is not supported
+ * @chainable
+ */
+OO.ui.MenuLayout.prototype.setMenuPosition = function ( position ) {
+	var positions = this.constructor.static.menuPositions;
+
+	if ( !positions[ position ] ) {
+		throw new Error( 'Cannot set position; unsupported position value: ' + position );
+	}
+
+	this.$menu.css( this.menuPosition.sizeProperty, '' );
+	this.$element.removeClass( this.menuPosition.className );
+
+	this.menuPosition = positions[ position ];
+
+	this.updateSizes();
+	this.$element.addClass( this.menuPosition.className );
+
+	return this;
+};
+
+/**
+ * Get menu position.
+ *
+ * @return {string} Menu position
+ */
+OO.ui.MenuLayout.prototype.getMenuPosition = function () {
+	return this.menuPosition;
+};
+
+/**
+ * Layout containing a series of pages.
+ *
+ * @class
+ * @extends OO.ui.MenuLayout
+ *
+ * @constructor
+ * @param {Object} [config] Configuration options
+ * @cfg {boolean} [continuous=false] Show all pages, one after another
+ * @cfg {boolean} [autoFocus=true] Focus on the first focusable element when changing to a page
+ * @cfg {boolean} [outlined=false] Show an outline
+ * @cfg {boolean} [editable=false] Show controls for adding, removing and reordering pages
+ */
+OO.ui.BookletLayout = function OoUiBookletLayout( config ) {
+	// Configuration initialization
+	config = config || {};
+
+	// Parent constructor
+	OO.ui.BookletLayout.super.call( this, config );
+
+	// Properties
+	this.currentPageName = null;
+	this.pages = {};
+	this.ignoreFocus = false;
+	this.stackLayout = new OO.ui.StackLayout( { continuous: !!config.continuous } );
+	this.$content.append( this.stackLayout.$element );
+	this.autoFocus = config.autoFocus === undefined || !!config.autoFocus;
+	this.outlineVisible = false;
+	this.outlined = !!config.outlined;
+	if ( this.outlined ) {
+		this.editable = !!config.editable;
+		this.outlineControlsWidget = null;
+		this.outlineSelectWidget = new OO.ui.OutlineSelectWidget();
+		this.outlinePanel = new OO.ui.PanelLayout( { scrollable: true } );
+		this.$menu.append( this.outlinePanel.$element );
+		this.outlineVisible = true;
+		if ( this.editable ) {
+			this.outlineControlsWidget = new OO.ui.OutlineControlsWidget(
+				this.outlineSelectWidget
+			);
+		}
+	}
+	this.toggleMenu( this.outlined );
+
+	// Events
+	this.stackLayout.connect( this, { set: 'onStackLayoutSet' } );
+	if ( this.outlined ) {
+		this.outlineSelectWidget.connect( this, { select: 'onOutlineSelectWidgetSelect' } );
+	}
+	if ( this.autoFocus ) {
+		// Event 'focus' does not bubble, but 'focusin' does
+		this.stackLayout.$element.on( 'focusin', this.onStackLayoutFocus.bind( this ) );
+	}
+
+	// Initialization
+	this.$element.addClass( 'oo-ui-bookletLayout' );
+	this.stackLayout.$element.addClass( 'oo-ui-bookletLayout-stackLayout' );
+	if ( this.outlined ) {
+		this.outlinePanel.$element
+			.addClass( 'oo-ui-bookletLayout-outlinePanel' )
+			.append( this.outlineSelectWidget.$element );
+		if ( this.editable ) {
+			this.outlinePanel.$element
+				.addClass( 'oo-ui-bookletLayout-outlinePanel-editable' )
+				.append( this.outlineControlsWidget.$element );
+		}
+	}
+};
+
+/* Setup */
+
+OO.inheritClass( OO.ui.BookletLayout, OO.ui.MenuLayout );
+
+/* Events */
+
+/**
+ * @event set
+ * @param {OO.ui.PageLayout} page Current page
+ */
+
+/**
+ * @event add
+ * @param {OO.ui.PageLayout[]} page Added pages
+ * @param {number} index Index pages were added at
+ */
+
+/**
+ * @event remove
+ * @param {OO.ui.PageLayout[]} pages Removed pages
+ */
+
+/* Methods */
+
+/**
+ * Handle stack layout focus.
+ *
+ * @param {jQuery.Event} e Focusin event
+ */
+OO.ui.BookletLayout.prototype.onStackLayoutFocus = function ( e ) {
+	var name, $target;
+
+	// Find the page that an element was focused within
+	$target = $( e.target ).closest( '.oo-ui-pageLayout' );
+	for ( name in this.pages ) {
+		// Check for page match, exclude current page to find only page changes
+		if ( this.pages[ name ].$element[ 0 ] === $target[ 0 ] && name !== this.currentPageName ) {
+			this.setPage( name );
+			break;
+		}
+	}
+};
+
+/**
+ * Handle stack layout set events.
+ *
+ * @param {OO.ui.PanelLayout|null} page The page panel that is now the current panel
+ */
+OO.ui.BookletLayout.prototype.onStackLayoutSet = function ( page ) {
+	var layout = this;
+	if ( page ) {
+		page.scrollElementIntoView( { complete: function () {
+			if ( layout.autoFocus ) {
+				layout.focus();
+			}
+		} } );
+	}
+};
+
+/**
+ * Focus the first input in the current page.
+ *
+ * If no page is selected, the first selectable page will be selected.
+ * If the focus is already in an element on the current page, nothing will happen.
+ */
+OO.ui.BookletLayout.prototype.focus = function () {
+	var $input, page = this.stackLayout.getCurrentItem();
+	if ( !page && this.outlined ) {
+		this.selectFirstSelectablePage();
+		page = this.stackLayout.getCurrentItem();
+	}
+	if ( !page ) {
+		return;
+	}
+	// Only change the focus if is not already in the current page
+	if ( !page.$element.find( ':focus' ).length ) {
+		$input = page.$element.find( ':input:first' );
+		if ( $input.length ) {
+			$input[ 0 ].focus();
+		}
+	}
+};
+
+/**
+ * Handle outline widget select events.
+ *
+ * @param {OO.ui.OptionWidget|null} item Selected item
+ */
+OO.ui.BookletLayout.prototype.onOutlineSelectWidgetSelect = function ( item ) {
+	if ( item ) {
+		this.setPage( item.getData() );
+	}
+};
+
+/**
+ * Check if booklet has an outline.
+ *
+ * @return {boolean}
+ */
+OO.ui.BookletLayout.prototype.isOutlined = function () {
+	return this.outlined;
+};
+
+/**
+ * Check if booklet has editing controls.
+ *
+ * @return {boolean}
+ */
+OO.ui.BookletLayout.prototype.isEditable = function () {
+	return this.editable;
+};
+
+/**
+ * Check if booklet has a visible outline.
+ *
+ * @return {boolean}
+ */
+OO.ui.BookletLayout.prototype.isOutlineVisible = function () {
+	return this.outlined && this.outlineVisible;
+};
+
+/**
+ * Hide or show the outline.
+ *
+ * @param {boolean} [show] Show outline, omit to invert current state
+ * @chainable
+ */
+OO.ui.BookletLayout.prototype.toggleOutline = function ( show ) {
+	if ( this.outlined ) {
+		show = show === undefined ? !this.outlineVisible : !!show;
+		this.outlineVisible = show;
+		this.toggleMenu( show );
+	}
+
+	return this;
+};
+
+/**
+ * Get the outline widget.
+ *
+ * @param {OO.ui.PageLayout} page Page to be selected
+ * @return {OO.ui.PageLayout|null} Closest page to another
+ */
+OO.ui.BookletLayout.prototype.getClosestPage = function ( page ) {
+	var next, prev, level,
+		pages = this.stackLayout.getItems(),
+		index = $.inArray( page, pages );
+
+	if ( index !== -1 ) {
+		next = pages[ index + 1 ];
+		prev = pages[ index - 1 ];
+		// Prefer adjacent pages at the same level
+		if ( this.outlined ) {
+			level = this.outlineSelectWidget.getItemFromData( page.getName() ).getLevel();
+			if (
+				prev &&
+				level === this.outlineSelectWidget.getItemFromData( prev.getName() ).getLevel()
+			) {
+				return prev;
+			}
+			if (
+				next &&
+				level === this.outlineSelectWidget.getItemFromData( next.getName() ).getLevel()
+			) {
+				return next;
+			}
+		}
+	}
+	return prev || next || null;
+};
+
+/**
+ * Get the outline widget.
+ *
+ * @return {OO.ui.OutlineSelectWidget|null} Outline widget, or null if booklet has no outline
+ */
+OO.ui.BookletLayout.prototype.getOutline = function () {
+	return this.outlineSelectWidget;
+};
+
+/**
+ * Get the outline controls widget. If the outline is not editable, null is returned.
+ *
+ * @return {OO.ui.OutlineControlsWidget|null} The outline controls widget.
+ */
+OO.ui.BookletLayout.prototype.getOutlineControls = function () {
+	return this.outlineControlsWidget;
+};
+
+/**
+ * Get a page by name.
+ *
+ * @param {string} name Symbolic name of page
+ * @return {OO.ui.PageLayout|undefined} Page, if found
+ */
+OO.ui.BookletLayout.prototype.getPage = function ( name ) {
+	return this.pages[ name ];
+};
+
+/**
+ * Get the current page
+ *
+ * @return {OO.ui.PageLayout|undefined} Current page, if found
+ */
+OO.ui.BookletLayout.prototype.getCurrentPage = function () {
+	var name = this.getCurrentPageName();
+	return name ? this.getPage( name ) : undefined;
+};
+
+/**
+ * Get the current page name.
+ *
+ * @return {string|null} Current page name
+ */
+OO.ui.BookletLayout.prototype.getCurrentPageName = function () {
+	return this.currentPageName;
+};
+
+/**
+ * Add a page to the layout.
+ *
+ * When pages are added with the same names as existing pages, the existing pages will be
+ * automatically removed before the new pages are added.
+ *
+ * @param {OO.ui.PageLayout[]} pages Pages to add
+ * @param {number} index Index to insert pages after
+ * @fires add
+ * @chainable
+ */
+OO.ui.BookletLayout.prototype.addPages = function ( pages, index ) {
+	var i, len, name, page, item, currentIndex,
+		stackLayoutPages = this.stackLayout.getItems(),
+		remove = [],
+		items = [];
+
+	// Remove pages with same names
+	for ( i = 0, len = pages.length; i < len; i++ ) {
+		page = pages[ i ];
+		name = page.getName();
+
+		if ( Object.prototype.hasOwnProperty.call( this.pages, name ) ) {
+			// Correct the insertion index
+			currentIndex = $.inArray( this.pages[ name ], stackLayoutPages );
+			if ( currentIndex !== -1 && currentIndex + 1 < index ) {
+				index--;
+			}
+			remove.push( this.pages[ name ] );
+		}
+	}
+	if ( remove.length ) {
+		this.removePages( remove );
+	}
+
+	// Add new pages
+	for ( i = 0, len = pages.length; i < len; i++ ) {
+		page = pages[ i ];
+		name = page.getName();
+		this.pages[ page.getName() ] = page;
+		if ( this.outlined ) {
+			item = new OO.ui.OutlineOptionWidget( { data: name } );
+			page.setOutlineItem( item );
+			items.push( item );
+		}
+	}
+
+	if ( this.outlined && items.length ) {
+		this.outlineSelectWidget.addItems( items, index );
+		this.selectFirstSelectablePage();
+	}
+	this.stackLayout.addItems( pages, index );
+	this.emit( 'add', pages, index );
+
+	return this;
+};
+
+/**
+ * Remove a page from the layout.
+ *
+ * @fires remove
+ * @chainable
+ */
+OO.ui.BookletLayout.prototype.removePages = function ( pages ) {
+	var i, len, name, page,
+		items = [];
+
+	for ( i = 0, len = pages.length; i < len; i++ ) {
+		page = pages[ i ];
+		name = page.getName();
+		delete this.pages[ name ];
+		if ( this.outlined ) {
+			items.push( this.outlineSelectWidget.getItemFromData( name ) );
+			page.setOutlineItem( null );
+		}
+	}
+	if ( this.outlined && items.length ) {
+		this.outlineSelectWidget.removeItems( items );
+		this.selectFirstSelectablePage();
+	}
+	this.stackLayout.removeItems( pages );
+	this.emit( 'remove', pages );
+
+	return this;
+};
+
+/**
+ * Clear all pages from the layout.
+ *
+ * @fires remove
+ * @chainable
+ */
+OO.ui.BookletLayout.prototype.clearPages = function () {
+	var i, len,
+		pages = this.stackLayout.getItems();
+
+	this.pages = {};
+	this.currentPageName = null;
+	if ( this.outlined ) {
+		this.outlineSelectWidget.clearItems();
+		for ( i = 0, len = pages.length; i < len; i++ ) {
+			pages[ i ].setOutlineItem( null );
+		}
+	}
+	this.stackLayout.clearItems();
+
+	this.emit( 'remove', pages );
+
+	return this;
+};
+
+/**
+ * Set the current page by name.
+ *
+ * @fires set
+ * @param {string} name Symbolic name of page
+ */
+OO.ui.BookletLayout.prototype.setPage = function ( name ) {
+	var selectedItem,
+		$focused,
+		page = this.pages[ name ];
+
+	if ( name !== this.currentPageName ) {
+		if ( this.outlined ) {
+			selectedItem = this.outlineSelectWidget.getSelectedItem();
+			if ( selectedItem && selectedItem.getData() !== name ) {
+				this.outlineSelectWidget.selectItem( this.outlineSelectWidget.getItemFromData( name ) );
+			}
+		}
+		if ( page ) {
+			if ( this.currentPageName && this.pages[ this.currentPageName ] ) {
+				this.pages[ this.currentPageName ].setActive( false );
+				// Blur anything focused if the next page doesn't have anything focusable - this
+				// is not needed if the next page has something focusable because once it is focused
+				// this blur happens automatically
+				if ( this.autoFocus && !page.$element.find( ':input' ).length ) {
+					$focused = this.pages[ this.currentPageName ].$element.find( ':focus' );
+					if ( $focused.length ) {
+						$focused[ 0 ].blur();
+					}
+				}
+			}
+			this.currentPageName = name;
+			this.stackLayout.setItem( page );
+			page.setActive( true );
+			this.emit( 'set', page );
+		}
+	}
+};
+
+/**
+ * Select the first selectable page.
+ *
+ * @chainable
+ */
+OO.ui.BookletLayout.prototype.selectFirstSelectablePage = function () {
+	if ( !this.outlineSelectWidget.getSelectedItem() ) {
+		this.outlineSelectWidget.selectItem( this.outlineSelectWidget.getFirstSelectableItem() );
+	}
+
+	return this;
 };
 
 /**
@@ -10782,11 +11257,14 @@ OO.ui.StackLayout.prototype.unsetCurrentItem = function () {
  * @chainable
  */
 OO.ui.StackLayout.prototype.addItems = function ( items, index ) {
+	// Update the visibility
+	this.updateHiddenState( items, this.currentItem );
+
 	// Mixin method
 	OO.ui.GroupElement.prototype.addItems.call( this, items, index );
 
 	if ( !this.currentItem && items.length ) {
-		this.setItem( items[0] );
+		this.setItem( items[ 0 ] );
 	}
 
 	return this;
@@ -10807,7 +11285,7 @@ OO.ui.StackLayout.prototype.removeItems = function ( items ) {
 
 	if ( $.inArray( this.currentItem, items ) !== -1 ) {
 		if ( this.items.length ) {
-			this.setItem( this.items[0] );
+			this.setItem( this.items[ 0 ] );
 		} else {
 			this.unsetCurrentItem();
 		}
@@ -10844,18 +11322,10 @@ OO.ui.StackLayout.prototype.clearItems = function () {
  * @fires set
  */
 OO.ui.StackLayout.prototype.setItem = function ( item ) {
-	var i, len;
-
 	if ( item !== this.currentItem ) {
-		if ( !this.continuous ) {
-			for ( i = 0, len = this.items.length; i < len; i++ ) {
-				this.items[i].$element.css( 'display', '' );
-			}
-		}
+		this.updateHiddenState( this.items, item );
+
 		if ( $.inArray( item, this.items ) !== -1 ) {
-			if ( !this.continuous ) {
-				item.$element.css( 'display', 'block' );
-			}
 			this.currentItem = item;
 			this.emit( 'set', item );
 		} else {
@@ -10864,6 +11334,30 @@ OO.ui.StackLayout.prototype.setItem = function ( item ) {
 	}
 
 	return this;
+};
+
+/**
+ * Update the visibility of all items in case of non-continuous view.
+ *
+ * Ensure all items are hidden except for the selected one.
+ * This method does nothing when the stack is continuous.
+ *
+ * @param {OO.ui.Layout[]} items Item list iterate over
+ * @param {OO.ui.Layout} [selectedItem] Selected item to show
+ */
+OO.ui.StackLayout.prototype.updateHiddenState = function ( items, selectedItem ) {
+	var i, len;
+
+	if ( !this.continuous ) {
+		for ( i = 0, len = items.length; i < len; i++ ) {
+			if ( !selectedItem || selectedItem !== items[ i ] ) {
+				items[ i ].$element.addClass( 'oo-ui-element-hidden' );
+			}
+		}
+		if ( selectedItem ) {
+			selectedItem.$element.removeClass( 'oo-ui-element-hidden' );
+		}
+	}
 };
 
 /**
@@ -10931,7 +11425,7 @@ OO.ui.PopupToolGroup = function OoUiPopupToolGroup( toolbar, config ) {
 	this.active = false;
 	this.dragging = false;
 	this.onBlurHandler = this.onBlur.bind( this );
-	this.$handle = this.$( '<span>' );
+	this.$handle = $( '<span>' );
 
 	// Events
 	this.$handle.on( {
@@ -10948,7 +11442,7 @@ OO.ui.PopupToolGroup = function OoUiPopupToolGroup( toolbar, config ) {
 	// OO.ui.HeaderedElement mixin constructor.
 	if ( config.header !== undefined ) {
 		this.$group
-			.prepend( this.$( '<span>' )
+			.prepend( $( '<span>' )
 				.addClass( 'oo-ui-popupToolGroup-header' )
 				.text( config.header )
 			);
@@ -10992,7 +11486,7 @@ OO.ui.PopupToolGroup.prototype.setDisabled = function () {
  */
 OO.ui.PopupToolGroup.prototype.onBlur = function ( e ) {
 	// Only deactivate when clicking outside the dropdown element
-	if ( this.$( e.target ).closest( '.oo-ui-popupToolGroup' )[0] !== this.$element[0] ) {
+	if ( $( e.target ).closest( '.oo-ui-popupToolGroup' )[ 0 ] !== this.$element[ 0 ] ) {
 		this.setActive( false );
 	}
 };
@@ -11130,8 +11624,8 @@ OO.ui.ListToolGroup.prototype.populate = function () {
 
 	this.collapsibleTools = [];
 	for ( i = 0, len = allowCollapse.length; i < len; i++ ) {
-		if ( this.tools[ allowCollapse[i] ] !== undefined ) {
-			this.collapsibleTools.push( this.tools[ allowCollapse[i] ] );
+		if ( this.tools[ allowCollapse[ i ] ] !== undefined ) {
+			this.collapsibleTools.push( this.tools[ allowCollapse[ i ] ] );
 		}
 	}
 
@@ -11139,14 +11633,6 @@ OO.ui.ListToolGroup.prototype.populate = function () {
 	this.$group.append( this.getExpandCollapseTool().$element );
 
 	this.getExpandCollapseTool().toggle( this.collapsibleTools.length !== 0 );
-
-	// Calling jQuery's .hide() and then .show() on a detached element caches the default value of its
-	// 'display' attribute and restores it, and the tool uses a <span> and can be hidden and re-shown.
-	// Is this a jQuery bug? http://jsfiddle.net/gtj4hu3h/
-	if ( this.getExpandCollapseTool().$element.css( 'display' ) === 'inline' ) {
-		this.getExpandCollapseTool().$element.css( 'display', 'block' );
-	}
-
 	this.updateCollapsibleState();
 };
 
@@ -11181,7 +11667,7 @@ OO.ui.ListToolGroup.prototype.onPointerUp = function ( e ) {
 	var ret = OO.ui.ListToolGroup.super.prototype.onPointerUp.call( this, e );
 
 	// Do not close the popup when the user wants to show more/fewer tools
-	if ( this.$( e.target ).closest( '.oo-ui-tool-name-more-fewer' ).length ) {
+	if ( $( e.target ).closest( '.oo-ui-tool-name-more-fewer' ).length ) {
 		// Prevent the popup list from being hidden
 		this.setActive( true );
 	}
@@ -11197,7 +11683,7 @@ OO.ui.ListToolGroup.prototype.updateCollapsibleState = function () {
 		.setTitle( OO.ui.msg( this.expanded ? 'ooui-toolgroup-collapse' : 'ooui-toolgroup-expand' ) );
 
 	for ( i = 0, len = this.collapsibleTools.length; i < len; i++ ) {
-		this.collapsibleTools[i].toggle( this.expanded );
+		this.collapsibleTools[ i ].toggle( this.expanded );
 	}
 };
 
@@ -11248,8 +11734,8 @@ OO.ui.MenuToolGroup.prototype.onUpdateState = function () {
 		labelTexts = [];
 
 	for ( name in this.tools ) {
-		if ( this.tools[name].isActive() ) {
-			labelTexts.push( this.tools[name].getTitle() );
+		if ( this.tools[ name ].isActive() ) {
+			labelTexts.push( this.tools[ name ].getTitle() );
 		}
 	}
 
@@ -11351,7 +11837,7 @@ OO.ui.GroupWidget.prototype.setDisabled = function ( disabled ) {
 	// During construction, #setDisabled is called before the OO.ui.GroupElement constructor
 	if ( this.items ) {
 		for ( i = 0, len = this.items.length; i < len; i++ ) {
-			this.items[i].updateDisabled();
+			this.items[ i ].updateDisabled();
 		}
 	}
 
@@ -11417,6 +11903,7 @@ OO.ui.ItemWidget.prototype.setElementGroup = function ( group ) {
  *
  * @class
  * @abstract
+ * @deprecated Use OO.ui.LookupElement instead.
  *
  * @constructor
  * @param {OO.ui.TextInputWidget} input Input widget
@@ -11432,7 +11919,6 @@ OO.ui.LookupInputWidget = function OoUiLookupInputWidget( input, config ) {
 	this.lookupInput = input;
 	this.$overlay = config.$overlay || this.$element;
 	this.lookupMenu = new OO.ui.TextInputMenuSelectWidget( this, {
-		$: OO.ui.Element.static.getJQuery( this.$overlay ),
 		input: this.lookupInput,
 		$container: config.$container
 	} );
@@ -11631,7 +12117,7 @@ OO.ui.LookupInputWidget.prototype.getLookupMenuItems = function () {
 
 	this.abortLookupRequest();
 	if ( Object.prototype.hasOwnProperty.call( this.lookupCache, value ) ) {
-		deferred.resolve( this.getLookupMenuItemsFromData( this.lookupCache[value] ) );
+		deferred.resolve( this.getLookupMenuItemsFromData( this.lookupCache[ value ] ) );
 	} else {
 		this.lookupInput.pushPending();
 		this.lookupQuery = value;
@@ -11652,8 +12138,8 @@ OO.ui.LookupInputWidget.prototype.getLookupMenuItems = function () {
 				if ( ourRequest === widget.lookupRequest ) {
 					widget.lookupQuery = null;
 					widget.lookupRequest = null;
-					widget.lookupCache[value] = widget.getLookupCacheItemFromData( data );
-					deferred.resolve( widget.getLookupMenuItemsFromData( widget.lookupCache[value] ) );
+					widget.lookupCache[ value ] = widget.getLookupCacheItemFromData( data );
+					deferred.resolve( widget.getLookupMenuItemsFromData( widget.lookupCache[ value ] ) );
 				}
 			} )
 			.fail( function () {
@@ -11745,21 +12231,18 @@ OO.ui.OutlineControlsWidget = function OoUiOutlineControlsWidget( outline, confi
 
 	// Properties
 	this.outline = outline;
-	this.$movers = this.$( '<div>' );
+	this.$movers = $( '<div>' );
 	this.upButton = new OO.ui.ButtonWidget( {
-		$: this.$,
 		framed: false,
 		icon: 'collapse',
 		title: OO.ui.msg( 'ooui-outline-control-move-up' )
 	} );
 	this.downButton = new OO.ui.ButtonWidget( {
-		$: this.$,
 		framed: false,
 		icon: 'expand',
 		title: OO.ui.msg( 'ooui-outline-control-move-down' )
 	} );
 	this.removeButton = new OO.ui.ButtonWidget( {
-		$: this.$,
 		framed: false,
 		icon: 'remove',
 		title: OO.ui.msg( 'ooui-outline-control-remove' )
@@ -11817,15 +12300,15 @@ OO.ui.OutlineControlsWidget.prototype.onOutlineChange = function () {
 		i = -1;
 		len = items.length;
 		while ( ++i < len ) {
-			if ( items[i].isMovable() ) {
-				firstMovable = items[i];
+			if ( items[ i ].isMovable() ) {
+				firstMovable = items[ i ];
 				break;
 			}
 		}
 		i = len;
 		while ( i-- ) {
-			if ( items[i].isMovable() ) {
-				lastMovable = items[i];
+			if ( items[ i ].isMovable() ) {
+				lastMovable = items[ i ];
 				break;
 			}
 		}
@@ -11889,6 +12372,7 @@ OO.ui.ToggleWidget.prototype.setValue = function ( value ) {
 		this.emit( 'change', value );
 		this.$element.toggleClass( 'oo-ui-toggleWidget-on', value );
 		this.$element.toggleClass( 'oo-ui-toggleWidget-off', !value );
+		this.$element.attr( 'aria-checked', value.toString() );
 	}
 	return this;
 };
@@ -11929,7 +12413,12 @@ OO.inheritClass( OO.ui.ButtonGroupWidget, OO.ui.Widget );
 OO.mixinClass( OO.ui.ButtonGroupWidget, OO.ui.GroupElement );
 
 /**
- * Generic widget for buttons.
+ * ButtonWidget is a generic widget for buttons. A wide variety of looks,
+ * feels, and functionality can be customized via the class’s configuration options
+ * and methods. Please see the OOjs UI documentation on MediaWiki for more information
+ * and examples.
+ *
+ * NOTE: HTML form buttons should use the OO.ui.ButtonInputWidget class.
  *
  * @class
  * @extends OO.ui.Widget
@@ -11939,11 +12428,13 @@ OO.mixinClass( OO.ui.ButtonGroupWidget, OO.ui.GroupElement );
  * @mixins OO.ui.LabelElement
  * @mixins OO.ui.TitledElement
  * @mixins OO.ui.FlaggedElement
+ * @mixins OO.ui.TabIndexedElement
  *
  * @constructor
  * @param {Object} [config] Configuration options
  * @cfg {string} [href] Hyperlink to visit when clicked
  * @cfg {string} [target] Target to open hyperlink in
+ * @cfg {boolean} [nofollow] Search engine traversal hint (default: true)
  */
 OO.ui.ButtonWidget = function OoUiButtonWidget( config ) {
 	// Configuration initialization
@@ -11959,17 +12450,13 @@ OO.ui.ButtonWidget = function OoUiButtonWidget( config ) {
 	OO.ui.LabelElement.call( this, config );
 	OO.ui.TitledElement.call( this, $.extend( {}, config, { $titled: this.$button } ) );
 	OO.ui.FlaggedElement.call( this, config );
+	OO.ui.TabIndexedElement.call( this, $.extend( {}, config, { $tabIndexed: this.$button } ) );
 
 	// Properties
 	this.href = null;
 	this.target = null;
+	this.nofollow = false;
 	this.isHyperlink = false;
-
-	// Events
-	this.$button.on( {
-		click: this.onClick.bind( this ),
-		keypress: this.onKeyPress.bind( this )
-	} );
 
 	// Initialization
 	this.$button.append( this.$icon, this.$label, this.$indicator );
@@ -11978,6 +12465,7 @@ OO.ui.ButtonWidget = function OoUiButtonWidget( config ) {
 		.append( this.$button );
 	this.setHref( config.href );
 	this.setTarget( config.target );
+	this.setNoFollow( config.nofollow );
 };
 
 /* Setup */
@@ -11989,45 +12477,54 @@ OO.mixinClass( OO.ui.ButtonWidget, OO.ui.IndicatorElement );
 OO.mixinClass( OO.ui.ButtonWidget, OO.ui.LabelElement );
 OO.mixinClass( OO.ui.ButtonWidget, OO.ui.TitledElement );
 OO.mixinClass( OO.ui.ButtonWidget, OO.ui.FlaggedElement );
-
-/* Events */
-
-/**
- * @event click
- */
+OO.mixinClass( OO.ui.ButtonWidget, OO.ui.TabIndexedElement );
 
 /* Methods */
 
 /**
- * Handles mouse click events.
- *
- * @param {jQuery.Event} e Mouse click event
- * @fires click
+ * @inheritdoc
  */
-OO.ui.ButtonWidget.prototype.onClick = function () {
+OO.ui.ButtonWidget.prototype.onMouseDown = function ( e ) {
 	if ( !this.isDisabled() ) {
-		this.emit( 'click' );
-		if ( this.isHyperlink ) {
-			return true;
-		}
+		// Remove the tab-index while the button is down to prevent the button from stealing focus
+		this.$button.removeAttr( 'tabindex' );
 	}
-	return false;
+
+	return OO.ui.ButtonElement.prototype.onMouseDown.call( this, e );
 };
 
 /**
- * Handles keypress events.
- *
- * @param {jQuery.Event} e Keypress event
- * @fires click
+ * @inheritdoc
+ */
+OO.ui.ButtonWidget.prototype.onMouseUp = function ( e ) {
+	if ( !this.isDisabled() ) {
+		// Restore the tab-index after the button is up to restore the button's accessibility
+		this.$button.attr( 'tabindex', this.tabIndex );
+	}
+
+	return OO.ui.ButtonElement.prototype.onMouseUp.call( this, e );
+};
+
+/**
+ * @inheritdoc
+ */
+OO.ui.ButtonWidget.prototype.onClick = function ( e ) {
+	var ret = OO.ui.ButtonElement.prototype.onClick.call( this, e );
+	if ( this.isHyperlink ) {
+		return true;
+	}
+	return ret;
+};
+
+/**
+ * @inheritdoc
  */
 OO.ui.ButtonWidget.prototype.onKeyPress = function ( e ) {
-	if ( !this.isDisabled() && ( e.which === OO.ui.Keys.SPACE || e.which === OO.ui.Keys.ENTER ) ) {
-		this.emit( 'click' );
-		if ( this.isHyperlink ) {
-			return true;
-		}
+	var ret = OO.ui.ButtonElement.prototype.onKeyPress.call( this, e );
+	if ( this.isHyperlink ) {
+		return true;
 	}
-	return false;
+	return ret;
 };
 
 /**
@@ -12046,6 +12543,15 @@ OO.ui.ButtonWidget.prototype.getHref = function () {
  */
 OO.ui.ButtonWidget.prototype.getTarget = function () {
 	return this.target;
+};
+
+/**
+ * Get search engine traversal hint.
+ *
+ * @return {boolean} Whether search engines should avoid traversing this hyperlink
+ */
+OO.ui.ButtonWidget.prototype.getNoFollow = function () {
+	return this.nofollow;
 };
 
 /**
@@ -12084,6 +12590,26 @@ OO.ui.ButtonWidget.prototype.setTarget = function ( target ) {
 			this.$button.attr( 'target', target );
 		} else {
 			this.$button.removeAttr( 'target' );
+		}
+	}
+
+	return this;
+};
+
+/**
+ * Set search engine traversal hint.
+ *
+ * @param {boolean} nofollow True if search engines should avoid traversing this hyperlink
+ */
+OO.ui.ButtonWidget.prototype.setNoFollow = function ( nofollow ) {
+	nofollow = typeof nofollow === 'boolean' ? nofollow : true;
+
+	if ( nofollow !== this.nofollow ) {
+		this.nofollow = nofollow;
+		if ( nofollow ) {
+			this.$button.attr( 'rel', 'nofollow' );
+		} else {
+			this.$button.removeAttr( 'rel' );
 		}
 	}
 
@@ -12261,9 +12787,13 @@ OO.ui.PopupButtonWidget = function OoUiPopupButtonWidget( config ) {
 	// Mixin constructors
 	OO.ui.PopupElement.call( this, config );
 
+	// Events
+	this.connect( this, { click: 'onAction' } );
+
 	// Initialization
 	this.$element
 		.addClass( 'oo-ui-popupButtonWidget' )
+		.attr( 'aria-haspopup', 'true' )
 		.append( this.popup.$element );
 };
 
@@ -12275,22 +12805,10 @@ OO.mixinClass( OO.ui.PopupButtonWidget, OO.ui.PopupElement );
 /* Methods */
 
 /**
- * Handles mouse click events.
- *
- * @param {jQuery.Event} e Mouse click event
+ * Handle the button action being triggered.
  */
-OO.ui.PopupButtonWidget.prototype.onClick = function ( e ) {
-	// Skip clicks within the popup
-	if ( $.contains( this.popup.$element[0], e.target ) ) {
-		return;
-	}
-
-	if ( !this.isDisabled() ) {
-		this.popup.toggle();
-		// Parent method
-		OO.ui.PopupButtonWidget.super.prototype.onClick.call( this );
-	}
-	return false;
+OO.ui.PopupButtonWidget.prototype.onAction = function () {
+	this.popup.toggle();
 };
 
 /**
@@ -12314,6 +12832,9 @@ OO.ui.ToggleButtonWidget = function OoUiToggleButtonWidget( config ) {
 	// Mixin constructors
 	OO.ui.ToggleWidget.call( this, config );
 
+	// Events
+	this.connect( this, { click: 'onAction' } );
+
 	// Initialization
 	this.$element.addClass( 'oo-ui-toggleButtonWidget' );
 };
@@ -12326,15 +12847,10 @@ OO.mixinClass( OO.ui.ToggleButtonWidget, OO.ui.ToggleWidget );
 /* Methods */
 
 /**
- * @inheritdoc
+ * Handle the button action being triggered.
  */
-OO.ui.ToggleButtonWidget.prototype.onClick = function () {
-	if ( !this.isDisabled() ) {
-		this.setValue( !this.value );
-	}
-
-	// Parent method
-	return OO.ui.ToggleButtonWidget.super.prototype.onClick.call( this );
+OO.ui.ToggleButtonWidget.prototype.onAction = function () {
+	this.setValue( !this.value );
 };
 
 /**
@@ -12343,6 +12859,7 @@ OO.ui.ToggleButtonWidget.prototype.onClick = function () {
 OO.ui.ToggleButtonWidget.prototype.setValue = function ( value ) {
 	value = !!value;
 	if ( value !== this.value ) {
+		this.$button.attr( 'aria-pressed', value.toString() );
 		this.setActive( value );
 	}
 
@@ -12366,6 +12883,7 @@ OO.ui.ToggleButtonWidget.prototype.setValue = function ( value ) {
  * @mixins OO.ui.IndicatorElement
  * @mixins OO.ui.LabelElement
  * @mixins OO.ui.TitledElement
+ * @mixins OO.ui.TabIndexedElement
  *
  * @constructor
  * @param {Object} [config] Configuration options
@@ -12378,18 +12896,24 @@ OO.ui.DropdownWidget = function OoUiDropdownWidget( config ) {
 	// Parent constructor
 	OO.ui.DropdownWidget.super.call( this, config );
 
+	// Properties (must be set before TabIndexedElement constructor call)
+	this.$handle = this.$( '<span>' );
+
 	// Mixin constructors
 	OO.ui.IconElement.call( this, config );
 	OO.ui.IndicatorElement.call( this, config );
 	OO.ui.LabelElement.call( this, config );
 	OO.ui.TitledElement.call( this, $.extend( {}, config, { $titled: this.$label } ) );
+	OO.ui.TabIndexedElement.call( this, $.extend( {}, config, { $tabIndexed: this.$handle } ) );
 
 	// Properties
-	this.menu = new OO.ui.MenuSelectWidget( $.extend( { $: this.$, widget: this }, config.menu ) );
-	this.$handle = this.$( '<span>' );
+	this.menu = new OO.ui.MenuSelectWidget( $.extend( { widget: this }, config.menu ) );
 
 	// Events
-	this.$element.on( { click: this.onClick.bind( this ) } );
+	this.$handle.on( {
+		click: this.onClick.bind( this ),
+		keypress: this.onKeyPress.bind( this )
+	} );
 	this.menu.connect( this, { select: 'onMenuSelect' } );
 
 	// Initialization
@@ -12408,6 +12932,7 @@ OO.mixinClass( OO.ui.DropdownWidget, OO.ui.IconElement );
 OO.mixinClass( OO.ui.DropdownWidget, OO.ui.IndicatorElement );
 OO.mixinClass( OO.ui.DropdownWidget, OO.ui.LabelElement );
 OO.mixinClass( OO.ui.DropdownWidget, OO.ui.TitledElement );
+OO.mixinClass( OO.ui.DropdownWidget, OO.ui.TabIndexedElement );
 
 /* Methods */
 
@@ -12443,17 +12968,28 @@ OO.ui.DropdownWidget.prototype.onMenuSelect = function ( item ) {
 };
 
 /**
- * Handles mouse click events.
+ * Handle mouse click events.
  *
  * @param {jQuery.Event} e Mouse click event
  */
 OO.ui.DropdownWidget.prototype.onClick = function ( e ) {
-	// Skip clicks within the menu
-	if ( $.contains( this.menu.$element[0], e.target ) ) {
-		return;
+	if ( !this.isDisabled() && e.which === 1 ) {
+		if ( this.menu.isVisible() ) {
+			this.menu.toggle( false );
+		} else {
+			this.menu.toggle( true );
+		}
 	}
+	return false;
+};
 
-	if ( !this.isDisabled() ) {
+/**
+ * Handle key press events.
+ *
+ * @param {jQuery.Event} e Key press event
+ */
+OO.ui.DropdownWidget.prototype.onKeyPress = function ( e ) {
+	if ( !this.isDisabled() && ( e.which === OO.ui.Keys.SPACE || e.which === OO.ui.Keys.ENTER ) ) {
 		if ( this.menu.isVisible() ) {
 			this.menu.toggle( false );
 		} else {
@@ -12546,6 +13082,7 @@ OO.ui.IndicatorWidget.static.tagName = 'span';
  * @class
  * @extends OO.ui.Widget
  * @mixins OO.ui.FlaggedElement
+ * @mixins OO.ui.TabIndexedElement
  *
  * @constructor
  * @param {Object} [config] Configuration options
@@ -12560,13 +13097,14 @@ OO.ui.InputWidget = function OoUiInputWidget( config ) {
 	// Parent constructor
 	OO.ui.InputWidget.super.call( this, config );
 
-	// Mixin constructors
-	OO.ui.FlaggedElement.call( this, config );
-
 	// Properties
 	this.$input = this.getInputElement( config );
 	this.value = '';
 	this.inputFilter = config.inputFilter;
+
+	// Mixin constructors
+	OO.ui.FlaggedElement.call( this, config );
+	OO.ui.TabIndexedElement.call( this, $.extend( {}, config, { $tabIndexed: this.$input } ) );
 
 	// Events
 	this.$input.on( 'keydown mouseup cut paste change input select', this.onEdit.bind( this ) );
@@ -12583,6 +13121,7 @@ OO.ui.InputWidget = function OoUiInputWidget( config ) {
 
 OO.inheritClass( OO.ui.InputWidget, OO.ui.Widget );
 OO.mixinClass( OO.ui.InputWidget, OO.ui.FlaggedElement );
+OO.mixinClass( OO.ui.InputWidget, OO.ui.TabIndexedElement );
 
 /* Events */
 
@@ -12596,12 +13135,15 @@ OO.mixinClass( OO.ui.InputWidget, OO.ui.FlaggedElement );
 /**
  * Get input element.
  *
+ * Subclasses of OO.ui.InputWidget use the `config` parameter to produce different elements in
+ * different circumstances. The element must have a `value` property (like form elements).
+ *
  * @private
- * @param {Object} [config] Configuration options
+ * @param {Object} config Configuration options
  * @return {jQuery} Input element
  */
 OO.ui.InputWidget.prototype.getInputElement = function () {
-	return this.$( '<input>' );
+	return $( '<input>' );
 };
 
 /**
@@ -12625,6 +13167,12 @@ OO.ui.InputWidget.prototype.onEdit = function () {
  * @return {string} Input value
  */
 OO.ui.InputWidget.prototype.getValue = function () {
+	// Resynchronize our internal data with DOM data. Other scripts executing on the page can modify
+	// it, and we won't know unless they're kind enough to trigger a 'change' event.
+	var value = this.$input.val();
+	if ( this.value !== value ) {
+		this.setValue( value );
+	}
 	return this.value;
 };
 
@@ -12634,13 +13182,7 @@ OO.ui.InputWidget.prototype.getValue = function () {
  * @param {boolean} isRTL
  */
 OO.ui.InputWidget.prototype.setRTL = function ( isRTL ) {
-	if ( isRTL ) {
-		this.$input.removeClass( 'oo-ui-ltr' );
-		this.$input.addClass( 'oo-ui-rtl' );
-	} else {
-		this.$input.removeClass( 'oo-ui-rtl' );
-		this.$input.addClass( 'oo-ui-ltr' );
-	}
+	this.$input.prop( 'dir', isRTL ? 'rtl' : 'ltr' );
 };
 
 /**
@@ -12691,7 +13233,7 @@ OO.ui.InputWidget.prototype.simulateLabelClick = function () {
 		if ( this.$input.is( ':checkbox,:radio' ) ) {
 			this.$input.click();
 		} else if ( this.$input.is( ':input' ) ) {
-			this.$input[0].focus();
+			this.$input[ 0 ].focus();
 		}
 	}
 };
@@ -12713,7 +13255,7 @@ OO.ui.InputWidget.prototype.setDisabled = function ( state ) {
  * @chainable
  */
 OO.ui.InputWidget.prototype.focus = function () {
-	this.$input[0].focus();
+	this.$input[ 0 ].focus();
 	return this;
 };
 
@@ -12723,7 +13265,7 @@ OO.ui.InputWidget.prototype.focus = function () {
  * @chainable
  */
 OO.ui.InputWidget.prototype.blur = function () {
-	this.$input[0].blur();
+	this.$input[ 0 ].blur();
 	return this;
 };
 
@@ -12765,12 +13307,6 @@ OO.ui.ButtonInputWidget = function OoUiButtonInputWidget( config ) {
 	OO.ui.TitledElement.call( this, $.extend( {}, config, { $titled: this.$input } ) );
 	OO.ui.FlaggedElement.call( this, config );
 
-	// Events
-	this.$input.on( {
-		click: this.onClick.bind( this ),
-		keypress: this.onKeyPress.bind( this )
-	} );
-
 	// Initialization
 	if ( !config.useInputTag ) {
 		this.$input.append( this.$icon, this.$label, this.$indicator );
@@ -12788,28 +13324,15 @@ OO.mixinClass( OO.ui.ButtonInputWidget, OO.ui.LabelElement );
 OO.mixinClass( OO.ui.ButtonInputWidget, OO.ui.TitledElement );
 OO.mixinClass( OO.ui.ButtonInputWidget, OO.ui.FlaggedElement );
 
-/* Events */
-
-/**
- * @event click
- */
-
 /* Methods */
 
 /**
- * Get input element.
- *
+ * @inheritdoc
  * @private
- * @param {Object} [config] Configuration options
- * @return {jQuery} Input element
  */
 OO.ui.ButtonInputWidget.prototype.getInputElement = function ( config ) {
-	// Configuration initialization
-	config = config || {};
-
 	var html = '<' + ( config.useInputTag ? 'input' : 'button' ) + ' type="' + config.type + '">';
-
-	return this.$( html );
+	return $( html );
 };
 
 /**
@@ -12856,32 +13379,6 @@ OO.ui.ButtonInputWidget.prototype.setValue = function ( value ) {
 };
 
 /**
- * Handles mouse click events.
- *
- * @param {jQuery.Event} e Mouse click event
- * @fires click
- */
-OO.ui.ButtonInputWidget.prototype.onClick = function () {
-	if ( !this.isDisabled() ) {
-		this.emit( 'click' );
-	}
-	return false;
-};
-
-/**
- * Handles keypress events.
- *
- * @param {jQuery.Event} e Keypress event
- * @fires click
- */
-OO.ui.ButtonInputWidget.prototype.onKeyPress = function ( e ) {
-	if ( !this.isDisabled() && ( e.which === OO.ui.Keys.SPACE || e.which === OO.ui.Keys.ENTER ) ) {
-		this.emit( 'click' );
-	}
-	return false;
-};
-
-/**
  * Checkbox input widget.
  *
  * @class
@@ -12892,6 +13389,9 @@ OO.ui.ButtonInputWidget.prototype.onKeyPress = function ( e ) {
  * @cfg {boolean} [selected=false] Whether the checkbox is initially selected
  */
 OO.ui.CheckboxInputWidget = function OoUiCheckboxInputWidget( config ) {
+	// Configuration initialization
+	config = config || {};
+
 	// Parent constructor
 	OO.ui.CheckboxInputWidget.super.call( this, config );
 
@@ -12907,13 +13407,11 @@ OO.inheritClass( OO.ui.CheckboxInputWidget, OO.ui.InputWidget );
 /* Methods */
 
 /**
- * Get input element.
- *
+ * @inheritdoc
  * @private
- * @return {jQuery} Input element
  */
 OO.ui.CheckboxInputWidget.prototype.getInputElement = function () {
-	return this.$( '<input type="checkbox" />' );
+	return $( '<input type="checkbox" />' );
 };
 
 /**
@@ -12951,7 +13449,137 @@ OO.ui.CheckboxInputWidget.prototype.setSelected = function ( state ) {
  * @return {boolean} Checkbox is selected
  */
 OO.ui.CheckboxInputWidget.prototype.isSelected = function () {
+	// Resynchronize our internal data with DOM data. Other scripts executing on the page can modify
+	// it, and we won't know unless they're kind enough to trigger a 'change' event.
+	var selected = this.$input.prop( 'checked' );
+	if ( this.selected !== selected ) {
+		this.setSelected( selected );
+	}
 	return this.selected;
+};
+
+/**
+ * A OO.ui.DropdownWidget synchronized with a `<input type=hidden>` for form submission. Intended to
+ * be used within a OO.ui.FormLayout.
+ *
+ * @class
+ * @extends OO.ui.InputWidget
+ *
+ * @constructor
+ * @param {Object} [config] Configuration options
+ * @cfg {Object[]} [options=[]] Array of menu options in the format `{ data: …, label: … }`
+ */
+OO.ui.DropdownInputWidget = function OoUiDropdownInputWidget( config ) {
+	// Configuration initialization
+	config = config || {};
+
+	// Properties (must be done before parent constructor which calls #setDisabled)
+	this.dropdownWidget = new OO.ui.DropdownWidget();
+
+	// Parent constructor
+	OO.ui.DropdownInputWidget.super.call( this, config );
+
+	// Events
+	this.dropdownWidget.getMenu().connect( this, { select: 'onMenuSelect' } );
+
+	// Initialization
+	this.setOptions( config.options || [] );
+	this.$element
+		.addClass( 'oo-ui-dropdownInputWidget' )
+		.append( this.dropdownWidget.$element );
+};
+
+/* Setup */
+
+OO.inheritClass( OO.ui.DropdownInputWidget, OO.ui.InputWidget );
+
+/* Methods */
+
+/**
+ * @inheritdoc
+ * @private
+ */
+OO.ui.DropdownInputWidget.prototype.getInputElement = function () {
+	return $( '<input type="hidden">' );
+};
+
+/**
+ * Handles menu select events.
+ *
+ * @param {OO.ui.MenuOptionWidget} item Selected menu item
+ */
+OO.ui.DropdownInputWidget.prototype.onMenuSelect = function ( item ) {
+	this.setValue( item.getData() );
+};
+
+/**
+ * @inheritdoc
+ */
+OO.ui.DropdownInputWidget.prototype.setValue = function ( value ) {
+	var item = this.dropdownWidget.getMenu().getItemFromData( value );
+	if ( item ) {
+		this.dropdownWidget.getMenu().selectItem( item );
+	}
+	OO.ui.DropdownInputWidget.super.prototype.setValue.call( this, value );
+	return this;
+};
+
+/**
+ * @inheritdoc
+ */
+OO.ui.DropdownInputWidget.prototype.setDisabled = function ( state ) {
+	this.dropdownWidget.setDisabled( state );
+	OO.ui.DropdownInputWidget.super.prototype.setDisabled.call( this, state );
+	return this;
+};
+
+/**
+ * Set the options available for this input.
+ *
+ * @param {Object[]} options Array of menu options in the format `{ data: …, label: … }`
+ * @chainable
+ */
+OO.ui.DropdownInputWidget.prototype.setOptions = function ( options ) {
+	var value = this.getValue();
+
+	// Rebuild the dropdown menu
+	this.dropdownWidget.getMenu()
+		.clearItems()
+		.addItems( options.map( function ( opt ) {
+			return new OO.ui.MenuOptionWidget( {
+				data: opt.data,
+				label: opt.label !== undefined ? opt.label : opt.data
+			} );
+		} ) );
+
+	// Restore the previous value, or reset to something sensible
+	if ( this.dropdownWidget.getMenu().getItemFromData( value ) ) {
+		// Previous value is still available, ensure consistency with the dropdown
+		this.setValue( value );
+	} else {
+		// No longer valid, reset
+		if ( options.length ) {
+			this.setValue( options[ 0 ].data );
+		}
+	}
+
+	return this;
+};
+
+/**
+ * @inheritdoc
+ */
+OO.ui.DropdownInputWidget.prototype.focus = function () {
+	this.dropdownWidget.getMenu().toggle( true );
+	return this;
+};
+
+/**
+ * @inheritdoc
+ */
+OO.ui.DropdownInputWidget.prototype.blur = function () {
+	this.dropdownWidget.getMenu().toggle( false );
+	return this;
 };
 
 /**
@@ -12968,6 +13596,9 @@ OO.ui.CheckboxInputWidget.prototype.isSelected = function () {
  * @cfg {boolean} [selected=false] Whether the radio button is initially selected
  */
 OO.ui.RadioInputWidget = function OoUiRadioInputWidget( config ) {
+	// Configuration initialization
+	config = config || {};
+
 	// Parent constructor
 	OO.ui.RadioInputWidget.super.call( this, config );
 
@@ -12983,13 +13614,11 @@ OO.inheritClass( OO.ui.RadioInputWidget, OO.ui.InputWidget );
 /* Methods */
 
 /**
- * Get input element.
- *
+ * @inheritdoc
  * @private
- * @return {jQuery} Input element
  */
 OO.ui.RadioInputWidget.prototype.getInputElement = function () {
-	return this.$( '<input type="radio" />' );
+	return $( '<input type="radio" />' );
 };
 
 /**
@@ -13033,16 +13662,25 @@ OO.ui.RadioInputWidget.prototype.isSelected = function () {
  * @param {Object} [config] Configuration options
  * @cfg {string} [type='text'] HTML tag `type` attribute
  * @cfg {string} [placeholder] Placeholder text
+ * @cfg {boolean} [autofocus=false] Ask the browser to focus this widget, using the 'autofocus' HTML
+ *  attribute
  * @cfg {boolean} [readOnly=false] Prevent changes
+ * @cfg {number} [maxLength] Maximum allowed number of characters to input
  * @cfg {boolean} [multiline=false] Allow multiple lines of text
  * @cfg {boolean} [autosize=false] Automatically resize to fit content
  * @cfg {boolean} [maxRows=10] Maximum number of rows to make visible when autosizing
- * @cfg {RegExp|string} [validate] Regular expression (or symbolic name referencing
+ * @cfg {string} [labelPosition='after'] Label position, 'before' or 'after'
+ * @cfg {boolean} [required=false] Mark the field as required
+ * @cfg {RegExp|string} [validate] Regular expression to validate against (or symbolic name referencing
  *  one, see #static-validationPatterns)
  */
 OO.ui.TextInputWidget = function OoUiTextInputWidget( config ) {
 	// Configuration initialization
-	config = $.extend( { readOnly: false }, config );
+	config = $.extend( {
+		type: 'text',
+		labelPosition: 'after',
+		maxRows: 10
+	}, config );
 
 	// Parent constructor
 	OO.ui.TextInputWidget.super.call( this, config );
@@ -13051,12 +13689,13 @@ OO.ui.TextInputWidget = function OoUiTextInputWidget( config ) {
 	OO.ui.IconElement.call( this, config );
 	OO.ui.IndicatorElement.call( this, config );
 	OO.ui.PendingElement.call( this, config );
+	OO.ui.LabelElement.call( this, config );
 
 	// Properties
 	this.readOnly = false;
 	this.multiline = !!config.multiline;
 	this.autosize = !!config.autosize;
-	this.maxRows = config.maxRows !== undefined ? config.maxRows : 10;
+	this.maxRows = config.maxRows;
 	this.validate = null;
 
 	// Clone for resizing
@@ -13064,10 +13703,12 @@ OO.ui.TextInputWidget = function OoUiTextInputWidget( config ) {
 		this.$clone = this.$input
 			.clone()
 			.insertAfter( this.$input )
-			.hide();
+			.attr( 'aria-hidden', 'true' )
+			.addClass( 'oo-ui-element-hidden' );
 	}
 
 	this.setValidation( config.validate );
+	this.setPosition( config.labelPosition );
 
 	// Events
 	this.$input.on( {
@@ -13077,16 +13718,25 @@ OO.ui.TextInputWidget = function OoUiTextInputWidget( config ) {
 	this.$element.on( 'DOMNodeInsertedIntoDocument', this.onElementAttach.bind( this ) );
 	this.$icon.on( 'mousedown', this.onIconMouseDown.bind( this ) );
 	this.$indicator.on( 'mousedown', this.onIndicatorMouseDown.bind( this ) );
+	this.on( 'labelChange', this.updatePosition.bind( this ) );
 
 	// Initialization
 	this.$element
 		.addClass( 'oo-ui-textInputWidget' )
-		.append( this.$icon, this.$indicator );
-	this.setReadOnly( config.readOnly );
+		.append( this.$icon, this.$indicator, this.$label );
+	this.setReadOnly( !!config.readOnly );
 	if ( config.placeholder ) {
 		this.$input.attr( 'placeholder', config.placeholder );
 	}
-	this.$element.attr( 'role', 'textbox' );
+	if ( config.maxLength ) {
+		this.$input.attr( 'maxlength', config.maxLength );
+	}
+	if ( config.autofocus ) {
+		this.$input.attr( 'autofocus', 'autofocus' );
+	}
+	if ( config.required ) {
+		this.$input.attr( 'required', 'true' );
+	}
 };
 
 /* Setup */
@@ -13095,6 +13745,7 @@ OO.inheritClass( OO.ui.TextInputWidget, OO.ui.InputWidget );
 OO.mixinClass( OO.ui.TextInputWidget, OO.ui.IconElement );
 OO.mixinClass( OO.ui.TextInputWidget, OO.ui.IndicatorElement );
 OO.mixinClass( OO.ui.TextInputWidget, OO.ui.PendingElement );
+OO.mixinClass( OO.ui.TextInputWidget, OO.ui.LabelElement );
 
 /* Static properties */
 
@@ -13135,7 +13786,7 @@ OO.ui.TextInputWidget.static.validationPatterns = {
  */
 OO.ui.TextInputWidget.prototype.onIconMouseDown = function ( e ) {
 	if ( e.which === 1 ) {
-		this.$input[0].focus();
+		this.$input[ 0 ].focus();
 		this.emit( 'icon' );
 		return false;
 	}
@@ -13149,7 +13800,7 @@ OO.ui.TextInputWidget.prototype.onIconMouseDown = function ( e ) {
  */
 OO.ui.TextInputWidget.prototype.onIndicatorMouseDown = function ( e ) {
 	if ( e.which === 1 ) {
-		this.$input[0].focus();
+		this.$input[ 0 ].focus();
 		this.emit( 'indicator' );
 		return false;
 	}
@@ -13173,7 +13824,10 @@ OO.ui.TextInputWidget.prototype.onKeyPress = function ( e ) {
  * @param {jQuery.Event} e Element attach event
  */
 OO.ui.TextInputWidget.prototype.onElementAttach = function () {
+	// Any previously calculated size is now probably invalid if we reattached elsewhere
+	this.valCache = null;
 	this.adjustSize();
+	this.positionLabel();
 };
 
 /**
@@ -13238,11 +13892,11 @@ OO.ui.TextInputWidget.prototype.adjustSize = function () {
 			// Set inline height property to 0 to measure scroll height
 			.css( 'height', 0 );
 
-		this.$clone[0].style.display = 'block';
+		this.$clone.removeClass( 'oo-ui-element-hidden' );
 
 		this.valCache = this.$input.val();
 
-		scrollHeight = this.$clone[0].scrollHeight;
+		scrollHeight = this.$clone[ 0 ].scrollHeight;
 
 		// Remove inline height property to measure natural heights
 		this.$clone.css( 'height', '' );
@@ -13258,10 +13912,10 @@ OO.ui.TextInputWidget.prototype.adjustSize = function () {
 
 		// Difference between reported innerHeight and scrollHeight with no scrollbars present
 		// Equals 1 on Blink-based browsers and 0 everywhere else
-		measurementError = maxInnerHeight - this.$clone[0].scrollHeight;
+		measurementError = maxInnerHeight - this.$clone[ 0 ].scrollHeight;
 		idealHeight = Math.min( maxInnerHeight, scrollHeight + measurementError );
 
-		this.$clone[0].style.display = 'none';
+		this.$clone.addClass( 'oo-ui-element-hidden' );
 
 		// Only apply inline height when expansion beyond natural height is needed
 		if ( idealHeight > innerHeight ) {
@@ -13275,19 +13929,11 @@ OO.ui.TextInputWidget.prototype.adjustSize = function () {
 };
 
 /**
- * Get input element.
- *
+ * @inheritdoc
  * @private
- * @param {Object} [config] Configuration options
- * @return {jQuery} Input element
  */
 OO.ui.TextInputWidget.prototype.getInputElement = function ( config ) {
-	// Configuration initialization
-	config = config || {};
-
-	var type = config.type || 'text';
-
-	return config.multiline ? this.$( '<textarea>' ) : this.$( '<input type="' + type + '" />' );
+	return config.multiline ? $( '<textarea>' ) : $( '<input type="' + config.type + '" />' );
 };
 
 /**
@@ -13327,7 +13973,7 @@ OO.ui.TextInputWidget.prototype.setValidation = function ( validate ) {
 	if ( validate instanceof RegExp ) {
 		this.validate = validate;
 	} else {
-		this.validate = this.constructor.static.validationPatterns[validate] || /.*/;
+		this.validate = this.constructor.static.validationPatterns[ validate ] || /.*/;
 	}
 };
 
@@ -13352,10 +13998,69 @@ OO.ui.TextInputWidget.prototype.isValid = function () {
 };
 
 /**
+ * Set the position of the inline label.
+ *
+ * @param {string} labelPosition Label position, 'before' or 'after'
+ * @chainable
+ */
+OO.ui.TextInputWidget.prototype.setPosition = function ( labelPosition ) {
+	this.labelPosition = labelPosition;
+	this.updatePosition();
+	return this;
+};
+
+/**
+ * Update the position of the inline label.
+ *
+ * @chainable
+ */
+OO.ui.TextInputWidget.prototype.updatePosition = function () {
+	var after = this.labelPosition === 'after';
+
+	this.$element
+		.toggleClass( 'oo-ui-textInputWidget-labelPosition-after', this.label && after )
+		.toggleClass( 'oo-ui-textInputWidget-labelPosition-before', this.label && !after );
+
+	if ( this.label ) {
+		this.positionLabel();
+	}
+
+	return this;
+};
+
+/**
+ * Position the label by setting the correct padding on the input.
+ *
+ * @chainable
+ */
+OO.ui.TextInputWidget.prototype.positionLabel = function () {
+	// Clear old values
+	this.$input
+		// Clear old values if present
+		.css( {
+			'padding-right': '',
+			'padding-left': ''
+		} );
+
+	if ( !this.$label.text() ) {
+		return;
+	}
+
+	var after = this.labelPosition === 'after',
+		rtl = this.$element.css( 'direction' ) === 'rtl',
+		property = after === rtl ? 'padding-left' : 'padding-right';
+
+	this.$input.css( property, this.$label.outerWidth() );
+
+	return this;
+};
+
+/**
  * Text input with a menu of optional values.
  *
  * @class
  * @extends OO.ui.Widget
+ * @mixins OO.ui.TabIndexedElement
  *
  * @constructor
  * @param {Object} [config] Configuration options
@@ -13370,15 +14075,24 @@ OO.ui.ComboBoxWidget = function OoUiComboBoxWidget( config ) {
 	// Parent constructor
 	OO.ui.ComboBoxWidget.super.call( this, config );
 
+	// Properties (must be set before TabIndexedElement constructor call)
+	this.$indicator = this.$( '<span>' );
+
+	// Mixin constructors
+	OO.ui.TabIndexedElement.call( this, $.extend( {}, config, { $tabIndexed: this.$indicator } ) );
+
 	// Properties
 	this.$overlay = config.$overlay || this.$element;
 	this.input = new OO.ui.TextInputWidget( $.extend(
-		{ $: this.$, indicator: 'down', disabled: this.isDisabled() },
+		{
+			indicator: 'down',
+			$indicator: this.$indicator,
+			disabled: this.isDisabled()
+		},
 		config.input
 	) );
 	this.menu = new OO.ui.TextInputMenuSelectWidget( this.input, $.extend(
 		{
-			$: OO.ui.Element.static.getJQuery( this.$overlay ),
 			widget: this,
 			input: this.input,
 			disabled: this.isDisabled()
@@ -13387,9 +14101,12 @@ OO.ui.ComboBoxWidget = function OoUiComboBoxWidget( config ) {
 	) );
 
 	// Events
+	this.$indicator.on( {
+		click: this.onClick.bind( this ),
+		keypress: this.onKeyPress.bind( this )
+	} );
 	this.input.connect( this, {
 		change: 'onInputChange',
-		indicator: 'onInputIndicator',
 		enter: 'onInputEnter'
 	} );
 	this.menu.connect( this, {
@@ -13407,6 +14124,7 @@ OO.ui.ComboBoxWidget = function OoUiComboBoxWidget( config ) {
 /* Setup */
 
 OO.inheritClass( OO.ui.ComboBoxWidget, OO.ui.Widget );
+OO.mixinClass( OO.ui.ComboBoxWidget, OO.ui.TabIndexedElement );
 
 /* Methods */
 
@@ -13434,12 +14152,29 @@ OO.ui.ComboBoxWidget.prototype.onInputChange = function ( value ) {
 };
 
 /**
- * Handle input indicator events.
+ * Handle mouse click events.
+ *
+ * @param {jQuery.Event} e Mouse click event
  */
-OO.ui.ComboBoxWidget.prototype.onInputIndicator = function () {
-	if ( !this.isDisabled() ) {
+OO.ui.ComboBoxWidget.prototype.onClick = function ( e ) {
+	if ( !this.isDisabled() && e.which === 1 ) {
 		this.menu.toggle();
+		this.input.$input[ 0 ].focus();
 	}
+	return false;
+};
+
+/**
+ * Handle key press events.
+ *
+ * @param {jQuery.Event} e Key press event
+ */
+OO.ui.ComboBoxWidget.prototype.onKeyPress = function ( e ) {
+	if ( !this.isDisabled() && ( e.which === OO.ui.Keys.SPACE || e.which === OO.ui.Keys.ENTER ) ) {
+		this.menu.toggle();
+		this.input.$input[ 0 ].focus();
+	}
+	return false;
 };
 
 /**
@@ -13662,7 +14397,9 @@ OO.ui.OptionWidget.prototype.isPressed = function () {
 OO.ui.OptionWidget.prototype.setSelected = function ( state ) {
 	if ( this.constructor.static.selectable ) {
 		this.selected = !!state;
-		this.$element.toggleClass( 'oo-ui-optionWidget-selected', state );
+		this.$element
+			.toggleClass( 'oo-ui-optionWidget-selected', state )
+			.attr( 'aria-selected', state.toString() );
 		if ( state && this.constructor.static.scrollIntoViewOnSelect ) {
 			this.scrollElementIntoView();
 		}
@@ -13699,36 +14436,6 @@ OO.ui.OptionWidget.prototype.setPressed = function ( state ) {
 		this.updateThemeClasses();
 	}
 	return this;
-};
-
-/**
- * Make the option's highlight flash.
- *
- * While flashing, the visual style of the pressed state is removed if present.
- *
- * @return {jQuery.Promise} Promise resolved when flashing is done
- */
-OO.ui.OptionWidget.prototype.flash = function () {
-	var widget = this,
-		$element = this.$element,
-		deferred = $.Deferred();
-
-	if ( !this.isDisabled() && this.constructor.static.pressable ) {
-		$element.removeClass( 'oo-ui-optionWidget-highlighted oo-ui-optionWidget-pressed' );
-		setTimeout( function () {
-			// Restore original classes
-			$element
-				.toggleClass( 'oo-ui-optionWidget-highlighted', widget.highlighted )
-				.toggleClass( 'oo-ui-optionWidget-pressed', widget.pressed );
-
-			setTimeout( function () {
-				deferred.resolve();
-			}, 100 );
-
-		}, 100 );
-	}
-
-	return deferred.promise();
 };
 
 /**
@@ -13773,6 +14480,7 @@ OO.mixinClass( OO.ui.OptionWidget, OO.ui.IndicatorElement );
  * @class
  * @extends OO.ui.DecoratedOptionWidget
  * @mixins OO.ui.ButtonElement
+ * @mixins OO.ui.TabIndexedElement
  *
  * @constructor
  * @param {Object} [config] Configuration options
@@ -13783,6 +14491,7 @@ OO.ui.ButtonOptionWidget = function OoUiButtonOptionWidget( config ) {
 
 	// Mixin constructors
 	OO.ui.ButtonElement.call( this, config );
+	OO.ui.TabIndexedElement.call( this, $.extend( {}, config, { $tabIndexed: this.$button } ) );
 
 	// Initialization
 	this.$element.addClass( 'oo-ui-buttonOptionWidget' );
@@ -13794,6 +14503,7 @@ OO.ui.ButtonOptionWidget = function OoUiButtonOptionWidget( config ) {
 
 OO.inheritClass( OO.ui.ButtonOptionWidget, OO.ui.DecoratedOptionWidget );
 OO.mixinClass( OO.ui.ButtonOptionWidget, OO.ui.ButtonElement );
+OO.mixinClass( OO.ui.ButtonOptionWidget, OO.ui.TabIndexedElement );
 
 /* Static Properties */
 
@@ -13847,7 +14557,11 @@ OO.inheritClass( OO.ui.RadioOptionWidget, OO.ui.OptionWidget );
 
 OO.ui.RadioOptionWidget.static.highlightable = false;
 
+OO.ui.RadioOptionWidget.static.scrollIntoViewOnSelect = true;
+
 OO.ui.RadioOptionWidget.static.pressable = false;
+
+OO.ui.RadioOptionWidget.static.tagName = 'label';
 
 /* Methods */
 
@@ -13887,6 +14601,10 @@ OO.ui.MenuOptionWidget = function OoUiMenuOptionWidget( config ) {
 /* Setup */
 
 OO.inheritClass( OO.ui.MenuOptionWidget, OO.ui.DecoratedOptionWidget );
+
+/* Static Properties */
+
+OO.ui.MenuOptionWidget.static.scrollIntoViewOnSelect = true;
 
 /**
  * Section to group one or more items in a OO.ui.MenuSelectWidget.
@@ -14070,16 +14788,17 @@ OO.ui.PopupWidget = function OoUiPopupWidget( config ) {
 	// Parent constructor
 	OO.ui.PopupWidget.super.call( this, config );
 
+	// Properties (must be set before ClippableElement constructor call)
+	this.$body = $( '<div>' );
+
 	// Mixin constructors
 	OO.ui.LabelElement.call( this, config );
-	OO.ui.ClippableElement.call( this, config );
+	OO.ui.ClippableElement.call( this, $.extend( {}, config, { $clippable: this.$body } ) );
 
 	// Properties
-	this.visible = false;
-	this.$popup = this.$( '<div>' );
-	this.$head = this.$( '<div>' );
-	this.$body = this.$( '<div>' );
-	this.$anchor = this.$( '<div>' );
+	this.$popup = $( '<div>' );
+	this.$head = $( '<div>' );
+	this.$anchor = $( '<div>' );
 	// If undefined, will be computed lazily in updateDimensions()
 	this.$container = config.$container;
 	this.containerPadding = config.containerPadding !== undefined ? config.containerPadding : 10;
@@ -14090,7 +14809,7 @@ OO.ui.PopupWidget = function OoUiPopupWidget( config ) {
 	this.width = config.width !== undefined ? config.width : 320;
 	this.height = config.height !== undefined ? config.height : null;
 	this.align = config.align || 'center';
-	this.closeButton = new OO.ui.ButtonWidget( { $: this.$, framed: false, icon: 'close' } );
+	this.closeButton = new OO.ui.ButtonWidget( { framed: false, icon: 'close' } );
 	this.onMouseDownHandler = this.onMouseDown.bind( this );
 
 	// Events
@@ -14104,13 +14823,12 @@ OO.ui.PopupWidget = function OoUiPopupWidget( config ) {
 		.addClass( 'oo-ui-popupWidget-head' )
 		.append( this.$label, this.closeButton.$element );
 	if ( !config.head ) {
-		this.$head.hide();
+		this.$head.addClass( 'oo-ui-element-hidden' );
 	}
 	this.$popup
 		.addClass( 'oo-ui-popupWidget-popup' )
 		.append( this.$head, this.$body );
 	this.$element
-		.hide()
 		.addClass( 'oo-ui-popupWidget' )
 		.append( this.$popup, this.$anchor );
 	// Move content, which was added to #$element by OO.ui.Widget, to the body
@@ -14120,7 +14838,12 @@ OO.ui.PopupWidget = function OoUiPopupWidget( config ) {
 	if ( config.padded ) {
 		this.$body.addClass( 'oo-ui-popupWidget-body-padded' );
 	}
-	this.setClippableElement( this.$body );
+
+	// Initially hidden - using #toggle may cause errors if subclasses override toggle with methods
+	// that reference properties not initialized at that time of parent class construction
+	// TODO: Find a better way to handle post-constructor setup
+	this.visible = false;
+	this.$element.addClass( 'oo-ui-element-hidden' );
 };
 
 /* Setup */
@@ -14139,7 +14862,7 @@ OO.mixinClass( OO.ui.PopupWidget, OO.ui.ClippableElement );
 OO.ui.PopupWidget.prototype.onMouseDown = function ( e ) {
 	if (
 		this.isVisible() &&
-		!$.contains( this.$element[0], e.target ) &&
+		!$.contains( this.$element[ 0 ], e.target ) &&
 		( !this.$autoCloseIgnore || !this.$autoCloseIgnore.has( e.target ).length )
 	) {
 		this.toggle( false );
@@ -14260,7 +14983,7 @@ OO.ui.PopupWidget.prototype.updateDimensions = function ( transition ) {
 
 	if ( !this.$container ) {
 		// Lazy-initialize $container if not specified in constructor
-		this.$container = this.$( this.getClosestScrollableElementContainer() );
+		this.$container = $( this.getClosestScrollableElementContainer() );
 	}
 
 	// Set height and width before measuring things, since it might cause our measurements
@@ -14271,11 +14994,11 @@ OO.ui.PopupWidget.prototype.updateDimensions = function ( transition ) {
 	} );
 
 	// Compute initial popupOffset based on alignment
-	popupOffset = this.width * ( { left: 0, center: -0.5, right: -1 } )[this.align];
+	popupOffset = this.width * ( { left: 0, center: -0.5, right: -1 } )[ this.align ];
 
 	// Figure out if this will cause the popup to go beyond the edge of the container
-	originOffset = Math.round( this.$element.offset().left );
-	containerLeft = Math.round( this.$container.offset().left );
+	originOffset = this.$element.offset().left;
+	containerLeft = this.$container.offset().left;
 	containerWidth = this.$container.innerWidth();
 	containerRight = containerLeft + containerWidth;
 	popupLeft = popupOffset - this.containerPadding;
@@ -14293,7 +15016,7 @@ OO.ui.PopupWidget.prototype.updateDimensions = function ( transition ) {
 	// Adjust offset to avoid anchor being rendered too close to the edge
 	// $anchor.width() doesn't work with the pure CSS anchor (returns 0)
 	// TODO: Find a measurement that works for CSS anchors and image anchors
-	anchorWidth = this.$anchor[0].scrollWidth * 2;
+	anchorWidth = this.$anchor[ 0 ].scrollWidth * 2;
 	if ( popupOffset + this.width < anchorWidth ) {
 		popupOffset = anchorWidth - this.width;
 	} else if ( -popupOffset < anchorWidth ) {
@@ -14344,12 +15067,12 @@ OO.ui.ProgressBarWidget = function OoUiProgressBarWidget( config ) {
 	OO.ui.ProgressBarWidget.super.call( this, config );
 
 	// Properties
-	this.$bar = this.$( '<div>' );
+	this.$bar = $( '<div>' );
 	this.progress = null;
 
 	// Initialization
 	this.setProgress( config.progress !== undefined ? config.progress : false );
-	this.$bar.addClass( 'oo-ui-progressBarWidget-bar');
+	this.$bar.addClass( 'oo-ui-progressBarWidget-bar' );
 	this.$element
 		.attr( {
 			role: 'progressbar',
@@ -14420,14 +15143,13 @@ OO.ui.SearchWidget = function OoUiSearchWidget( config ) {
 
 	// Properties
 	this.query = new OO.ui.TextInputWidget( {
-		$: this.$,
 		icon: 'search',
 		placeholder: config.placeholder,
 		value: config.value
 	} );
-	this.results = new OO.ui.SelectWidget( { $: this.$ } );
-	this.$query = this.$( '<div>' );
-	this.$results = this.$( '<div>' );
+	this.results = new OO.ui.SelectWidget();
+	this.$query = $( '<div>' );
+	this.$results = $( '<div>' );
 
 	// Events
 	this.query.connect( this, {
@@ -14592,7 +15314,9 @@ OO.ui.SelectWidget = function OoUiSelectWidget( config ) {
 	} );
 
 	// Initialization
-	this.$element.addClass( 'oo-ui-selectWidget oo-ui-selectWidget-depressed' );
+	this.$element
+		.addClass( 'oo-ui-selectWidget oo-ui-selectWidget-depressed' )
+		.attr( 'role', 'listbox' );
 	if ( $.isArray( config.items ) ) {
 		this.addItems( config.items );
 	}
@@ -14763,7 +15487,7 @@ OO.ui.SelectWidget.prototype.onMouseLeave = function () {
  * @return {OO.ui.OptionWidget|null} Outline item widget, `null` if none was found
  */
 OO.ui.SelectWidget.prototype.getTargetItem = function ( e ) {
-	var $item = this.$( e.target ).closest( '.oo-ui-optionWidget' );
+	var $item = $( e.target ).closest( '.oo-ui-optionWidget' );
 	if ( $item.length ) {
 		return $item.data( 'oo-ui-optionWidget' );
 	}
@@ -14779,8 +15503,8 @@ OO.ui.SelectWidget.prototype.getSelectedItem = function () {
 	var i, len;
 
 	for ( i = 0, len = this.items.length; i < len; i++ ) {
-		if ( this.items[i].isSelected() ) {
-			return this.items[i];
+		if ( this.items[ i ].isSelected() ) {
+			return this.items[ i ];
 		}
 	}
 	return null;
@@ -14795,8 +15519,8 @@ OO.ui.SelectWidget.prototype.getHighlightedItem = function () {
 	var i, len;
 
 	for ( i = 0, len = this.items.length; i < len; i++ ) {
-		if ( this.items[i].isHighlighted() ) {
-			return this.items[i];
+		if ( this.items[ i ].isHighlighted() ) {
+			return this.items[ i ];
 		}
 	}
 	return null;
@@ -14833,9 +15557,9 @@ OO.ui.SelectWidget.prototype.highlightItem = function ( item ) {
 		changed = false;
 
 	for ( i = 0, len = this.items.length; i < len; i++ ) {
-		highlighted = this.items[i] === item;
-		if ( this.items[i].isHighlighted() !== highlighted ) {
-			this.items[i].setHighlighted( highlighted );
+		highlighted = this.items[ i ] === item;
+		if ( this.items[ i ].isHighlighted() !== highlighted ) {
+			this.items[ i ].setHighlighted( highlighted );
 			changed = true;
 		}
 	}
@@ -14858,9 +15582,9 @@ OO.ui.SelectWidget.prototype.selectItem = function ( item ) {
 		changed = false;
 
 	for ( i = 0, len = this.items.length; i < len; i++ ) {
-		selected = this.items[i] === item;
-		if ( this.items[i].isSelected() !== selected ) {
-			this.items[i].setSelected( selected );
+		selected = this.items[ i ] === item;
+		if ( this.items[ i ].isSelected() !== selected ) {
+			this.items[ i ].setSelected( selected );
 			changed = true;
 		}
 	}
@@ -14883,9 +15607,9 @@ OO.ui.SelectWidget.prototype.pressItem = function ( item ) {
 		changed = false;
 
 	for ( i = 0, len = this.items.length; i < len; i++ ) {
-		pressed = this.items[i] === item;
-		if ( this.items[i].isPressed() !== pressed ) {
-			this.items[i].setPressed( pressed );
+		pressed = this.items[ i ] === item;
+		if ( this.items[ i ].isPressed() !== pressed ) {
+			this.items[ i ].setPressed( pressed );
 			changed = true;
 		}
 	}
@@ -14935,7 +15659,7 @@ OO.ui.SelectWidget.prototype.getRelativeSelectableItem = function ( item, direct
 	}
 
 	for ( i = 0; i < len; i++ ) {
-		item = this.items[nextIndex];
+		item = this.items[ nextIndex ];
 		if ( item instanceof OO.ui.OptionWidget && item.isSelectable() ) {
 			return item;
 		}
@@ -14953,7 +15677,7 @@ OO.ui.SelectWidget.prototype.getFirstSelectableItem = function () {
 	var i, len, item;
 
 	for ( i = 0, len = this.items.length; i < len; i++ ) {
-		item = this.items[i];
+		item = this.items[ i ];
 		if ( item instanceof OO.ui.OptionWidget && item.isSelectable() ) {
 			return item;
 		}
@@ -14994,7 +15718,7 @@ OO.ui.SelectWidget.prototype.removeItems = function ( items ) {
 
 	// Deselect items being removed
 	for ( i = 0, len = items.length; i < len; i++ ) {
-		item = items[i];
+		item = items[ i ];
 		if ( item.isSelected() ) {
 			this.selectItem( null );
 		}
@@ -15105,22 +15829,23 @@ OO.ui.MenuSelectWidget = function OoUiMenuSelectWidget( config ) {
 	OO.ui.ClippableElement.call( this, $.extend( {}, config, { $clippable: this.$group } ) );
 
 	// Properties
-	this.flashing = false;
-	this.visible = false;
 	this.newItems = null;
 	this.autoHide = config.autoHide === undefined || !!config.autoHide;
 	this.$input = config.input ? config.input.$input : null;
 	this.$widget = config.widget ? config.widget.$element : null;
-	this.$previousFocus = null;
-	this.isolated = !config.input;
 	this.onKeyDownHandler = this.onKeyDown.bind( this );
 	this.onDocumentMouseDownHandler = this.onDocumentMouseDown.bind( this );
 
 	// Initialization
 	this.$element
-		.hide()
-		.attr( 'role', 'menu' )
-		.addClass( 'oo-ui-menuSelectWidget' );
+		.addClass( 'oo-ui-menuSelectWidget' )
+		.attr( 'role', 'menu' );
+
+	// Initially hidden - using #toggle may cause errors if subclasses override toggle with methods
+	// that reference properties not initialized at that time of parent class construction
+	// TODO: Find a better way to handle post-constructor setup
+	this.visible = false;
+	this.$element.addClass( 'oo-ui-element-hidden' );
 };
 
 /* Setup */
@@ -15137,8 +15862,8 @@ OO.mixinClass( OO.ui.MenuSelectWidget, OO.ui.ClippableElement );
  */
 OO.ui.MenuSelectWidget.prototype.onDocumentMouseDown = function ( e ) {
 	if (
-		!OO.ui.contains( this.$element[0], e.target, true ) &&
-		( !this.$widget || !OO.ui.contains( this.$widget[0], e.target, true ) )
+		!OO.ui.contains( this.$element[ 0 ], e.target, true ) &&
+		( !this.$widget || !OO.ui.contains( this.$widget[ 0 ], e.target, true ) )
 	) {
 		this.toggle( false );
 	}
@@ -15172,11 +15897,13 @@ OO.ui.MenuSelectWidget.prototype.onKeyDown = function ( e ) {
 				handled = true;
 				break;
 			case OO.ui.Keys.ESCAPE:
+			case OO.ui.Keys.TAB:
 				if ( highlightItem ) {
 					highlightItem.setHighlighted( false );
 				}
 				this.toggle( false );
-				handled = true;
+				// Don't prevent tabbing away
+				handled = ( e.keyCode === OO.ui.Keys.ESCAPE );
 				break;
 		}
 
@@ -15210,7 +15937,7 @@ OO.ui.MenuSelectWidget.prototype.bindKeyDownListener = function () {
  */
 OO.ui.MenuSelectWidget.prototype.unbindKeyDownListener = function () {
 	if ( this.$input ) {
-		this.$input.off( 'keydown' );
+		this.$input.off( 'keydown', this.onKeyDownHandler );
 	} else {
 		this.getElementWindow().removeEventListener( 'keydown', this.onKeyDownHandler, true );
 	}
@@ -15219,27 +15946,14 @@ OO.ui.MenuSelectWidget.prototype.unbindKeyDownListener = function () {
 /**
  * Choose an item.
  *
- * This will close the menu when done, unlike selectItem which only changes selection.
+ * This will close the menu, unlike #selectItem which only changes selection.
  *
  * @param {OO.ui.OptionWidget} item Item to choose
  * @chainable
  */
 OO.ui.MenuSelectWidget.prototype.chooseItem = function ( item ) {
-	var widget = this;
-
-	// Parent method
 	OO.ui.MenuSelectWidget.super.prototype.chooseItem.call( this, item );
-
-	if ( item && !this.flashing ) {
-		this.flashing = true;
-		item.flash().done( function () {
-			widget.toggle( false );
-			widget.flashing = false;
-		} );
-	} else {
-		this.toggle( false );
-	}
-
+	this.toggle( false );
 	return this;
 };
 
@@ -15258,7 +15972,7 @@ OO.ui.MenuSelectWidget.prototype.addItems = function ( items, index ) {
 	}
 
 	for ( i = 0, len = items.length; i < len; i++ ) {
-		item = items[i];
+		item = items[ i ];
 		if ( this.isVisible() ) {
 			// Defer fitting label until item has been attached
 			item.fitLabel();
@@ -15306,9 +16020,7 @@ OO.ui.MenuSelectWidget.prototype.toggle = function ( visible ) {
 	visible = ( visible === undefined ? !this.visible : !!visible ) && !!this.items.length;
 
 	var i, len,
-		change = visible !== this.isVisible(),
-		elementDoc = this.getElementDocument(),
-		widgetDoc = this.$widget ? this.$widget[0].ownerDocument : null;
+		change = visible !== this.isVisible();
 
 	// Parent method
 	OO.ui.MenuSelectWidget.super.prototype.toggle.call( this, visible );
@@ -15317,14 +16029,9 @@ OO.ui.MenuSelectWidget.prototype.toggle = function ( visible ) {
 		if ( visible ) {
 			this.bindKeyDownListener();
 
-			// Change focus to enable keyboard navigation
-			if ( this.isolated && this.$input && !this.$input.is( ':focus' ) ) {
-				this.$previousFocus = this.$( ':focus' );
-				this.$input[0].focus();
-			}
 			if ( this.newItems && this.newItems.length ) {
 				for ( i = 0, len = this.newItems.length; i < len; i++ ) {
-					this.newItems[i].fitLabel();
+					this.newItems[ i ].fitLabel();
 				}
 				this.newItems = null;
 			}
@@ -15332,31 +16039,15 @@ OO.ui.MenuSelectWidget.prototype.toggle = function ( visible ) {
 
 			// Auto-hide
 			if ( this.autoHide ) {
-				elementDoc.addEventListener(
+				this.getElementDocument().addEventListener(
 					'mousedown', this.onDocumentMouseDownHandler, true
 				);
-				// Support $widget being in a different document
-				if ( widgetDoc && widgetDoc !== elementDoc ) {
-					widgetDoc.addEventListener(
-						'mousedown', this.onDocumentMouseDownHandler, true
-					);
-				}
 			}
 		} else {
 			this.unbindKeyDownListener();
-			if ( this.isolated && this.$previousFocus ) {
-				this.$previousFocus[0].focus();
-				this.$previousFocus = null;
-			}
-			elementDoc.removeEventListener(
+			this.getElementDocument().removeEventListener(
 				'mousedown', this.onDocumentMouseDownHandler, true
 			);
-			// Support $widget being in a different document
-			if ( widgetDoc && widgetDoc !== elementDoc ) {
-				widgetDoc.removeEventListener(
-					'mousedown', this.onDocumentMouseDownHandler, true
-				);
-			}
 			this.toggleClipping( false );
 		}
 	}
@@ -15367,9 +16058,8 @@ OO.ui.MenuSelectWidget.prototype.toggle = function ( visible ) {
 /**
  * Menu for a text input widget.
  *
- * This menu is specially designed to be positioned beneath the text input widget. Even if the input
- * is in a different frame, the menu's position is automatically calculated and maintained when the
- * menu is toggled or the window is resized.
+ * This menu is specially designed to be positioned beneath a text input widget. The menu's position
+ * is automatically calculated and maintained when the menu is toggled or the window is resized.
  *
  * @class
  * @extends OO.ui.MenuSelectWidget
@@ -15431,9 +16121,9 @@ OO.ui.TextInputMenuSelectWidget.prototype.toggle = function ( visible ) {
 	if ( change ) {
 		if ( this.isVisible() ) {
 			this.position();
-			this.$( this.getElementWindow() ).on( 'resize', this.onWindowResizeHandler );
+			$( this.getElementWindow() ).on( 'resize', this.onWindowResizeHandler );
 		} else {
-			this.$( this.getElementWindow() ).off( 'resize', this.onWindowResizeHandler );
+			$( this.getElementWindow() ).off( 'resize', this.onWindowResizeHandler );
 		}
 	}
 
@@ -15493,6 +16183,7 @@ OO.inheritClass( OO.ui.OutlineSelectWidget, OO.ui.SelectWidget );
  * @class
  * @extends OO.ui.Widget
  * @mixins OO.ui.ToggleWidget
+ * @mixins OO.ui.TabIndexedElement
  *
  * @constructor
  * @param {Object} [config] Configuration options
@@ -15504,22 +16195,27 @@ OO.ui.ToggleSwitchWidget = function OoUiToggleSwitchWidget( config ) {
 
 	// Mixin constructors
 	OO.ui.ToggleWidget.call( this, config );
+	OO.ui.TabIndexedElement.call( this, config );
 
 	// Properties
 	this.dragging = false;
 	this.dragStart = null;
 	this.sliding = false;
-	this.$glow = this.$( '<span>' );
-	this.$grip = this.$( '<span>' );
+	this.$glow = $( '<span>' );
+	this.$grip = $( '<span>' );
 
 	// Events
-	this.$element.on( 'click', this.onClick.bind( this ) );
+	this.$element.on( {
+		click: this.onClick.bind( this ),
+		keypress: this.onKeyPress.bind( this )
+	} );
 
 	// Initialization
 	this.$glow.addClass( 'oo-ui-toggleSwitchWidget-glow' );
 	this.$grip.addClass( 'oo-ui-toggleSwitchWidget-grip' );
 	this.$element
 		.addClass( 'oo-ui-toggleSwitchWidget' )
+		.attr( 'role', 'checkbox' )
 		.append( this.$glow, this.$grip );
 };
 
@@ -15527,35 +16223,64 @@ OO.ui.ToggleSwitchWidget = function OoUiToggleSwitchWidget( config ) {
 
 OO.inheritClass( OO.ui.ToggleSwitchWidget, OO.ui.Widget );
 OO.mixinClass( OO.ui.ToggleSwitchWidget, OO.ui.ToggleWidget );
+OO.mixinClass( OO.ui.ToggleSwitchWidget, OO.ui.TabIndexedElement );
 
 /* Methods */
 
 /**
- * Handle mouse down events.
+ * Handle mouse click events.
  *
- * @param {jQuery.Event} e Mouse down event
+ * @param {jQuery.Event} e Mouse click event
  */
 OO.ui.ToggleSwitchWidget.prototype.onClick = function ( e ) {
 	if ( !this.isDisabled() && e.which === 1 ) {
 		this.setValue( !this.value );
 	}
+	return false;
+};
+
+/**
+ * Handle key press events.
+ *
+ * @param {jQuery.Event} e Key press event
+ */
+OO.ui.ToggleSwitchWidget.prototype.onKeyPress = function ( e ) {
+	if ( !this.isDisabled() && ( e.which === OO.ui.Keys.SPACE || e.which === OO.ui.Keys.ENTER ) ) {
+		this.setValue( !this.value );
+	}
+	return false;
 };
 
 }( OO ) );
 
 /*!
- * OOjs UI v0.6.0
+ * OOjs UI v0.7.0
  * https://www.mediawiki.org/wiki/OOjs_UI
  *
- * Copyright 2011–2014 OOjs Team and other contributors.
+ * Copyright 2011–2015 OOjs Team and other contributors.
  * Released under the MIT license
  * http://oojs.mit-license.org
  *
- * Date: 2014-12-16T21:00:55Z
+ * Date: 2015-02-12T00:04:43Z
  */
+/**
+ * @class
+ * @extends OO.ui.Theme
+ *
+ * @constructor
+ */
+OO.ui.ApexTheme = function OoUiApexTheme() {
+	// Parent constructor
+	OO.ui.ApexTheme.super.call( this );
+};
+
+/* Setup */
+
+OO.inheritClass( OO.ui.ApexTheme, OO.ui.Theme );
+
 /* Instantiation */
 
-OO.ui.theme = new OO.ui.Theme();
+OO.ui.theme = new OO.ui.ApexTheme();
 
 /*!
  * VisualEditor v0.0.0
@@ -15565,22 +16290,22 @@ OO.ui.theme = new OO.ui.Theme();
  * Released under the MIT license
  * http://ve.mit-license.org
  *
- * Date: 2015-02-06T15:40:27Z
+ * Date: 2015-02-19T10:21:52Z
  */
 /*!
- * UnicodeJS v0.1.2
+ * UnicodeJS v0.1.3
  * https://www.mediawiki.org/wiki/UnicodeJS
  *
- * Copyright 2013-2014 UnicodeJS Team and other contributors.
+ * Copyright 2013-2015 UnicodeJS Team and other contributors.
  * Released under the MIT license
  * http://unicodejs.mit-license.org/
  *
- * Date: 2014-12-04T18:27:57Z
+ * Date: 2015-02-05T02:13:05Z
  */
 /*!
  * UnicodeJS namespace
  *
- * @copyright 2013–2014 UnicodeJS team and others; see AUTHORS.txt
+ * @copyright 2013–2015 UnicodeJS team and others; see AUTHORS.txt
  * @license The MIT License (MIT); see LICENSE.txt
  */
 
@@ -15615,7 +16340,7 @@ OO.ui.theme = new OO.ui.Theme();
 	 * @return {string} String literal ('\u' followed by 4 hex digits)
 	 */
 	function uEsc( codeUnit ) {
-		return '\\u' + ( codeUnit + 0x10000 ).toString( 16 ).substr( -4 );
+		return '\\u' + ( codeUnit + 0x10000 ).toString( 16 ).slice( -4 );
 	}
 
 	/**
@@ -15749,7 +16474,7 @@ OO.ui.theme = new OO.ui.Theme();
 			min = range[0];
 			max = range[1];
 			if ( min > max ) {
-				throw new Error(min.toString( 16 ) + ' > ' + max.toString( 16 ) );
+				throw new Error( min.toString( 16 ) + ' > ' + max.toString( 16 ) );
 			}
 			if ( max > 0x10FFFF ) {
 				throw new Error( 'Character code too high: ' +
@@ -15781,7 +16506,7 @@ OO.ui.theme = new OO.ui.Theme();
 		}
 
 		// prepend BMP character class to the disjunction
-		if ( characterClass.length === 1 && !characterClass[0].match(/-/) ) {
+		if ( characterClass.length === 1 && !characterClass[0].match( /-/ ) ) {
 			disjunction.unshift( characterClass[0] ); // single character
 		} else if ( characterClass.length > 0 ) {
 			disjunction.unshift( '[' + characterClass.join( '' ) + ']' );
@@ -15794,10 +16519,54 @@ OO.ui.theme = new OO.ui.Theme();
 	window.unicodeJS = unicodeJS;
 }() );
 
+// This file is GENERATED by tools/unicodejs-properties.py
+// DO NOT EDIT
+unicodeJS.derivedcoreproperties = {
+	// partial extraction only
+	Alphabetic: [[0x0041, 0x005A], [0x0061, 0x007A], 0x00AA, 0x00B5, 0x00BA, [0x00C0, 0x00D6], [0x00D8, 0x00F6], [0x00F8, 0x02C1], [0x02C6, 0x02D1], [0x02E0, 0x02E4], 0x02EC, 0x02EE, 0x0345, [0x0370, 0x0374], 0x0376, 0x0377, [0x037A, 0x037D], 0x037F, 0x0386, [0x0388, 0x038A], 0x038C, [0x038E, 0x03A1], [0x03A3, 0x03F5], [0x03F7, 0x0481], [0x048A, 0x052F], [0x0531, 0x0556], 0x0559, [0x0561, 0x0587], [0x05B0, 0x05BD], 0x05BF, 0x05C1, 0x05C2, 0x05C4, 0x05C5, 0x05C7, [0x05D0, 0x05EA], [0x05F0, 0x05F2], [0x0610, 0x061A], [0x0620, 0x0657], [0x0659, 0x065F], [0x066E, 0x06D3], [0x06D5, 0x06DC], [0x06E1, 0x06E8], [0x06ED, 0x06EF], [0x06FA, 0x06FC], 0x06FF, [0x0710, 0x073F], [0x074D, 0x07B1], [0x07CA, 0x07EA], 0x07F4, 0x07F5, 0x07FA, [0x0800, 0x0817], [0x081A, 0x082C], [0x0840, 0x0858], [0x08A0, 0x08B2], [0x08E4, 0x08E9], [0x08F0, 0x093B], [0x093D, 0x094C], [0x094E, 0x0950], [0x0955, 0x0963], [0x0971, 0x0983], [0x0985, 0x098C], 0x098F, 0x0990, [0x0993, 0x09A8], [0x09AA, 0x09B0], 0x09B2, [0x09B6, 0x09B9], [0x09BD, 0x09C4], 0x09C7, 0x09C8, 0x09CB, 0x09CC, 0x09CE, 0x09D7, 0x09DC, 0x09DD, [0x09DF, 0x09E3], 0x09F0, 0x09F1, [0x0A01, 0x0A03], [0x0A05, 0x0A0A], 0x0A0F, 0x0A10, [0x0A13, 0x0A28], [0x0A2A, 0x0A30], 0x0A32, 0x0A33, 0x0A35, 0x0A36, 0x0A38, 0x0A39, [0x0A3E, 0x0A42], 0x0A47, 0x0A48, 0x0A4B, 0x0A4C, 0x0A51, [0x0A59, 0x0A5C], 0x0A5E, [0x0A70, 0x0A75], [0x0A81, 0x0A83], [0x0A85, 0x0A8D], [0x0A8F, 0x0A91], [0x0A93, 0x0AA8], [0x0AAA, 0x0AB0], 0x0AB2, 0x0AB3, [0x0AB5, 0x0AB9], [0x0ABD, 0x0AC5], [0x0AC7, 0x0AC9], 0x0ACB, 0x0ACC, 0x0AD0, [0x0AE0, 0x0AE3], [0x0B01, 0x0B03], [0x0B05, 0x0B0C], 0x0B0F, 0x0B10, [0x0B13, 0x0B28], [0x0B2A, 0x0B30], 0x0B32, 0x0B33, [0x0B35, 0x0B39], [0x0B3D, 0x0B44], 0x0B47, 0x0B48, 0x0B4B, 0x0B4C, 0x0B56, 0x0B57, 0x0B5C, 0x0B5D, [0x0B5F, 0x0B63], 0x0B71, 0x0B82, 0x0B83, [0x0B85, 0x0B8A], [0x0B8E, 0x0B90], [0x0B92, 0x0B95], 0x0B99, 0x0B9A, 0x0B9C, 0x0B9E, 0x0B9F, 0x0BA3, 0x0BA4, [0x0BA8, 0x0BAA], [0x0BAE, 0x0BB9], [0x0BBE, 0x0BC2], [0x0BC6, 0x0BC8], [0x0BCA, 0x0BCC], 0x0BD0, 0x0BD7, [0x0C00, 0x0C03], [0x0C05, 0x0C0C], [0x0C0E, 0x0C10], [0x0C12, 0x0C28], [0x0C2A, 0x0C39], [0x0C3D, 0x0C44], [0x0C46, 0x0C48], [0x0C4A, 0x0C4C], 0x0C55, 0x0C56, 0x0C58, 0x0C59, [0x0C60, 0x0C63], [0x0C81, 0x0C83], [0x0C85, 0x0C8C], [0x0C8E, 0x0C90], [0x0C92, 0x0CA8], [0x0CAA, 0x0CB3], [0x0CB5, 0x0CB9], [0x0CBD, 0x0CC4], [0x0CC6, 0x0CC8], [0x0CCA, 0x0CCC], 0x0CD5, 0x0CD6, 0x0CDE, [0x0CE0, 0x0CE3], 0x0CF1, 0x0CF2, [0x0D01, 0x0D03], [0x0D05, 0x0D0C], [0x0D0E, 0x0D10], [0x0D12, 0x0D3A], [0x0D3D, 0x0D44], [0x0D46, 0x0D48], [0x0D4A, 0x0D4C], 0x0D4E, 0x0D57, [0x0D60, 0x0D63], [0x0D7A, 0x0D7F], 0x0D82, 0x0D83, [0x0D85, 0x0D96], [0x0D9A, 0x0DB1], [0x0DB3, 0x0DBB], 0x0DBD, [0x0DC0, 0x0DC6], [0x0DCF, 0x0DD4], 0x0DD6, [0x0DD8, 0x0DDF], 0x0DF2, 0x0DF3, [0x0E01, 0x0E3A], [0x0E40, 0x0E46], 0x0E4D, 0x0E81, 0x0E82, 0x0E84, 0x0E87, 0x0E88, 0x0E8A, 0x0E8D, [0x0E94, 0x0E97], [0x0E99, 0x0E9F], [0x0EA1, 0x0EA3], 0x0EA5, 0x0EA7, 0x0EAA, 0x0EAB, [0x0EAD, 0x0EB9], [0x0EBB, 0x0EBD], [0x0EC0, 0x0EC4], 0x0EC6, 0x0ECD, [0x0EDC, 0x0EDF], 0x0F00, [0x0F40, 0x0F47], [0x0F49, 0x0F6C], [0x0F71, 0x0F81], [0x0F88, 0x0F97], [0x0F99, 0x0FBC], [0x1000, 0x1036], 0x1038, [0x103B, 0x103F], [0x1050, 0x1062], [0x1065, 0x1068], [0x106E, 0x1086], 0x108E, 0x109C, 0x109D, [0x10A0, 0x10C5], 0x10C7, 0x10CD, [0x10D0, 0x10FA], [0x10FC, 0x1248], [0x124A, 0x124D], [0x1250, 0x1256], 0x1258, [0x125A, 0x125D], [0x1260, 0x1288], [0x128A, 0x128D], [0x1290, 0x12B0], [0x12B2, 0x12B5], [0x12B8, 0x12BE], 0x12C0, [0x12C2, 0x12C5], [0x12C8, 0x12D6], [0x12D8, 0x1310], [0x1312, 0x1315], [0x1318, 0x135A], 0x135F, [0x1380, 0x138F], [0x13A0, 0x13F4], [0x1401, 0x166C], [0x166F, 0x167F], [0x1681, 0x169A], [0x16A0, 0x16EA], [0x16EE, 0x16F8], [0x1700, 0x170C], [0x170E, 0x1713], [0x1720, 0x1733], [0x1740, 0x1753], [0x1760, 0x176C], [0x176E, 0x1770], 0x1772, 0x1773, [0x1780, 0x17B3], [0x17B6, 0x17C8], 0x17D7, 0x17DC, [0x1820, 0x1877], [0x1880, 0x18AA], [0x18B0, 0x18F5], [0x1900, 0x191E], [0x1920, 0x192B], [0x1930, 0x1938], [0x1950, 0x196D], [0x1970, 0x1974], [0x1980, 0x19AB], [0x19B0, 0x19C9], [0x1A00, 0x1A1B], [0x1A20, 0x1A5E], [0x1A61, 0x1A74], 0x1AA7, [0x1B00, 0x1B33], [0x1B35, 0x1B43], [0x1B45, 0x1B4B], [0x1B80, 0x1BA9], [0x1BAC, 0x1BAF], [0x1BBA, 0x1BE5], [0x1BE7, 0x1BF1], [0x1C00, 0x1C35], [0x1C4D, 0x1C4F], [0x1C5A, 0x1C7D], [0x1CE9, 0x1CEC], [0x1CEE, 0x1CF3], 0x1CF5, 0x1CF6, [0x1D00, 0x1DBF], [0x1DE7, 0x1DF4], [0x1E00, 0x1F15], [0x1F18, 0x1F1D], [0x1F20, 0x1F45], [0x1F48, 0x1F4D], [0x1F50, 0x1F57], 0x1F59, 0x1F5B, 0x1F5D, [0x1F5F, 0x1F7D], [0x1F80, 0x1FB4], [0x1FB6, 0x1FBC], 0x1FBE, [0x1FC2, 0x1FC4], [0x1FC6, 0x1FCC], [0x1FD0, 0x1FD3], [0x1FD6, 0x1FDB], [0x1FE0, 0x1FEC], [0x1FF2, 0x1FF4], [0x1FF6, 0x1FFC], 0x2071, 0x207F, [0x2090, 0x209C], 0x2102, 0x2107, [0x210A, 0x2113], 0x2115, [0x2119, 0x211D], 0x2124, 0x2126, 0x2128, [0x212A, 0x212D], [0x212F, 0x2139], [0x213C, 0x213F], [0x2145, 0x2149], 0x214E, [0x2160, 0x2188], [0x24B6, 0x24E9], [0x2C00, 0x2C2E], [0x2C30, 0x2C5E], [0x2C60, 0x2CE4], [0x2CEB, 0x2CEE], 0x2CF2, 0x2CF3, [0x2D00, 0x2D25], 0x2D27, 0x2D2D, [0x2D30, 0x2D67], 0x2D6F, [0x2D80, 0x2D96], [0x2DA0, 0x2DA6], [0x2DA8, 0x2DAE], [0x2DB0, 0x2DB6], [0x2DB8, 0x2DBE], [0x2DC0, 0x2DC6], [0x2DC8, 0x2DCE], [0x2DD0, 0x2DD6], [0x2DD8, 0x2DDE], [0x2DE0, 0x2DFF], 0x2E2F, [0x3005, 0x3007], [0x3021, 0x3029], [0x3031, 0x3035], [0x3038, 0x303C], [0x3041, 0x3096], [0x309D, 0x309F], [0x30A1, 0x30FA], [0x30FC, 0x30FF], [0x3105, 0x312D], [0x3131, 0x318E], [0x31A0, 0x31BA], [0x31F0, 0x31FF], [0x3400, 0x4DB5], [0x4E00, 0x9FCC], [0xA000, 0xA48C], [0xA4D0, 0xA4FD], [0xA500, 0xA60C], [0xA610, 0xA61F], 0xA62A, 0xA62B, [0xA640, 0xA66E], [0xA674, 0xA67B], [0xA67F, 0xA69D], [0xA69F, 0xA6EF], [0xA717, 0xA71F], [0xA722, 0xA788], [0xA78B, 0xA78E], [0xA790, 0xA7AD], 0xA7B0, 0xA7B1, [0xA7F7, 0xA801], [0xA803, 0xA805], [0xA807, 0xA80A], [0xA80C, 0xA827], [0xA840, 0xA873], [0xA880, 0xA8C3], [0xA8F2, 0xA8F7], 0xA8FB, [0xA90A, 0xA92A], [0xA930, 0xA952], [0xA960, 0xA97C], [0xA980, 0xA9B2], [0xA9B4, 0xA9BF], 0xA9CF, [0xA9E0, 0xA9E4], [0xA9E6, 0xA9EF], [0xA9FA, 0xA9FE], [0xAA00, 0xAA36], [0xAA40, 0xAA4D], [0xAA60, 0xAA76], 0xAA7A, [0xAA7E, 0xAABE], 0xAAC0, 0xAAC2, [0xAADB, 0xAADD], [0xAAE0, 0xAAEF], [0xAAF2, 0xAAF5], [0xAB01, 0xAB06], [0xAB09, 0xAB0E], [0xAB11, 0xAB16], [0xAB20, 0xAB26], [0xAB28, 0xAB2E], [0xAB30, 0xAB5A], [0xAB5C, 0xAB5F], 0xAB64, 0xAB65, [0xABC0, 0xABEA], [0xAC00, 0xD7A3], [0xD7B0, 0xD7C6], [0xD7CB, 0xD7FB], [0xF900, 0xFA6D], [0xFA70, 0xFAD9], [0xFB00, 0xFB06], [0xFB13, 0xFB17], [0xFB1D, 0xFB28], [0xFB2A, 0xFB36], [0xFB38, 0xFB3C], 0xFB3E, 0xFB40, 0xFB41, 0xFB43, 0xFB44, [0xFB46, 0xFBB1], [0xFBD3, 0xFD3D], [0xFD50, 0xFD8F], [0xFD92, 0xFDC7], [0xFDF0, 0xFDFB], [0xFE70, 0xFE74], [0xFE76, 0xFEFC], [0xFF21, 0xFF3A], [0xFF41, 0xFF5A], [0xFF66, 0xFFBE], [0xFFC2, 0xFFC7], [0xFFCA, 0xFFCF], [0xFFD2, 0xFFD7], [0xFFDA, 0xFFDC], [0x10000, 0x1000B], [0x1000D, 0x10026], [0x10028, 0x1003A], 0x1003C, 0x1003D, [0x1003F, 0x1004D], [0x10050, 0x1005D], [0x10080, 0x100FA], [0x10140, 0x10174], [0x10280, 0x1029C], [0x102A0, 0x102D0], [0x10300, 0x1031F], [0x10330, 0x1034A], [0x10350, 0x1037A], [0x10380, 0x1039D], [0x103A0, 0x103C3], [0x103C8, 0x103CF], [0x103D1, 0x103D5], [0x10400, 0x1049D], [0x10500, 0x10527], [0x10530, 0x10563], [0x10600, 0x10736], [0x10740, 0x10755], [0x10760, 0x10767], [0x10800, 0x10805], 0x10808, [0x1080A, 0x10835], 0x10837, 0x10838, 0x1083C, [0x1083F, 0x10855], [0x10860, 0x10876], [0x10880, 0x1089E], [0x10900, 0x10915], [0x10920, 0x10939], [0x10980, 0x109B7], 0x109BE, 0x109BF, [0x10A00, 0x10A03], 0x10A05, 0x10A06, [0x10A0C, 0x10A13], [0x10A15, 0x10A17], [0x10A19, 0x10A33], [0x10A60, 0x10A7C], [0x10A80, 0x10A9C], [0x10AC0, 0x10AC7], [0x10AC9, 0x10AE4], [0x10B00, 0x10B35], [0x10B40, 0x10B55], [0x10B60, 0x10B72], [0x10B80, 0x10B91], [0x10C00, 0x10C48], [0x11000, 0x11045], [0x11082, 0x110B8], [0x110D0, 0x110E8], [0x11100, 0x11132], [0x11150, 0x11172], 0x11176, [0x11180, 0x111BF], [0x111C1, 0x111C4], 0x111DA, [0x11200, 0x11211], [0x11213, 0x11234], 0x11237, [0x112B0, 0x112E8], [0x11301, 0x11303], [0x11305, 0x1130C], 0x1130F, 0x11310, [0x11313, 0x11328], [0x1132A, 0x11330], 0x11332, 0x11333, [0x11335, 0x11339], [0x1133D, 0x11344], 0x11347, 0x11348, 0x1134B, 0x1134C, 0x11357, [0x1135D, 0x11363], [0x11480, 0x114C1], 0x114C4, 0x114C5, 0x114C7, [0x11580, 0x115B5], [0x115B8, 0x115BE], [0x11600, 0x1163E], 0x11640, 0x11644, [0x11680, 0x116B5], [0x118A0, 0x118DF], 0x118FF, [0x11AC0, 0x11AF8], [0x12000, 0x12398], [0x12400, 0x1246E], [0x13000, 0x1342E], [0x16800, 0x16A38], [0x16A40, 0x16A5E], [0x16AD0, 0x16AED], [0x16B00, 0x16B36], [0x16B40, 0x16B43], [0x16B63, 0x16B77], [0x16B7D, 0x16B8F], [0x16F00, 0x16F44], [0x16F50, 0x16F7E], [0x16F93, 0x16F9F], 0x1B000, 0x1B001, [0x1BC00, 0x1BC6A], [0x1BC70, 0x1BC7C], [0x1BC80, 0x1BC88], [0x1BC90, 0x1BC99], 0x1BC9E, [0x1D400, 0x1D454], [0x1D456, 0x1D49C], 0x1D49E, 0x1D49F, 0x1D4A2, 0x1D4A5, 0x1D4A6, [0x1D4A9, 0x1D4AC], [0x1D4AE, 0x1D4B9], 0x1D4BB, [0x1D4BD, 0x1D4C3], [0x1D4C5, 0x1D505], [0x1D507, 0x1D50A], [0x1D50D, 0x1D514], [0x1D516, 0x1D51C], [0x1D51E, 0x1D539], [0x1D53B, 0x1D53E], [0x1D540, 0x1D544], 0x1D546, [0x1D54A, 0x1D550], [0x1D552, 0x1D6A5], [0x1D6A8, 0x1D6C0], [0x1D6C2, 0x1D6DA], [0x1D6DC, 0x1D6FA], [0x1D6FC, 0x1D714], [0x1D716, 0x1D734], [0x1D736, 0x1D74E], [0x1D750, 0x1D76E], [0x1D770, 0x1D788], [0x1D78A, 0x1D7A8], [0x1D7AA, 0x1D7C2], [0x1D7C4, 0x1D7CB], [0x1E800, 0x1E8C4], [0x1EE00, 0x1EE03], [0x1EE05, 0x1EE1F], 0x1EE21, 0x1EE22, 0x1EE24, 0x1EE27, [0x1EE29, 0x1EE32], [0x1EE34, 0x1EE37], 0x1EE39, 0x1EE3B, 0x1EE42, 0x1EE47, 0x1EE49, 0x1EE4B, [0x1EE4D, 0x1EE4F], 0x1EE51, 0x1EE52, 0x1EE54, 0x1EE57, 0x1EE59, 0x1EE5B, 0x1EE5D, 0x1EE5F, 0x1EE61, 0x1EE62, 0x1EE64, [0x1EE67, 0x1EE6A], [0x1EE6C, 0x1EE72], [0x1EE74, 0x1EE77], [0x1EE79, 0x1EE7C], 0x1EE7E, [0x1EE80, 0x1EE89], [0x1EE8B, 0x1EE9B], [0x1EEA1, 0x1EEA3], [0x1EEA5, 0x1EEA9], [0x1EEAB, 0x1EEBB], [0x1F130, 0x1F149], [0x1F150, 0x1F169], [0x1F170, 0x1F189], [0x20000, 0x2A6D6], [0x2A700, 0x2B734], [0x2B740, 0x2B81D], [0x2F800, 0x2FA1D]]
+};
+
+// This file is GENERATED by tools/unicodejs-properties.py
+// DO NOT EDIT
+unicodeJS.derivedgeneralcategories = {
+	// partial extraction only
+	M: [[0x0300, 0x036F], [0x0483, 0x0489], [0x0591, 0x05BD], 0x05BF, 0x05C1, 0x05C2, 0x05C4, 0x05C5, 0x05C7, [0x0610, 0x061A], [0x064B, 0x065F], 0x0670, [0x06D6, 0x06DC], [0x06DF, 0x06E4], 0x06E7, 0x06E8, [0x06EA, 0x06ED], 0x0711, [0x0730, 0x074A], [0x07A6, 0x07B0], [0x07EB, 0x07F3], [0x0816, 0x0819], [0x081B, 0x0823], [0x0825, 0x0827], [0x0829, 0x082D], [0x0859, 0x085B], [0x08E4, 0x0903], [0x093A, 0x093C], [0x093E, 0x094F], [0x0951, 0x0957], 0x0962, 0x0963, [0x0981, 0x0983], 0x09BC, [0x09BE, 0x09C4], 0x09C7, 0x09C8, [0x09CB, 0x09CD], 0x09D7, 0x09E2, 0x09E3, [0x0A01, 0x0A03], 0x0A3C, [0x0A3E, 0x0A42], 0x0A47, 0x0A48, [0x0A4B, 0x0A4D], 0x0A51, 0x0A70, 0x0A71, 0x0A75, [0x0A81, 0x0A83], 0x0ABC, [0x0ABE, 0x0AC5], [0x0AC7, 0x0AC9], [0x0ACB, 0x0ACD], 0x0AE2, 0x0AE3, [0x0B01, 0x0B03], 0x0B3C, [0x0B3E, 0x0B44], 0x0B47, 0x0B48, [0x0B4B, 0x0B4D], 0x0B56, 0x0B57, 0x0B62, 0x0B63, 0x0B82, [0x0BBE, 0x0BC2], [0x0BC6, 0x0BC8], [0x0BCA, 0x0BCD], 0x0BD7, [0x0C00, 0x0C03], [0x0C3E, 0x0C44], [0x0C46, 0x0C48], [0x0C4A, 0x0C4D], 0x0C55, 0x0C56, 0x0C62, 0x0C63, [0x0C81, 0x0C83], 0x0CBC, [0x0CBE, 0x0CC4], [0x0CC6, 0x0CC8], [0x0CCA, 0x0CCD], 0x0CD5, 0x0CD6, 0x0CE2, 0x0CE3, [0x0D01, 0x0D03], [0x0D3E, 0x0D44], [0x0D46, 0x0D48], [0x0D4A, 0x0D4D], 0x0D57, 0x0D62, 0x0D63, 0x0D82, 0x0D83, 0x0DCA, [0x0DCF, 0x0DD4], 0x0DD6, [0x0DD8, 0x0DDF], 0x0DF2, 0x0DF3, 0x0E31, [0x0E34, 0x0E3A], [0x0E47, 0x0E4E], 0x0EB1, [0x0EB4, 0x0EB9], 0x0EBB, 0x0EBC, [0x0EC8, 0x0ECD], 0x0F18, 0x0F19, 0x0F35, 0x0F37, 0x0F39, 0x0F3E, 0x0F3F, [0x0F71, 0x0F84], 0x0F86, 0x0F87, [0x0F8D, 0x0F97], [0x0F99, 0x0FBC], 0x0FC6, [0x102B, 0x103E], [0x1056, 0x1059], [0x105E, 0x1060], [0x1062, 0x1064], [0x1067, 0x106D], [0x1071, 0x1074], [0x1082, 0x108D], 0x108F, [0x109A, 0x109D], [0x135D, 0x135F], [0x1712, 0x1714], [0x1732, 0x1734], 0x1752, 0x1753, 0x1772, 0x1773, [0x17B4, 0x17D3], 0x17DD, [0x180B, 0x180D], 0x18A9, [0x1920, 0x192B], [0x1930, 0x193B], [0x19B0, 0x19C0], 0x19C8, 0x19C9, [0x1A17, 0x1A1B], [0x1A55, 0x1A5E], [0x1A60, 0x1A7C], 0x1A7F, [0x1AB0, 0x1ABE], [0x1B00, 0x1B04], [0x1B34, 0x1B44], [0x1B6B, 0x1B73], [0x1B80, 0x1B82], [0x1BA1, 0x1BAD], [0x1BE6, 0x1BF3], [0x1C24, 0x1C37], [0x1CD0, 0x1CD2], [0x1CD4, 0x1CE8], 0x1CED, [0x1CF2, 0x1CF4], 0x1CF8, 0x1CF9, [0x1DC0, 0x1DF5], [0x1DFC, 0x1DFF], [0x20D0, 0x20F0], [0x2CEF, 0x2CF1], 0x2D7F, [0x2DE0, 0x2DFF], [0x302A, 0x302F], 0x3099, 0x309A, [0xA66F, 0xA672], [0xA674, 0xA67D], 0xA69F, 0xA6F0, 0xA6F1, 0xA802, 0xA806, 0xA80B, [0xA823, 0xA827], 0xA880, 0xA881, [0xA8B4, 0xA8C4], [0xA8E0, 0xA8F1], [0xA926, 0xA92D], [0xA947, 0xA953], [0xA980, 0xA983], [0xA9B3, 0xA9C0], 0xA9E5, [0xAA29, 0xAA36], 0xAA43, 0xAA4C, 0xAA4D, [0xAA7B, 0xAA7D], 0xAAB0, [0xAAB2, 0xAAB4], 0xAAB7, 0xAAB8, 0xAABE, 0xAABF, 0xAAC1, [0xAAEB, 0xAAEF], 0xAAF5, 0xAAF6, [0xABE3, 0xABEA], 0xABEC, 0xABED, 0xFB1E, [0xFE00, 0xFE0F], [0xFE20, 0xFE2D], 0x101FD, 0x102E0, [0x10376, 0x1037A], [0x10A01, 0x10A03], 0x10A05, 0x10A06, [0x10A0C, 0x10A0F], [0x10A38, 0x10A3A], 0x10A3F, 0x10AE5, 0x10AE6, [0x11000, 0x11002], [0x11038, 0x11046], [0x1107F, 0x11082], [0x110B0, 0x110BA], [0x11100, 0x11102], [0x11127, 0x11134], 0x11173, [0x11180, 0x11182], [0x111B3, 0x111C0], [0x1122C, 0x11237], [0x112DF, 0x112EA], [0x11301, 0x11303], 0x1133C, [0x1133E, 0x11344], 0x11347, 0x11348, [0x1134B, 0x1134D], 0x11357, 0x11362, 0x11363, [0x11366, 0x1136C], [0x11370, 0x11374], [0x114B0, 0x114C3], [0x115AF, 0x115B5], [0x115B8, 0x115C0], [0x11630, 0x11640], [0x116AB, 0x116B7], [0x16AF0, 0x16AF4], [0x16B30, 0x16B36], [0x16F51, 0x16F7E], [0x16F8F, 0x16F92], 0x1BC9D, 0x1BC9E, [0x1D165, 0x1D169], [0x1D16D, 0x1D172], [0x1D17B, 0x1D182], [0x1D185, 0x1D18B], [0x1D1AA, 0x1D1AD], [0x1D242, 0x1D244], [0x1E8D0, 0x1E8D6], [0xE0100, 0xE01EF]],
+	Pc: [0x005F, 0x203F, 0x2040, 0x2054, 0xFE33, 0xFE34, [0xFE4D, 0xFE4F], 0xFF3F]
+};
+
+/*!
+ * UnicodeJS character classes
+ *
+ * Support for unicode equivalents of JS regex character classes
+ *
+ * @copyright 2013–2015 UnicodeJS team and others; see AUTHORS.txt
+ * @license The MIT License (MIT); see LICENSE.txt
+ */
+( function () {
+	/**
+	 * @class unicodeJS.characterclass
+	 * @singleton
+	 */
+	var basicLatinDigitRange = [ 0x30, 0x39 ],
+		joinControlRange = [ 0x200C, 0x200D ],
+		characterclass = unicodeJS.characterclass = {};
+
+	characterclass.patterns = {
+		// \w is defined in http://unicode.org/reports/tr18/
+		word: unicodeJS.charRangeArrayRegexp( [].concat(
+			unicodeJS.derivedcoreproperties.Alphabetic,
+			unicodeJS.derivedgeneralcategories.M,
+			[ basicLatinDigitRange ],
+			unicodeJS.derivedgeneralcategories.Pc,
+			[ joinControlRange ]
+		) )
+	};
+}() );
+
 /*!
  * UnicodeJS TextString class.
  *
- * @copyright 2013–2014 UnicodeJS team and others; see AUTHORS.txt
+ * @copyright 2013–2015 UnicodeJS team and others; see AUTHORS.txt
  * @license The MIT License (MIT); see LICENSE.txt
  */
 
@@ -15866,10 +16635,10 @@ unicodeJS.TextString.prototype.getString = function () {
 unicodeJS.graphemebreakproperties = {
 	CR: [0x000D],
 	LF: [0x000A],
-	Control: [[0x0000, 0x0009], [0x000B, 0x000C], [0x000E, 0x001F], [0x007F, 0x009F], 0x00AD, [0x0600, 0x0605], 0x061C, 0x06DD, 0x070F, 0x180E, 0x200B, [0x200E, 0x200F], 0x2028, 0x2029, [0x202A, 0x202E], [0x2060, 0x2064], 0x2065, [0x2066, 0x206F], 0xFEFF, [0xFFF0, 0xFFF8], [0xFFF9, 0xFFFB], 0x110BD, [0x1BCA0, 0x1BCA3], [0x1D173, 0x1D17A], 0xE0000, 0xE0001, [0xE0002, 0xE001F], [0xE0020, 0xE007F], [0xE0080, 0xE00FF], [0xE01F0, 0xE0FFF]],
-	Extend: [[0x0300, 0x036F], [0x0483, 0x0487], [0x0488, 0x0489], [0x0591, 0x05BD], 0x05BF, [0x05C1, 0x05C2], [0x05C4, 0x05C5], 0x05C7, [0x0610, 0x061A], [0x064B, 0x065F], 0x0670, [0x06D6, 0x06DC], [0x06DF, 0x06E4], [0x06E7, 0x06E8], [0x06EA, 0x06ED], 0x0711, [0x0730, 0x074A], [0x07A6, 0x07B0], [0x07EB, 0x07F3], [0x0816, 0x0819], [0x081B, 0x0823], [0x0825, 0x0827], [0x0829, 0x082D], [0x0859, 0x085B], [0x08E4, 0x0902], 0x093A, 0x093C, [0x0941, 0x0948], 0x094D, [0x0951, 0x0957], [0x0962, 0x0963], 0x0981, 0x09BC, 0x09BE, [0x09C1, 0x09C4], 0x09CD, 0x09D7, [0x09E2, 0x09E3], [0x0A01, 0x0A02], 0x0A3C, [0x0A41, 0x0A42], [0x0A47, 0x0A48], [0x0A4B, 0x0A4D], 0x0A51, [0x0A70, 0x0A71], 0x0A75, [0x0A81, 0x0A82], 0x0ABC, [0x0AC1, 0x0AC5], [0x0AC7, 0x0AC8], 0x0ACD, [0x0AE2, 0x0AE3], 0x0B01, 0x0B3C, 0x0B3E, 0x0B3F, [0x0B41, 0x0B44], 0x0B4D, 0x0B56, 0x0B57, [0x0B62, 0x0B63], 0x0B82, 0x0BBE, 0x0BC0, 0x0BCD, 0x0BD7, 0x0C00, [0x0C3E, 0x0C40], [0x0C46, 0x0C48], [0x0C4A, 0x0C4D], [0x0C55, 0x0C56], [0x0C62, 0x0C63], 0x0C81, 0x0CBC, 0x0CBF, 0x0CC2, 0x0CC6, [0x0CCC, 0x0CCD], [0x0CD5, 0x0CD6], [0x0CE2, 0x0CE3], 0x0D01, 0x0D3E, [0x0D41, 0x0D44], 0x0D4D, 0x0D57, [0x0D62, 0x0D63], 0x0DCA, 0x0DCF, [0x0DD2, 0x0DD4], 0x0DD6, 0x0DDF, 0x0E31, [0x0E34, 0x0E3A], [0x0E47, 0x0E4E], 0x0EB1, [0x0EB4, 0x0EB9], [0x0EBB, 0x0EBC], [0x0EC8, 0x0ECD], [0x0F18, 0x0F19], 0x0F35, 0x0F37, 0x0F39, [0x0F71, 0x0F7E], [0x0F80, 0x0F84], [0x0F86, 0x0F87], [0x0F8D, 0x0F97], [0x0F99, 0x0FBC], 0x0FC6, [0x102D, 0x1030], [0x1032, 0x1037], [0x1039, 0x103A], [0x103D, 0x103E], [0x1058, 0x1059], [0x105E, 0x1060], [0x1071, 0x1074], 0x1082, [0x1085, 0x1086], 0x108D, 0x109D, [0x135D, 0x135F], [0x1712, 0x1714], [0x1732, 0x1734], [0x1752, 0x1753], [0x1772, 0x1773], [0x17B4, 0x17B5], [0x17B7, 0x17BD], 0x17C6, [0x17C9, 0x17D3], 0x17DD, [0x180B, 0x180D], 0x18A9, [0x1920, 0x1922], [0x1927, 0x1928], 0x1932, [0x1939, 0x193B], [0x1A17, 0x1A18], 0x1A1B, 0x1A56, [0x1A58, 0x1A5E], 0x1A60, 0x1A62, [0x1A65, 0x1A6C], [0x1A73, 0x1A7C], 0x1A7F, [0x1AB0, 0x1ABD], 0x1ABE, [0x1B00, 0x1B03], 0x1B34, [0x1B36, 0x1B3A], 0x1B3C, 0x1B42, [0x1B6B, 0x1B73], [0x1B80, 0x1B81], [0x1BA2, 0x1BA5], [0x1BA8, 0x1BA9], [0x1BAB, 0x1BAD], 0x1BE6, [0x1BE8, 0x1BE9], 0x1BED, [0x1BEF, 0x1BF1], [0x1C2C, 0x1C33], [0x1C36, 0x1C37], [0x1CD0, 0x1CD2], [0x1CD4, 0x1CE0], [0x1CE2, 0x1CE8], 0x1CED, 0x1CF4, [0x1CF8, 0x1CF9], [0x1DC0, 0x1DF5], [0x1DFC, 0x1DFF], [0x200C, 0x200D], [0x20D0, 0x20DC], [0x20DD, 0x20E0], 0x20E1, [0x20E2, 0x20E4], [0x20E5, 0x20F0], [0x2CEF, 0x2CF1], 0x2D7F, [0x2DE0, 0x2DFF], [0x302A, 0x302D], [0x302E, 0x302F], [0x3099, 0x309A], 0xA66F, [0xA670, 0xA672], [0xA674, 0xA67D], 0xA69F, [0xA6F0, 0xA6F1], 0xA802, 0xA806, 0xA80B, [0xA825, 0xA826], 0xA8C4, [0xA8E0, 0xA8F1], [0xA926, 0xA92D], [0xA947, 0xA951], [0xA980, 0xA982], 0xA9B3, [0xA9B6, 0xA9B9], 0xA9BC, 0xA9E5, [0xAA29, 0xAA2E], [0xAA31, 0xAA32], [0xAA35, 0xAA36], 0xAA43, 0xAA4C, 0xAA7C, 0xAAB0, [0xAAB2, 0xAAB4], [0xAAB7, 0xAAB8], [0xAABE, 0xAABF], 0xAAC1, [0xAAEC, 0xAAED], 0xAAF6, 0xABE5, 0xABE8, 0xABED, 0xFB1E, [0xFE00, 0xFE0F], [0xFE20, 0xFE2D], [0xFF9E, 0xFF9F], 0x101FD, 0x102E0, [0x10376, 0x1037A], [0x10A01, 0x10A03], [0x10A05, 0x10A06], [0x10A0C, 0x10A0F], [0x10A38, 0x10A3A], 0x10A3F, [0x10AE5, 0x10AE6], 0x11001, [0x11038, 0x11046], [0x1107F, 0x11081], [0x110B3, 0x110B6], [0x110B9, 0x110BA], [0x11100, 0x11102], [0x11127, 0x1112B], [0x1112D, 0x11134], 0x11173, [0x11180, 0x11181], [0x111B6, 0x111BE], [0x1122F, 0x11231], 0x11234, [0x11236, 0x11237], 0x112DF, [0x112E3, 0x112EA], 0x11301, 0x1133C, 0x1133E, 0x11340, 0x11357, [0x11366, 0x1136C], [0x11370, 0x11374], 0x114B0, [0x114B3, 0x114B8], 0x114BA, 0x114BD, [0x114BF, 0x114C0], [0x114C2, 0x114C3], 0x115AF, [0x115B2, 0x115B5], [0x115BC, 0x115BD], [0x115BF, 0x115C0], [0x11633, 0x1163A], 0x1163D, [0x1163F, 0x11640], 0x116AB, 0x116AD, [0x116B0, 0x116B5], 0x116B7, [0x16AF0, 0x16AF4], [0x16B30, 0x16B36], [0x16F8F, 0x16F92], [0x1BC9D, 0x1BC9E], 0x1D165, [0x1D167, 0x1D169], [0x1D16E, 0x1D172], [0x1D17B, 0x1D182], [0x1D185, 0x1D18B], [0x1D1AA, 0x1D1AD], [0x1D242, 0x1D244], [0x1E8D0, 0x1E8D6], [0xE0100, 0xE01EF]],
+	Control: [[0x0000, 0x0009], 0x000B, 0x000C, [0x000E, 0x001F], [0x007F, 0x009F], 0x00AD, [0x0600, 0x0605], 0x061C, 0x06DD, 0x070F, 0x180E, 0x200B, 0x200E, 0x200F, [0x2028, 0x202E], [0x2060, 0x206F], 0xFEFF, [0xFFF0, 0xFFFB], 0x110BD, [0x1BCA0, 0x1BCA3], [0x1D173, 0x1D17A], [0xE0000, 0xE00FF], [0xE01F0, 0xE0FFF]],
+	Extend: [[0x0300, 0x036F], [0x0483, 0x0489], [0x0591, 0x05BD], 0x05BF, 0x05C1, 0x05C2, 0x05C4, 0x05C5, 0x05C7, [0x0610, 0x061A], [0x064B, 0x065F], 0x0670, [0x06D6, 0x06DC], [0x06DF, 0x06E4], 0x06E7, 0x06E8, [0x06EA, 0x06ED], 0x0711, [0x0730, 0x074A], [0x07A6, 0x07B0], [0x07EB, 0x07F3], [0x0816, 0x0819], [0x081B, 0x0823], [0x0825, 0x0827], [0x0829, 0x082D], [0x0859, 0x085B], [0x08E4, 0x0902], 0x093A, 0x093C, [0x0941, 0x0948], 0x094D, [0x0951, 0x0957], 0x0962, 0x0963, 0x0981, 0x09BC, 0x09BE, [0x09C1, 0x09C4], 0x09CD, 0x09D7, 0x09E2, 0x09E3, 0x0A01, 0x0A02, 0x0A3C, 0x0A41, 0x0A42, 0x0A47, 0x0A48, [0x0A4B, 0x0A4D], 0x0A51, 0x0A70, 0x0A71, 0x0A75, 0x0A81, 0x0A82, 0x0ABC, [0x0AC1, 0x0AC5], 0x0AC7, 0x0AC8, 0x0ACD, 0x0AE2, 0x0AE3, 0x0B01, 0x0B3C, 0x0B3E, 0x0B3F, [0x0B41, 0x0B44], 0x0B4D, 0x0B56, 0x0B57, 0x0B62, 0x0B63, 0x0B82, 0x0BBE, 0x0BC0, 0x0BCD, 0x0BD7, 0x0C00, [0x0C3E, 0x0C40], [0x0C46, 0x0C48], [0x0C4A, 0x0C4D], 0x0C55, 0x0C56, 0x0C62, 0x0C63, 0x0C81, 0x0CBC, 0x0CBF, 0x0CC2, 0x0CC6, 0x0CCC, 0x0CCD, 0x0CD5, 0x0CD6, 0x0CE2, 0x0CE3, 0x0D01, 0x0D3E, [0x0D41, 0x0D44], 0x0D4D, 0x0D57, 0x0D62, 0x0D63, 0x0DCA, 0x0DCF, [0x0DD2, 0x0DD4], 0x0DD6, 0x0DDF, 0x0E31, [0x0E34, 0x0E3A], [0x0E47, 0x0E4E], 0x0EB1, [0x0EB4, 0x0EB9], 0x0EBB, 0x0EBC, [0x0EC8, 0x0ECD], 0x0F18, 0x0F19, 0x0F35, 0x0F37, 0x0F39, [0x0F71, 0x0F7E], [0x0F80, 0x0F84], 0x0F86, 0x0F87, [0x0F8D, 0x0F97], [0x0F99, 0x0FBC], 0x0FC6, [0x102D, 0x1030], [0x1032, 0x1037], 0x1039, 0x103A, 0x103D, 0x103E, 0x1058, 0x1059, [0x105E, 0x1060], [0x1071, 0x1074], 0x1082, 0x1085, 0x1086, 0x108D, 0x109D, [0x135D, 0x135F], [0x1712, 0x1714], [0x1732, 0x1734], 0x1752, 0x1753, 0x1772, 0x1773, 0x17B4, 0x17B5, [0x17B7, 0x17BD], 0x17C6, [0x17C9, 0x17D3], 0x17DD, [0x180B, 0x180D], 0x18A9, [0x1920, 0x1922], 0x1927, 0x1928, 0x1932, [0x1939, 0x193B], 0x1A17, 0x1A18, 0x1A1B, 0x1A56, [0x1A58, 0x1A5E], 0x1A60, 0x1A62, [0x1A65, 0x1A6C], [0x1A73, 0x1A7C], 0x1A7F, [0x1AB0, 0x1ABE], [0x1B00, 0x1B03], 0x1B34, [0x1B36, 0x1B3A], 0x1B3C, 0x1B42, [0x1B6B, 0x1B73], 0x1B80, 0x1B81, [0x1BA2, 0x1BA5], 0x1BA8, 0x1BA9, [0x1BAB, 0x1BAD], 0x1BE6, 0x1BE8, 0x1BE9, 0x1BED, [0x1BEF, 0x1BF1], [0x1C2C, 0x1C33], 0x1C36, 0x1C37, [0x1CD0, 0x1CD2], [0x1CD4, 0x1CE0], [0x1CE2, 0x1CE8], 0x1CED, 0x1CF4, 0x1CF8, 0x1CF9, [0x1DC0, 0x1DF5], [0x1DFC, 0x1DFF], 0x200C, 0x200D, [0x20D0, 0x20F0], [0x2CEF, 0x2CF1], 0x2D7F, [0x2DE0, 0x2DFF], [0x302A, 0x302F], 0x3099, 0x309A, [0xA66F, 0xA672], [0xA674, 0xA67D], 0xA69F, 0xA6F0, 0xA6F1, 0xA802, 0xA806, 0xA80B, 0xA825, 0xA826, 0xA8C4, [0xA8E0, 0xA8F1], [0xA926, 0xA92D], [0xA947, 0xA951], [0xA980, 0xA982], 0xA9B3, [0xA9B6, 0xA9B9], 0xA9BC, 0xA9E5, [0xAA29, 0xAA2E], 0xAA31, 0xAA32, 0xAA35, 0xAA36, 0xAA43, 0xAA4C, 0xAA7C, 0xAAB0, [0xAAB2, 0xAAB4], 0xAAB7, 0xAAB8, 0xAABE, 0xAABF, 0xAAC1, 0xAAEC, 0xAAED, 0xAAF6, 0xABE5, 0xABE8, 0xABED, 0xFB1E, [0xFE00, 0xFE0F], [0xFE20, 0xFE2D], 0xFF9E, 0xFF9F, 0x101FD, 0x102E0, [0x10376, 0x1037A], [0x10A01, 0x10A03], 0x10A05, 0x10A06, [0x10A0C, 0x10A0F], [0x10A38, 0x10A3A], 0x10A3F, 0x10AE5, 0x10AE6, 0x11001, [0x11038, 0x11046], [0x1107F, 0x11081], [0x110B3, 0x110B6], 0x110B9, 0x110BA, [0x11100, 0x11102], [0x11127, 0x1112B], [0x1112D, 0x11134], 0x11173, 0x11180, 0x11181, [0x111B6, 0x111BE], [0x1122F, 0x11231], 0x11234, 0x11236, 0x11237, 0x112DF, [0x112E3, 0x112EA], 0x11301, 0x1133C, 0x1133E, 0x11340, 0x11357, [0x11366, 0x1136C], [0x11370, 0x11374], 0x114B0, [0x114B3, 0x114B8], 0x114BA, 0x114BD, 0x114BF, 0x114C0, 0x114C2, 0x114C3, 0x115AF, [0x115B2, 0x115B5], 0x115BC, 0x115BD, 0x115BF, 0x115C0, [0x11633, 0x1163A], 0x1163D, 0x1163F, 0x11640, 0x116AB, 0x116AD, [0x116B0, 0x116B5], 0x116B7, [0x16AF0, 0x16AF4], [0x16B30, 0x16B36], [0x16F8F, 0x16F92], 0x1BC9D, 0x1BC9E, 0x1D165, [0x1D167, 0x1D169], [0x1D16E, 0x1D172], [0x1D17B, 0x1D182], [0x1D185, 0x1D18B], [0x1D1AA, 0x1D1AD], [0x1D242, 0x1D244], [0x1E8D0, 0x1E8D6], [0xE0100, 0xE01EF]],
 	RegionalIndicator: [[0x1F1E6, 0x1F1FF]],
-	SpacingMark: [0x0903, 0x093B, [0x093E, 0x0940], [0x0949, 0x094C], [0x094E, 0x094F], [0x0982, 0x0983], [0x09BF, 0x09C0], [0x09C7, 0x09C8], [0x09CB, 0x09CC], 0x0A03, [0x0A3E, 0x0A40], 0x0A83, [0x0ABE, 0x0AC0], 0x0AC9, [0x0ACB, 0x0ACC], [0x0B02, 0x0B03], 0x0B40, [0x0B47, 0x0B48], [0x0B4B, 0x0B4C], 0x0BBF, [0x0BC1, 0x0BC2], [0x0BC6, 0x0BC8], [0x0BCA, 0x0BCC], [0x0C01, 0x0C03], [0x0C41, 0x0C44], [0x0C82, 0x0C83], 0x0CBE, [0x0CC0, 0x0CC1], [0x0CC3, 0x0CC4], [0x0CC7, 0x0CC8], [0x0CCA, 0x0CCB], [0x0D02, 0x0D03], [0x0D3F, 0x0D40], [0x0D46, 0x0D48], [0x0D4A, 0x0D4C], [0x0D82, 0x0D83], [0x0DD0, 0x0DD1], [0x0DD8, 0x0DDE], [0x0DF2, 0x0DF3], 0x0E33, 0x0EB3, [0x0F3E, 0x0F3F], 0x0F7F, 0x1031, [0x103B, 0x103C], [0x1056, 0x1057], 0x1084, 0x17B6, [0x17BE, 0x17C5], [0x17C7, 0x17C8], [0x1923, 0x1926], [0x1929, 0x192B], [0x1930, 0x1931], [0x1933, 0x1938], [0x19B5, 0x19B7], 0x19BA, [0x1A19, 0x1A1A], 0x1A55, 0x1A57, [0x1A6D, 0x1A72], 0x1B04, 0x1B35, 0x1B3B, [0x1B3D, 0x1B41], [0x1B43, 0x1B44], 0x1B82, 0x1BA1, [0x1BA6, 0x1BA7], 0x1BAA, 0x1BE7, [0x1BEA, 0x1BEC], 0x1BEE, [0x1BF2, 0x1BF3], [0x1C24, 0x1C2B], [0x1C34, 0x1C35], 0x1CE1, [0x1CF2, 0x1CF3], [0xA823, 0xA824], 0xA827, [0xA880, 0xA881], [0xA8B4, 0xA8C3], [0xA952, 0xA953], 0xA983, [0xA9B4, 0xA9B5], [0xA9BA, 0xA9BB], [0xA9BD, 0xA9C0], [0xAA2F, 0xAA30], [0xAA33, 0xAA34], 0xAA4D, 0xAAEB, [0xAAEE, 0xAAEF], 0xAAF5, [0xABE3, 0xABE4], [0xABE6, 0xABE7], [0xABE9, 0xABEA], 0xABEC, 0x11000, 0x11002, 0x11082, [0x110B0, 0x110B2], [0x110B7, 0x110B8], 0x1112C, 0x11182, [0x111B3, 0x111B5], [0x111BF, 0x111C0], [0x1122C, 0x1122E], [0x11232, 0x11233], 0x11235, [0x112E0, 0x112E2], [0x11302, 0x11303], 0x1133F, [0x11341, 0x11344], [0x11347, 0x11348], [0x1134B, 0x1134D], [0x11362, 0x11363], [0x114B1, 0x114B2], 0x114B9, [0x114BB, 0x114BC], 0x114BE, 0x114C1, [0x115B0, 0x115B1], [0x115B8, 0x115BB], 0x115BE, [0x11630, 0x11632], [0x1163B, 0x1163C], 0x1163E, 0x116AC, [0x116AE, 0x116AF], 0x116B6, [0x16F51, 0x16F7E], 0x1D166, 0x1D16D],
+	SpacingMark: [0x0903, 0x093B, [0x093E, 0x0940], [0x0949, 0x094C], 0x094E, 0x094F, 0x0982, 0x0983, 0x09BF, 0x09C0, 0x09C7, 0x09C8, 0x09CB, 0x09CC, 0x0A03, [0x0A3E, 0x0A40], 0x0A83, [0x0ABE, 0x0AC0], 0x0AC9, 0x0ACB, 0x0ACC, 0x0B02, 0x0B03, 0x0B40, 0x0B47, 0x0B48, 0x0B4B, 0x0B4C, 0x0BBF, 0x0BC1, 0x0BC2, [0x0BC6, 0x0BC8], [0x0BCA, 0x0BCC], [0x0C01, 0x0C03], [0x0C41, 0x0C44], 0x0C82, 0x0C83, 0x0CBE, 0x0CC0, 0x0CC1, 0x0CC3, 0x0CC4, 0x0CC7, 0x0CC8, 0x0CCA, 0x0CCB, 0x0D02, 0x0D03, 0x0D3F, 0x0D40, [0x0D46, 0x0D48], [0x0D4A, 0x0D4C], 0x0D82, 0x0D83, 0x0DD0, 0x0DD1, [0x0DD8, 0x0DDE], 0x0DF2, 0x0DF3, 0x0E33, 0x0EB3, 0x0F3E, 0x0F3F, 0x0F7F, 0x1031, 0x103B, 0x103C, 0x1056, 0x1057, 0x1084, 0x17B6, [0x17BE, 0x17C5], 0x17C7, 0x17C8, [0x1923, 0x1926], [0x1929, 0x192B], 0x1930, 0x1931, [0x1933, 0x1938], [0x19B5, 0x19B7], 0x19BA, 0x1A19, 0x1A1A, 0x1A55, 0x1A57, [0x1A6D, 0x1A72], 0x1B04, 0x1B35, 0x1B3B, [0x1B3D, 0x1B41], 0x1B43, 0x1B44, 0x1B82, 0x1BA1, 0x1BA6, 0x1BA7, 0x1BAA, 0x1BE7, [0x1BEA, 0x1BEC], 0x1BEE, 0x1BF2, 0x1BF3, [0x1C24, 0x1C2B], 0x1C34, 0x1C35, 0x1CE1, 0x1CF2, 0x1CF3, 0xA823, 0xA824, 0xA827, 0xA880, 0xA881, [0xA8B4, 0xA8C3], 0xA952, 0xA953, 0xA983, 0xA9B4, 0xA9B5, 0xA9BA, 0xA9BB, [0xA9BD, 0xA9C0], 0xAA2F, 0xAA30, 0xAA33, 0xAA34, 0xAA4D, 0xAAEB, 0xAAEE, 0xAAEF, 0xAAF5, 0xABE3, 0xABE4, 0xABE6, 0xABE7, 0xABE9, 0xABEA, 0xABEC, 0x11000, 0x11002, 0x11082, [0x110B0, 0x110B2], 0x110B7, 0x110B8, 0x1112C, 0x11182, [0x111B3, 0x111B5], 0x111BF, 0x111C0, [0x1122C, 0x1122E], 0x11232, 0x11233, 0x11235, [0x112E0, 0x112E2], 0x11302, 0x11303, 0x1133F, [0x11341, 0x11344], 0x11347, 0x11348, [0x1134B, 0x1134D], 0x11362, 0x11363, 0x114B1, 0x114B2, 0x114B9, 0x114BB, 0x114BC, 0x114BE, 0x114C1, 0x115B0, 0x115B1, [0x115B8, 0x115BB], 0x115BE, [0x11630, 0x11632], 0x1163B, 0x1163C, 0x1163E, 0x116AC, 0x116AE, 0x116AF, 0x116B6, [0x16F51, 0x16F7E], 0x1D166, 0x1D16D],
 	L: [[0x1100, 0x115F], [0xA960, 0xA97C]],
 	V: [[0x1160, 0x11A7], [0xD7B0, 0xD7C6]],
 	T: [[0x11A8, 0x11FF], [0xD7CB, 0xD7FB]],
@@ -15883,7 +16652,7 @@ unicodeJS.graphemebreakproperties = {
  * Implementation of Unicode 7.0.0 Default Grapheme Cluster Boundary Specification
  * http://www.unicode.org/reports/tr29/#Default_Grapheme_Cluster_Table
  *
- * @copyright 2013–2014 UnicodeJS team and others; see AUTHORS.txt
+ * @copyright 2013–2015 UnicodeJS team and others; see AUTHORS.txt
  * @license The MIT License (MIT); see LICENSE.txt
  */
 ( function () {
@@ -15988,20 +16757,20 @@ unicodeJS.graphemebreakproperties = {
 unicodeJS.wordbreakproperties = {
 	DoubleQuote: [0x0022],
 	SingleQuote: [0x0027],
-	HebrewLetter: [[0x05D0, 0x05EA], [0x05F0, 0x05F2], 0xFB1D, [0xFB1F, 0xFB28], [0xFB2A, 0xFB36], [0xFB38, 0xFB3C], 0xFB3E, [0xFB40, 0xFB41], [0xFB43, 0xFB44], [0xFB46, 0xFB4F]],
+	HebrewLetter: [[0x05D0, 0x05EA], [0x05F0, 0x05F2], 0xFB1D, [0xFB1F, 0xFB28], [0xFB2A, 0xFB36], [0xFB38, 0xFB3C], 0xFB3E, 0xFB40, 0xFB41, 0xFB43, 0xFB44, [0xFB46, 0xFB4F]],
 	CR: [0x000D],
 	LF: [0x000A],
-	Newline: [[0x000B, 0x000C], 0x0085, 0x2028, 0x2029],
-	Extend: [[0x0300, 0x036F], [0x0483, 0x0487], [0x0488, 0x0489], [0x0591, 0x05BD], 0x05BF, [0x05C1, 0x05C2], [0x05C4, 0x05C5], 0x05C7, [0x0610, 0x061A], [0x064B, 0x065F], 0x0670, [0x06D6, 0x06DC], [0x06DF, 0x06E4], [0x06E7, 0x06E8], [0x06EA, 0x06ED], 0x0711, [0x0730, 0x074A], [0x07A6, 0x07B0], [0x07EB, 0x07F3], [0x0816, 0x0819], [0x081B, 0x0823], [0x0825, 0x0827], [0x0829, 0x082D], [0x0859, 0x085B], [0x08E4, 0x0902], 0x0903, 0x093A, 0x093B, 0x093C, [0x093E, 0x0940], [0x0941, 0x0948], [0x0949, 0x094C], 0x094D, [0x094E, 0x094F], [0x0951, 0x0957], [0x0962, 0x0963], 0x0981, [0x0982, 0x0983], 0x09BC, [0x09BE, 0x09C0], [0x09C1, 0x09C4], [0x09C7, 0x09C8], [0x09CB, 0x09CC], 0x09CD, 0x09D7, [0x09E2, 0x09E3], [0x0A01, 0x0A02], 0x0A03, 0x0A3C, [0x0A3E, 0x0A40], [0x0A41, 0x0A42], [0x0A47, 0x0A48], [0x0A4B, 0x0A4D], 0x0A51, [0x0A70, 0x0A71], 0x0A75, [0x0A81, 0x0A82], 0x0A83, 0x0ABC, [0x0ABE, 0x0AC0], [0x0AC1, 0x0AC5], [0x0AC7, 0x0AC8], 0x0AC9, [0x0ACB, 0x0ACC], 0x0ACD, [0x0AE2, 0x0AE3], 0x0B01, [0x0B02, 0x0B03], 0x0B3C, 0x0B3E, 0x0B3F, 0x0B40, [0x0B41, 0x0B44], [0x0B47, 0x0B48], [0x0B4B, 0x0B4C], 0x0B4D, 0x0B56, 0x0B57, [0x0B62, 0x0B63], 0x0B82, [0x0BBE, 0x0BBF], 0x0BC0, [0x0BC1, 0x0BC2], [0x0BC6, 0x0BC8], [0x0BCA, 0x0BCC], 0x0BCD, 0x0BD7, 0x0C00, [0x0C01, 0x0C03], [0x0C3E, 0x0C40], [0x0C41, 0x0C44], [0x0C46, 0x0C48], [0x0C4A, 0x0C4D], [0x0C55, 0x0C56], [0x0C62, 0x0C63], 0x0C81, [0x0C82, 0x0C83], 0x0CBC, 0x0CBE, 0x0CBF, [0x0CC0, 0x0CC4], 0x0CC6, [0x0CC7, 0x0CC8], [0x0CCA, 0x0CCB], [0x0CCC, 0x0CCD], [0x0CD5, 0x0CD6], [0x0CE2, 0x0CE3], 0x0D01, [0x0D02, 0x0D03], [0x0D3E, 0x0D40], [0x0D41, 0x0D44], [0x0D46, 0x0D48], [0x0D4A, 0x0D4C], 0x0D4D, 0x0D57, [0x0D62, 0x0D63], [0x0D82, 0x0D83], 0x0DCA, [0x0DCF, 0x0DD1], [0x0DD2, 0x0DD4], 0x0DD6, [0x0DD8, 0x0DDF], [0x0DF2, 0x0DF3], 0x0E31, [0x0E34, 0x0E3A], [0x0E47, 0x0E4E], 0x0EB1, [0x0EB4, 0x0EB9], [0x0EBB, 0x0EBC], [0x0EC8, 0x0ECD], [0x0F18, 0x0F19], 0x0F35, 0x0F37, 0x0F39, [0x0F3E, 0x0F3F], [0x0F71, 0x0F7E], 0x0F7F, [0x0F80, 0x0F84], [0x0F86, 0x0F87], [0x0F8D, 0x0F97], [0x0F99, 0x0FBC], 0x0FC6, [0x102B, 0x102C], [0x102D, 0x1030], 0x1031, [0x1032, 0x1037], 0x1038, [0x1039, 0x103A], [0x103B, 0x103C], [0x103D, 0x103E], [0x1056, 0x1057], [0x1058, 0x1059], [0x105E, 0x1060], [0x1062, 0x1064], [0x1067, 0x106D], [0x1071, 0x1074], 0x1082, [0x1083, 0x1084], [0x1085, 0x1086], [0x1087, 0x108C], 0x108D, 0x108F, [0x109A, 0x109C], 0x109D, [0x135D, 0x135F], [0x1712, 0x1714], [0x1732, 0x1734], [0x1752, 0x1753], [0x1772, 0x1773], [0x17B4, 0x17B5], 0x17B6, [0x17B7, 0x17BD], [0x17BE, 0x17C5], 0x17C6, [0x17C7, 0x17C8], [0x17C9, 0x17D3], 0x17DD, [0x180B, 0x180D], 0x18A9, [0x1920, 0x1922], [0x1923, 0x1926], [0x1927, 0x1928], [0x1929, 0x192B], [0x1930, 0x1931], 0x1932, [0x1933, 0x1938], [0x1939, 0x193B], [0x19B0, 0x19C0], [0x19C8, 0x19C9], [0x1A17, 0x1A18], [0x1A19, 0x1A1A], 0x1A1B, 0x1A55, 0x1A56, 0x1A57, [0x1A58, 0x1A5E], 0x1A60, 0x1A61, 0x1A62, [0x1A63, 0x1A64], [0x1A65, 0x1A6C], [0x1A6D, 0x1A72], [0x1A73, 0x1A7C], 0x1A7F, [0x1AB0, 0x1ABD], 0x1ABE, [0x1B00, 0x1B03], 0x1B04, 0x1B34, 0x1B35, [0x1B36, 0x1B3A], 0x1B3B, 0x1B3C, [0x1B3D, 0x1B41], 0x1B42, [0x1B43, 0x1B44], [0x1B6B, 0x1B73], [0x1B80, 0x1B81], 0x1B82, 0x1BA1, [0x1BA2, 0x1BA5], [0x1BA6, 0x1BA7], [0x1BA8, 0x1BA9], 0x1BAA, [0x1BAB, 0x1BAD], 0x1BE6, 0x1BE7, [0x1BE8, 0x1BE9], [0x1BEA, 0x1BEC], 0x1BED, 0x1BEE, [0x1BEF, 0x1BF1], [0x1BF2, 0x1BF3], [0x1C24, 0x1C2B], [0x1C2C, 0x1C33], [0x1C34, 0x1C35], [0x1C36, 0x1C37], [0x1CD0, 0x1CD2], [0x1CD4, 0x1CE0], 0x1CE1, [0x1CE2, 0x1CE8], 0x1CED, [0x1CF2, 0x1CF3], 0x1CF4, [0x1CF8, 0x1CF9], [0x1DC0, 0x1DF5], [0x1DFC, 0x1DFF], [0x200C, 0x200D], [0x20D0, 0x20DC], [0x20DD, 0x20E0], 0x20E1, [0x20E2, 0x20E4], [0x20E5, 0x20F0], [0x2CEF, 0x2CF1], 0x2D7F, [0x2DE0, 0x2DFF], [0x302A, 0x302D], [0x302E, 0x302F], [0x3099, 0x309A], 0xA66F, [0xA670, 0xA672], [0xA674, 0xA67D], 0xA69F, [0xA6F0, 0xA6F1], 0xA802, 0xA806, 0xA80B, [0xA823, 0xA824], [0xA825, 0xA826], 0xA827, [0xA880, 0xA881], [0xA8B4, 0xA8C3], 0xA8C4, [0xA8E0, 0xA8F1], [0xA926, 0xA92D], [0xA947, 0xA951], [0xA952, 0xA953], [0xA980, 0xA982], 0xA983, 0xA9B3, [0xA9B4, 0xA9B5], [0xA9B6, 0xA9B9], [0xA9BA, 0xA9BB], 0xA9BC, [0xA9BD, 0xA9C0], 0xA9E5, [0xAA29, 0xAA2E], [0xAA2F, 0xAA30], [0xAA31, 0xAA32], [0xAA33, 0xAA34], [0xAA35, 0xAA36], 0xAA43, 0xAA4C, 0xAA4D, 0xAA7B, 0xAA7C, 0xAA7D, 0xAAB0, [0xAAB2, 0xAAB4], [0xAAB7, 0xAAB8], [0xAABE, 0xAABF], 0xAAC1, 0xAAEB, [0xAAEC, 0xAAED], [0xAAEE, 0xAAEF], 0xAAF5, 0xAAF6, [0xABE3, 0xABE4], 0xABE5, [0xABE6, 0xABE7], 0xABE8, [0xABE9, 0xABEA], 0xABEC, 0xABED, 0xFB1E, [0xFE00, 0xFE0F], [0xFE20, 0xFE2D], [0xFF9E, 0xFF9F], 0x101FD, 0x102E0, [0x10376, 0x1037A], [0x10A01, 0x10A03], [0x10A05, 0x10A06], [0x10A0C, 0x10A0F], [0x10A38, 0x10A3A], 0x10A3F, [0x10AE5, 0x10AE6], 0x11000, 0x11001, 0x11002, [0x11038, 0x11046], [0x1107F, 0x11081], 0x11082, [0x110B0, 0x110B2], [0x110B3, 0x110B6], [0x110B7, 0x110B8], [0x110B9, 0x110BA], [0x11100, 0x11102], [0x11127, 0x1112B], 0x1112C, [0x1112D, 0x11134], 0x11173, [0x11180, 0x11181], 0x11182, [0x111B3, 0x111B5], [0x111B6, 0x111BE], [0x111BF, 0x111C0], [0x1122C, 0x1122E], [0x1122F, 0x11231], [0x11232, 0x11233], 0x11234, 0x11235, [0x11236, 0x11237], 0x112DF, [0x112E0, 0x112E2], [0x112E3, 0x112EA], 0x11301, [0x11302, 0x11303], 0x1133C, [0x1133E, 0x1133F], 0x11340, [0x11341, 0x11344], [0x11347, 0x11348], [0x1134B, 0x1134D], 0x11357, [0x11362, 0x11363], [0x11366, 0x1136C], [0x11370, 0x11374], [0x114B0, 0x114B2], [0x114B3, 0x114B8], 0x114B9, 0x114BA, [0x114BB, 0x114BE], [0x114BF, 0x114C0], 0x114C1, [0x114C2, 0x114C3], [0x115AF, 0x115B1], [0x115B2, 0x115B5], [0x115B8, 0x115BB], [0x115BC, 0x115BD], 0x115BE, [0x115BF, 0x115C0], [0x11630, 0x11632], [0x11633, 0x1163A], [0x1163B, 0x1163C], 0x1163D, 0x1163E, [0x1163F, 0x11640], 0x116AB, 0x116AC, 0x116AD, [0x116AE, 0x116AF], [0x116B0, 0x116B5], 0x116B6, 0x116B7, [0x16AF0, 0x16AF4], [0x16B30, 0x16B36], [0x16F51, 0x16F7E], [0x16F8F, 0x16F92], [0x1BC9D, 0x1BC9E], [0x1D165, 0x1D166], [0x1D167, 0x1D169], [0x1D16D, 0x1D172], [0x1D17B, 0x1D182], [0x1D185, 0x1D18B], [0x1D1AA, 0x1D1AD], [0x1D242, 0x1D244], [0x1E8D0, 0x1E8D6], [0xE0100, 0xE01EF]],
+	Newline: [0x000B, 0x000C, 0x0085, 0x2028, 0x2029],
+	Extend: [[0x0300, 0x036F], [0x0483, 0x0489], [0x0591, 0x05BD], 0x05BF, 0x05C1, 0x05C2, 0x05C4, 0x05C5, 0x05C7, [0x0610, 0x061A], [0x064B, 0x065F], 0x0670, [0x06D6, 0x06DC], [0x06DF, 0x06E4], 0x06E7, 0x06E8, [0x06EA, 0x06ED], 0x0711, [0x0730, 0x074A], [0x07A6, 0x07B0], [0x07EB, 0x07F3], [0x0816, 0x0819], [0x081B, 0x0823], [0x0825, 0x0827], [0x0829, 0x082D], [0x0859, 0x085B], [0x08E4, 0x0903], [0x093A, 0x093C], [0x093E, 0x094F], [0x0951, 0x0957], 0x0962, 0x0963, [0x0981, 0x0983], 0x09BC, [0x09BE, 0x09C4], 0x09C7, 0x09C8, [0x09CB, 0x09CD], 0x09D7, 0x09E2, 0x09E3, [0x0A01, 0x0A03], 0x0A3C, [0x0A3E, 0x0A42], 0x0A47, 0x0A48, [0x0A4B, 0x0A4D], 0x0A51, 0x0A70, 0x0A71, 0x0A75, [0x0A81, 0x0A83], 0x0ABC, [0x0ABE, 0x0AC5], [0x0AC7, 0x0AC9], [0x0ACB, 0x0ACD], 0x0AE2, 0x0AE3, [0x0B01, 0x0B03], 0x0B3C, [0x0B3E, 0x0B44], 0x0B47, 0x0B48, [0x0B4B, 0x0B4D], 0x0B56, 0x0B57, 0x0B62, 0x0B63, 0x0B82, [0x0BBE, 0x0BC2], [0x0BC6, 0x0BC8], [0x0BCA, 0x0BCD], 0x0BD7, [0x0C00, 0x0C03], [0x0C3E, 0x0C44], [0x0C46, 0x0C48], [0x0C4A, 0x0C4D], 0x0C55, 0x0C56, 0x0C62, 0x0C63, [0x0C81, 0x0C83], 0x0CBC, [0x0CBE, 0x0CC4], [0x0CC6, 0x0CC8], [0x0CCA, 0x0CCD], 0x0CD5, 0x0CD6, 0x0CE2, 0x0CE3, [0x0D01, 0x0D03], [0x0D3E, 0x0D44], [0x0D46, 0x0D48], [0x0D4A, 0x0D4D], 0x0D57, 0x0D62, 0x0D63, 0x0D82, 0x0D83, 0x0DCA, [0x0DCF, 0x0DD4], 0x0DD6, [0x0DD8, 0x0DDF], 0x0DF2, 0x0DF3, 0x0E31, [0x0E34, 0x0E3A], [0x0E47, 0x0E4E], 0x0EB1, [0x0EB4, 0x0EB9], 0x0EBB, 0x0EBC, [0x0EC8, 0x0ECD], 0x0F18, 0x0F19, 0x0F35, 0x0F37, 0x0F39, 0x0F3E, 0x0F3F, [0x0F71, 0x0F84], 0x0F86, 0x0F87, [0x0F8D, 0x0F97], [0x0F99, 0x0FBC], 0x0FC6, [0x102B, 0x103E], [0x1056, 0x1059], [0x105E, 0x1060], [0x1062, 0x1064], [0x1067, 0x106D], [0x1071, 0x1074], [0x1082, 0x108D], 0x108F, [0x109A, 0x109D], [0x135D, 0x135F], [0x1712, 0x1714], [0x1732, 0x1734], 0x1752, 0x1753, 0x1772, 0x1773, [0x17B4, 0x17D3], 0x17DD, [0x180B, 0x180D], 0x18A9, [0x1920, 0x192B], [0x1930, 0x193B], [0x19B0, 0x19C0], 0x19C8, 0x19C9, [0x1A17, 0x1A1B], [0x1A55, 0x1A5E], [0x1A60, 0x1A7C], 0x1A7F, [0x1AB0, 0x1ABE], [0x1B00, 0x1B04], [0x1B34, 0x1B44], [0x1B6B, 0x1B73], [0x1B80, 0x1B82], [0x1BA1, 0x1BAD], [0x1BE6, 0x1BF3], [0x1C24, 0x1C37], [0x1CD0, 0x1CD2], [0x1CD4, 0x1CE8], 0x1CED, [0x1CF2, 0x1CF4], 0x1CF8, 0x1CF9, [0x1DC0, 0x1DF5], [0x1DFC, 0x1DFF], 0x200C, 0x200D, [0x20D0, 0x20F0], [0x2CEF, 0x2CF1], 0x2D7F, [0x2DE0, 0x2DFF], [0x302A, 0x302F], 0x3099, 0x309A, [0xA66F, 0xA672], [0xA674, 0xA67D], 0xA69F, 0xA6F0, 0xA6F1, 0xA802, 0xA806, 0xA80B, [0xA823, 0xA827], 0xA880, 0xA881, [0xA8B4, 0xA8C4], [0xA8E0, 0xA8F1], [0xA926, 0xA92D], [0xA947, 0xA953], [0xA980, 0xA983], [0xA9B3, 0xA9C0], 0xA9E5, [0xAA29, 0xAA36], 0xAA43, 0xAA4C, 0xAA4D, [0xAA7B, 0xAA7D], 0xAAB0, [0xAAB2, 0xAAB4], 0xAAB7, 0xAAB8, 0xAABE, 0xAABF, 0xAAC1, [0xAAEB, 0xAAEF], 0xAAF5, 0xAAF6, [0xABE3, 0xABEA], 0xABEC, 0xABED, 0xFB1E, [0xFE00, 0xFE0F], [0xFE20, 0xFE2D], 0xFF9E, 0xFF9F, 0x101FD, 0x102E0, [0x10376, 0x1037A], [0x10A01, 0x10A03], 0x10A05, 0x10A06, [0x10A0C, 0x10A0F], [0x10A38, 0x10A3A], 0x10A3F, 0x10AE5, 0x10AE6, [0x11000, 0x11002], [0x11038, 0x11046], [0x1107F, 0x11082], [0x110B0, 0x110BA], [0x11100, 0x11102], [0x11127, 0x11134], 0x11173, [0x11180, 0x11182], [0x111B3, 0x111C0], [0x1122C, 0x11237], [0x112DF, 0x112EA], [0x11301, 0x11303], 0x1133C, [0x1133E, 0x11344], 0x11347, 0x11348, [0x1134B, 0x1134D], 0x11357, 0x11362, 0x11363, [0x11366, 0x1136C], [0x11370, 0x11374], [0x114B0, 0x114C3], [0x115AF, 0x115B5], [0x115B8, 0x115C0], [0x11630, 0x11640], [0x116AB, 0x116B7], [0x16AF0, 0x16AF4], [0x16B30, 0x16B36], [0x16F51, 0x16F7E], [0x16F8F, 0x16F92], 0x1BC9D, 0x1BC9E, [0x1D165, 0x1D169], [0x1D16D, 0x1D172], [0x1D17B, 0x1D182], [0x1D185, 0x1D18B], [0x1D1AA, 0x1D1AD], [0x1D242, 0x1D244], [0x1E8D0, 0x1E8D6], [0xE0100, 0xE01EF]],
 	RegionalIndicator: [[0x1F1E6, 0x1F1FF]],
-	Format: [0x00AD, [0x0600, 0x0605], 0x061C, 0x06DD, 0x070F, 0x180E, [0x200E, 0x200F], [0x202A, 0x202E], [0x2060, 0x2064], [0x2066, 0x206F], 0xFEFF, [0xFFF9, 0xFFFB], 0x110BD, [0x1BCA0, 0x1BCA3], [0x1D173, 0x1D17A], 0xE0001, [0xE0020, 0xE007F]],
-	Katakana: [[0x3031, 0x3035], [0x309B, 0x309C], 0x30A0, [0x30A1, 0x30FA], [0x30FC, 0x30FE], 0x30FF, [0x31F0, 0x31FF], [0x32D0, 0x32FE], [0x3300, 0x3357], [0xFF66, 0xFF6F], 0xFF70, [0xFF71, 0xFF9D], 0x1B000],
-	ALetter: [[0x0041, 0x005A], [0x0061, 0x007A], 0x00AA, 0x00B5, 0x00BA, [0x00C0, 0x00D6], [0x00D8, 0x00F6], [0x00F8, 0x01BA], 0x01BB, [0x01BC, 0x01BF], [0x01C0, 0x01C3], [0x01C4, 0x0293], 0x0294, [0x0295, 0x02AF], [0x02B0, 0x02C1], [0x02C6, 0x02D1], [0x02E0, 0x02E4], 0x02EC, 0x02EE, [0x0370, 0x0373], 0x0374, [0x0376, 0x0377], 0x037A, [0x037B, 0x037D], 0x037F, 0x0386, [0x0388, 0x038A], 0x038C, [0x038E, 0x03A1], [0x03A3, 0x03F5], [0x03F7, 0x0481], [0x048A, 0x052F], [0x0531, 0x0556], 0x0559, [0x0561, 0x0587], 0x05F3, [0x0620, 0x063F], 0x0640, [0x0641, 0x064A], [0x066E, 0x066F], [0x0671, 0x06D3], 0x06D5, [0x06E5, 0x06E6], [0x06EE, 0x06EF], [0x06FA, 0x06FC], 0x06FF, 0x0710, [0x0712, 0x072F], [0x074D, 0x07A5], 0x07B1, [0x07CA, 0x07EA], [0x07F4, 0x07F5], 0x07FA, [0x0800, 0x0815], 0x081A, 0x0824, 0x0828, [0x0840, 0x0858], [0x08A0, 0x08B2], [0x0904, 0x0939], 0x093D, 0x0950, [0x0958, 0x0961], 0x0971, [0x0972, 0x0980], [0x0985, 0x098C], [0x098F, 0x0990], [0x0993, 0x09A8], [0x09AA, 0x09B0], 0x09B2, [0x09B6, 0x09B9], 0x09BD, 0x09CE, [0x09DC, 0x09DD], [0x09DF, 0x09E1], [0x09F0, 0x09F1], [0x0A05, 0x0A0A], [0x0A0F, 0x0A10], [0x0A13, 0x0A28], [0x0A2A, 0x0A30], [0x0A32, 0x0A33], [0x0A35, 0x0A36], [0x0A38, 0x0A39], [0x0A59, 0x0A5C], 0x0A5E, [0x0A72, 0x0A74], [0x0A85, 0x0A8D], [0x0A8F, 0x0A91], [0x0A93, 0x0AA8], [0x0AAA, 0x0AB0], [0x0AB2, 0x0AB3], [0x0AB5, 0x0AB9], 0x0ABD, 0x0AD0, [0x0AE0, 0x0AE1], [0x0B05, 0x0B0C], [0x0B0F, 0x0B10], [0x0B13, 0x0B28], [0x0B2A, 0x0B30], [0x0B32, 0x0B33], [0x0B35, 0x0B39], 0x0B3D, [0x0B5C, 0x0B5D], [0x0B5F, 0x0B61], 0x0B71, 0x0B83, [0x0B85, 0x0B8A], [0x0B8E, 0x0B90], [0x0B92, 0x0B95], [0x0B99, 0x0B9A], 0x0B9C, [0x0B9E, 0x0B9F], [0x0BA3, 0x0BA4], [0x0BA8, 0x0BAA], [0x0BAE, 0x0BB9], 0x0BD0, [0x0C05, 0x0C0C], [0x0C0E, 0x0C10], [0x0C12, 0x0C28], [0x0C2A, 0x0C39], 0x0C3D, [0x0C58, 0x0C59], [0x0C60, 0x0C61], [0x0C85, 0x0C8C], [0x0C8E, 0x0C90], [0x0C92, 0x0CA8], [0x0CAA, 0x0CB3], [0x0CB5, 0x0CB9], 0x0CBD, 0x0CDE, [0x0CE0, 0x0CE1], [0x0CF1, 0x0CF2], [0x0D05, 0x0D0C], [0x0D0E, 0x0D10], [0x0D12, 0x0D3A], 0x0D3D, 0x0D4E, [0x0D60, 0x0D61], [0x0D7A, 0x0D7F], [0x0D85, 0x0D96], [0x0D9A, 0x0DB1], [0x0DB3, 0x0DBB], 0x0DBD, [0x0DC0, 0x0DC6], 0x0F00, [0x0F40, 0x0F47], [0x0F49, 0x0F6C], [0x0F88, 0x0F8C], [0x10A0, 0x10C5], 0x10C7, 0x10CD, [0x10D0, 0x10FA], 0x10FC, [0x10FD, 0x1248], [0x124A, 0x124D], [0x1250, 0x1256], 0x1258, [0x125A, 0x125D], [0x1260, 0x1288], [0x128A, 0x128D], [0x1290, 0x12B0], [0x12B2, 0x12B5], [0x12B8, 0x12BE], 0x12C0, [0x12C2, 0x12C5], [0x12C8, 0x12D6], [0x12D8, 0x1310], [0x1312, 0x1315], [0x1318, 0x135A], [0x1380, 0x138F], [0x13A0, 0x13F4], [0x1401, 0x166C], [0x166F, 0x167F], [0x1681, 0x169A], [0x16A0, 0x16EA], [0x16EE, 0x16F0], [0x16F1, 0x16F8], [0x1700, 0x170C], [0x170E, 0x1711], [0x1720, 0x1731], [0x1740, 0x1751], [0x1760, 0x176C], [0x176E, 0x1770], [0x1820, 0x1842], 0x1843, [0x1844, 0x1877], [0x1880, 0x18A8], 0x18AA, [0x18B0, 0x18F5], [0x1900, 0x191E], [0x1A00, 0x1A16], [0x1B05, 0x1B33], [0x1B45, 0x1B4B], [0x1B83, 0x1BA0], [0x1BAE, 0x1BAF], [0x1BBA, 0x1BE5], [0x1C00, 0x1C23], [0x1C4D, 0x1C4F], [0x1C5A, 0x1C77], [0x1C78, 0x1C7D], [0x1CE9, 0x1CEC], [0x1CEE, 0x1CF1], [0x1CF5, 0x1CF6], [0x1D00, 0x1D2B], [0x1D2C, 0x1D6A], [0x1D6B, 0x1D77], 0x1D78, [0x1D79, 0x1D9A], [0x1D9B, 0x1DBF], [0x1E00, 0x1F15], [0x1F18, 0x1F1D], [0x1F20, 0x1F45], [0x1F48, 0x1F4D], [0x1F50, 0x1F57], 0x1F59, 0x1F5B, 0x1F5D, [0x1F5F, 0x1F7D], [0x1F80, 0x1FB4], [0x1FB6, 0x1FBC], 0x1FBE, [0x1FC2, 0x1FC4], [0x1FC6, 0x1FCC], [0x1FD0, 0x1FD3], [0x1FD6, 0x1FDB], [0x1FE0, 0x1FEC], [0x1FF2, 0x1FF4], [0x1FF6, 0x1FFC], 0x2071, 0x207F, [0x2090, 0x209C], 0x2102, 0x2107, [0x210A, 0x2113], 0x2115, [0x2119, 0x211D], 0x2124, 0x2126, 0x2128, [0x212A, 0x212D], [0x212F, 0x2134], [0x2135, 0x2138], 0x2139, [0x213C, 0x213F], [0x2145, 0x2149], 0x214E, [0x2160, 0x2182], [0x2183, 0x2184], [0x2185, 0x2188], [0x24B6, 0x24E9], [0x2C00, 0x2C2E], [0x2C30, 0x2C5E], [0x2C60, 0x2C7B], [0x2C7C, 0x2C7D], [0x2C7E, 0x2CE4], [0x2CEB, 0x2CEE], [0x2CF2, 0x2CF3], [0x2D00, 0x2D25], 0x2D27, 0x2D2D, [0x2D30, 0x2D67], 0x2D6F, [0x2D80, 0x2D96], [0x2DA0, 0x2DA6], [0x2DA8, 0x2DAE], [0x2DB0, 0x2DB6], [0x2DB8, 0x2DBE], [0x2DC0, 0x2DC6], [0x2DC8, 0x2DCE], [0x2DD0, 0x2DD6], [0x2DD8, 0x2DDE], 0x2E2F, 0x3005, 0x303B, 0x303C, [0x3105, 0x312D], [0x3131, 0x318E], [0x31A0, 0x31BA], [0xA000, 0xA014], 0xA015, [0xA016, 0xA48C], [0xA4D0, 0xA4F7], [0xA4F8, 0xA4FD], [0xA500, 0xA60B], 0xA60C, [0xA610, 0xA61F], [0xA62A, 0xA62B], [0xA640, 0xA66D], 0xA66E, 0xA67F, [0xA680, 0xA69B], [0xA69C, 0xA69D], [0xA6A0, 0xA6E5], [0xA6E6, 0xA6EF], [0xA717, 0xA71F], [0xA722, 0xA76F], 0xA770, [0xA771, 0xA787], 0xA788, [0xA78B, 0xA78E], [0xA790, 0xA7AD], [0xA7B0, 0xA7B1], 0xA7F7, [0xA7F8, 0xA7F9], 0xA7FA, [0xA7FB, 0xA801], [0xA803, 0xA805], [0xA807, 0xA80A], [0xA80C, 0xA822], [0xA840, 0xA873], [0xA882, 0xA8B3], [0xA8F2, 0xA8F7], 0xA8FB, [0xA90A, 0xA925], [0xA930, 0xA946], [0xA960, 0xA97C], [0xA984, 0xA9B2], 0xA9CF, [0xAA00, 0xAA28], [0xAA40, 0xAA42], [0xAA44, 0xAA4B], [0xAAE0, 0xAAEA], 0xAAF2, [0xAAF3, 0xAAF4], [0xAB01, 0xAB06], [0xAB09, 0xAB0E], [0xAB11, 0xAB16], [0xAB20, 0xAB26], [0xAB28, 0xAB2E], [0xAB30, 0xAB5A], [0xAB5C, 0xAB5F], [0xAB64, 0xAB65], [0xABC0, 0xABE2], [0xAC00, 0xD7A3], [0xD7B0, 0xD7C6], [0xD7CB, 0xD7FB], [0xFB00, 0xFB06], [0xFB13, 0xFB17], [0xFB50, 0xFBB1], [0xFBD3, 0xFD3D], [0xFD50, 0xFD8F], [0xFD92, 0xFDC7], [0xFDF0, 0xFDFB], [0xFE70, 0xFE74], [0xFE76, 0xFEFC], [0xFF21, 0xFF3A], [0xFF41, 0xFF5A], [0xFFA0, 0xFFBE], [0xFFC2, 0xFFC7], [0xFFCA, 0xFFCF], [0xFFD2, 0xFFD7], [0xFFDA, 0xFFDC], [0x10000, 0x1000B], [0x1000D, 0x10026], [0x10028, 0x1003A], [0x1003C, 0x1003D], [0x1003F, 0x1004D], [0x10050, 0x1005D], [0x10080, 0x100FA], [0x10140, 0x10174], [0x10280, 0x1029C], [0x102A0, 0x102D0], [0x10300, 0x1031F], [0x10330, 0x10340], 0x10341, [0x10342, 0x10349], 0x1034A, [0x10350, 0x10375], [0x10380, 0x1039D], [0x103A0, 0x103C3], [0x103C8, 0x103CF], [0x103D1, 0x103D5], [0x10400, 0x1044F], [0x10450, 0x1049D], [0x10500, 0x10527], [0x10530, 0x10563], [0x10600, 0x10736], [0x10740, 0x10755], [0x10760, 0x10767], [0x10800, 0x10805], 0x10808, [0x1080A, 0x10835], [0x10837, 0x10838], 0x1083C, [0x1083F, 0x10855], [0x10860, 0x10876], [0x10880, 0x1089E], [0x10900, 0x10915], [0x10920, 0x10939], [0x10980, 0x109B7], [0x109BE, 0x109BF], 0x10A00, [0x10A10, 0x10A13], [0x10A15, 0x10A17], [0x10A19, 0x10A33], [0x10A60, 0x10A7C], [0x10A80, 0x10A9C], [0x10AC0, 0x10AC7], [0x10AC9, 0x10AE4], [0x10B00, 0x10B35], [0x10B40, 0x10B55], [0x10B60, 0x10B72], [0x10B80, 0x10B91], [0x10C00, 0x10C48], [0x11003, 0x11037], [0x11083, 0x110AF], [0x110D0, 0x110E8], [0x11103, 0x11126], [0x11150, 0x11172], 0x11176, [0x11183, 0x111B2], [0x111C1, 0x111C4], 0x111DA, [0x11200, 0x11211], [0x11213, 0x1122B], [0x112B0, 0x112DE], [0x11305, 0x1130C], [0x1130F, 0x11310], [0x11313, 0x11328], [0x1132A, 0x11330], [0x11332, 0x11333], [0x11335, 0x11339], 0x1133D, [0x1135D, 0x11361], [0x11480, 0x114AF], [0x114C4, 0x114C5], 0x114C7, [0x11580, 0x115AE], [0x11600, 0x1162F], 0x11644, [0x11680, 0x116AA], [0x118A0, 0x118DF], 0x118FF, [0x11AC0, 0x11AF8], [0x12000, 0x12398], [0x12400, 0x1246E], [0x13000, 0x1342E], [0x16800, 0x16A38], [0x16A40, 0x16A5E], [0x16AD0, 0x16AED], [0x16B00, 0x16B2F], [0x16B40, 0x16B43], [0x16B63, 0x16B77], [0x16B7D, 0x16B8F], [0x16F00, 0x16F44], 0x16F50, [0x16F93, 0x16F9F], [0x1BC00, 0x1BC6A], [0x1BC70, 0x1BC7C], [0x1BC80, 0x1BC88], [0x1BC90, 0x1BC99], [0x1D400, 0x1D454], [0x1D456, 0x1D49C], [0x1D49E, 0x1D49F], 0x1D4A2, [0x1D4A5, 0x1D4A6], [0x1D4A9, 0x1D4AC], [0x1D4AE, 0x1D4B9], 0x1D4BB, [0x1D4BD, 0x1D4C3], [0x1D4C5, 0x1D505], [0x1D507, 0x1D50A], [0x1D50D, 0x1D514], [0x1D516, 0x1D51C], [0x1D51E, 0x1D539], [0x1D53B, 0x1D53E], [0x1D540, 0x1D544], 0x1D546, [0x1D54A, 0x1D550], [0x1D552, 0x1D6A5], [0x1D6A8, 0x1D6C0], [0x1D6C2, 0x1D6DA], [0x1D6DC, 0x1D6FA], [0x1D6FC, 0x1D714], [0x1D716, 0x1D734], [0x1D736, 0x1D74E], [0x1D750, 0x1D76E], [0x1D770, 0x1D788], [0x1D78A, 0x1D7A8], [0x1D7AA, 0x1D7C2], [0x1D7C4, 0x1D7CB], [0x1E800, 0x1E8C4], [0x1EE00, 0x1EE03], [0x1EE05, 0x1EE1F], [0x1EE21, 0x1EE22], 0x1EE24, 0x1EE27, [0x1EE29, 0x1EE32], [0x1EE34, 0x1EE37], 0x1EE39, 0x1EE3B, 0x1EE42, 0x1EE47, 0x1EE49, 0x1EE4B, [0x1EE4D, 0x1EE4F], [0x1EE51, 0x1EE52], 0x1EE54, 0x1EE57, 0x1EE59, 0x1EE5B, 0x1EE5D, 0x1EE5F, [0x1EE61, 0x1EE62], 0x1EE64, [0x1EE67, 0x1EE6A], [0x1EE6C, 0x1EE72], [0x1EE74, 0x1EE77], [0x1EE79, 0x1EE7C], 0x1EE7E, [0x1EE80, 0x1EE89], [0x1EE8B, 0x1EE9B], [0x1EEA1, 0x1EEA3], [0x1EEA5, 0x1EEA9], [0x1EEAB, 0x1EEBB], [0x1F130, 0x1F149], [0x1F150, 0x1F169], [0x1F170, 0x1F189]],
+	Format: [0x00AD, [0x0600, 0x0605], 0x061C, 0x06DD, 0x070F, 0x180E, 0x200E, 0x200F, [0x202A, 0x202E], [0x2060, 0x2064], [0x2066, 0x206F], 0xFEFF, [0xFFF9, 0xFFFB], 0x110BD, [0x1BCA0, 0x1BCA3], [0x1D173, 0x1D17A], 0xE0001, [0xE0020, 0xE007F]],
+	Katakana: [[0x3031, 0x3035], 0x309B, 0x309C, [0x30A0, 0x30FA], [0x30FC, 0x30FF], [0x31F0, 0x31FF], [0x32D0, 0x32FE], [0x3300, 0x3357], [0xFF66, 0xFF9D], 0x1B000],
+	ALetter: [[0x0041, 0x005A], [0x0061, 0x007A], 0x00AA, 0x00B5, 0x00BA, [0x00C0, 0x00D6], [0x00D8, 0x00F6], [0x00F8, 0x02C1], [0x02C6, 0x02D1], [0x02E0, 0x02E4], 0x02EC, 0x02EE, [0x0370, 0x0374], 0x0376, 0x0377, [0x037A, 0x037D], 0x037F, 0x0386, [0x0388, 0x038A], 0x038C, [0x038E, 0x03A1], [0x03A3, 0x03F5], [0x03F7, 0x0481], [0x048A, 0x052F], [0x0531, 0x0556], 0x0559, [0x0561, 0x0587], 0x05F3, [0x0620, 0x064A], 0x066E, 0x066F, [0x0671, 0x06D3], 0x06D5, 0x06E5, 0x06E6, 0x06EE, 0x06EF, [0x06FA, 0x06FC], 0x06FF, 0x0710, [0x0712, 0x072F], [0x074D, 0x07A5], 0x07B1, [0x07CA, 0x07EA], 0x07F4, 0x07F5, 0x07FA, [0x0800, 0x0815], 0x081A, 0x0824, 0x0828, [0x0840, 0x0858], [0x08A0, 0x08B2], [0x0904, 0x0939], 0x093D, 0x0950, [0x0958, 0x0961], [0x0971, 0x0980], [0x0985, 0x098C], 0x098F, 0x0990, [0x0993, 0x09A8], [0x09AA, 0x09B0], 0x09B2, [0x09B6, 0x09B9], 0x09BD, 0x09CE, 0x09DC, 0x09DD, [0x09DF, 0x09E1], 0x09F0, 0x09F1, [0x0A05, 0x0A0A], 0x0A0F, 0x0A10, [0x0A13, 0x0A28], [0x0A2A, 0x0A30], 0x0A32, 0x0A33, 0x0A35, 0x0A36, 0x0A38, 0x0A39, [0x0A59, 0x0A5C], 0x0A5E, [0x0A72, 0x0A74], [0x0A85, 0x0A8D], [0x0A8F, 0x0A91], [0x0A93, 0x0AA8], [0x0AAA, 0x0AB0], 0x0AB2, 0x0AB3, [0x0AB5, 0x0AB9], 0x0ABD, 0x0AD0, 0x0AE0, 0x0AE1, [0x0B05, 0x0B0C], 0x0B0F, 0x0B10, [0x0B13, 0x0B28], [0x0B2A, 0x0B30], 0x0B32, 0x0B33, [0x0B35, 0x0B39], 0x0B3D, 0x0B5C, 0x0B5D, [0x0B5F, 0x0B61], 0x0B71, 0x0B83, [0x0B85, 0x0B8A], [0x0B8E, 0x0B90], [0x0B92, 0x0B95], 0x0B99, 0x0B9A, 0x0B9C, 0x0B9E, 0x0B9F, 0x0BA3, 0x0BA4, [0x0BA8, 0x0BAA], [0x0BAE, 0x0BB9], 0x0BD0, [0x0C05, 0x0C0C], [0x0C0E, 0x0C10], [0x0C12, 0x0C28], [0x0C2A, 0x0C39], 0x0C3D, 0x0C58, 0x0C59, 0x0C60, 0x0C61, [0x0C85, 0x0C8C], [0x0C8E, 0x0C90], [0x0C92, 0x0CA8], [0x0CAA, 0x0CB3], [0x0CB5, 0x0CB9], 0x0CBD, 0x0CDE, 0x0CE0, 0x0CE1, 0x0CF1, 0x0CF2, [0x0D05, 0x0D0C], [0x0D0E, 0x0D10], [0x0D12, 0x0D3A], 0x0D3D, 0x0D4E, 0x0D60, 0x0D61, [0x0D7A, 0x0D7F], [0x0D85, 0x0D96], [0x0D9A, 0x0DB1], [0x0DB3, 0x0DBB], 0x0DBD, [0x0DC0, 0x0DC6], 0x0F00, [0x0F40, 0x0F47], [0x0F49, 0x0F6C], [0x0F88, 0x0F8C], [0x10A0, 0x10C5], 0x10C7, 0x10CD, [0x10D0, 0x10FA], [0x10FC, 0x1248], [0x124A, 0x124D], [0x1250, 0x1256], 0x1258, [0x125A, 0x125D], [0x1260, 0x1288], [0x128A, 0x128D], [0x1290, 0x12B0], [0x12B2, 0x12B5], [0x12B8, 0x12BE], 0x12C0, [0x12C2, 0x12C5], [0x12C8, 0x12D6], [0x12D8, 0x1310], [0x1312, 0x1315], [0x1318, 0x135A], [0x1380, 0x138F], [0x13A0, 0x13F4], [0x1401, 0x166C], [0x166F, 0x167F], [0x1681, 0x169A], [0x16A0, 0x16EA], [0x16EE, 0x16F8], [0x1700, 0x170C], [0x170E, 0x1711], [0x1720, 0x1731], [0x1740, 0x1751], [0x1760, 0x176C], [0x176E, 0x1770], [0x1820, 0x1877], [0x1880, 0x18A8], 0x18AA, [0x18B0, 0x18F5], [0x1900, 0x191E], [0x1A00, 0x1A16], [0x1B05, 0x1B33], [0x1B45, 0x1B4B], [0x1B83, 0x1BA0], 0x1BAE, 0x1BAF, [0x1BBA, 0x1BE5], [0x1C00, 0x1C23], [0x1C4D, 0x1C4F], [0x1C5A, 0x1C7D], [0x1CE9, 0x1CEC], [0x1CEE, 0x1CF1], 0x1CF5, 0x1CF6, [0x1D00, 0x1DBF], [0x1E00, 0x1F15], [0x1F18, 0x1F1D], [0x1F20, 0x1F45], [0x1F48, 0x1F4D], [0x1F50, 0x1F57], 0x1F59, 0x1F5B, 0x1F5D, [0x1F5F, 0x1F7D], [0x1F80, 0x1FB4], [0x1FB6, 0x1FBC], 0x1FBE, [0x1FC2, 0x1FC4], [0x1FC6, 0x1FCC], [0x1FD0, 0x1FD3], [0x1FD6, 0x1FDB], [0x1FE0, 0x1FEC], [0x1FF2, 0x1FF4], [0x1FF6, 0x1FFC], 0x2071, 0x207F, [0x2090, 0x209C], 0x2102, 0x2107, [0x210A, 0x2113], 0x2115, [0x2119, 0x211D], 0x2124, 0x2126, 0x2128, [0x212A, 0x212D], [0x212F, 0x2139], [0x213C, 0x213F], [0x2145, 0x2149], 0x214E, [0x2160, 0x2188], [0x24B6, 0x24E9], [0x2C00, 0x2C2E], [0x2C30, 0x2C5E], [0x2C60, 0x2CE4], [0x2CEB, 0x2CEE], 0x2CF2, 0x2CF3, [0x2D00, 0x2D25], 0x2D27, 0x2D2D, [0x2D30, 0x2D67], 0x2D6F, [0x2D80, 0x2D96], [0x2DA0, 0x2DA6], [0x2DA8, 0x2DAE], [0x2DB0, 0x2DB6], [0x2DB8, 0x2DBE], [0x2DC0, 0x2DC6], [0x2DC8, 0x2DCE], [0x2DD0, 0x2DD6], [0x2DD8, 0x2DDE], 0x2E2F, 0x3005, 0x303B, 0x303C, [0x3105, 0x312D], [0x3131, 0x318E], [0x31A0, 0x31BA], [0xA000, 0xA48C], [0xA4D0, 0xA4FD], [0xA500, 0xA60C], [0xA610, 0xA61F], 0xA62A, 0xA62B, [0xA640, 0xA66E], [0xA67F, 0xA69D], [0xA6A0, 0xA6EF], [0xA717, 0xA71F], [0xA722, 0xA788], [0xA78B, 0xA78E], [0xA790, 0xA7AD], 0xA7B0, 0xA7B1, [0xA7F7, 0xA801], [0xA803, 0xA805], [0xA807, 0xA80A], [0xA80C, 0xA822], [0xA840, 0xA873], [0xA882, 0xA8B3], [0xA8F2, 0xA8F7], 0xA8FB, [0xA90A, 0xA925], [0xA930, 0xA946], [0xA960, 0xA97C], [0xA984, 0xA9B2], 0xA9CF, [0xAA00, 0xAA28], [0xAA40, 0xAA42], [0xAA44, 0xAA4B], [0xAAE0, 0xAAEA], [0xAAF2, 0xAAF4], [0xAB01, 0xAB06], [0xAB09, 0xAB0E], [0xAB11, 0xAB16], [0xAB20, 0xAB26], [0xAB28, 0xAB2E], [0xAB30, 0xAB5A], [0xAB5C, 0xAB5F], 0xAB64, 0xAB65, [0xABC0, 0xABE2], [0xAC00, 0xD7A3], [0xD7B0, 0xD7C6], [0xD7CB, 0xD7FB], [0xFB00, 0xFB06], [0xFB13, 0xFB17], [0xFB50, 0xFBB1], [0xFBD3, 0xFD3D], [0xFD50, 0xFD8F], [0xFD92, 0xFDC7], [0xFDF0, 0xFDFB], [0xFE70, 0xFE74], [0xFE76, 0xFEFC], [0xFF21, 0xFF3A], [0xFF41, 0xFF5A], [0xFFA0, 0xFFBE], [0xFFC2, 0xFFC7], [0xFFCA, 0xFFCF], [0xFFD2, 0xFFD7], [0xFFDA, 0xFFDC], [0x10000, 0x1000B], [0x1000D, 0x10026], [0x10028, 0x1003A], 0x1003C, 0x1003D, [0x1003F, 0x1004D], [0x10050, 0x1005D], [0x10080, 0x100FA], [0x10140, 0x10174], [0x10280, 0x1029C], [0x102A0, 0x102D0], [0x10300, 0x1031F], [0x10330, 0x1034A], [0x10350, 0x10375], [0x10380, 0x1039D], [0x103A0, 0x103C3], [0x103C8, 0x103CF], [0x103D1, 0x103D5], [0x10400, 0x1049D], [0x10500, 0x10527], [0x10530, 0x10563], [0x10600, 0x10736], [0x10740, 0x10755], [0x10760, 0x10767], [0x10800, 0x10805], 0x10808, [0x1080A, 0x10835], 0x10837, 0x10838, 0x1083C, [0x1083F, 0x10855], [0x10860, 0x10876], [0x10880, 0x1089E], [0x10900, 0x10915], [0x10920, 0x10939], [0x10980, 0x109B7], 0x109BE, 0x109BF, 0x10A00, [0x10A10, 0x10A13], [0x10A15, 0x10A17], [0x10A19, 0x10A33], [0x10A60, 0x10A7C], [0x10A80, 0x10A9C], [0x10AC0, 0x10AC7], [0x10AC9, 0x10AE4], [0x10B00, 0x10B35], [0x10B40, 0x10B55], [0x10B60, 0x10B72], [0x10B80, 0x10B91], [0x10C00, 0x10C48], [0x11003, 0x11037], [0x11083, 0x110AF], [0x110D0, 0x110E8], [0x11103, 0x11126], [0x11150, 0x11172], 0x11176, [0x11183, 0x111B2], [0x111C1, 0x111C4], 0x111DA, [0x11200, 0x11211], [0x11213, 0x1122B], [0x112B0, 0x112DE], [0x11305, 0x1130C], 0x1130F, 0x11310, [0x11313, 0x11328], [0x1132A, 0x11330], 0x11332, 0x11333, [0x11335, 0x11339], 0x1133D, [0x1135D, 0x11361], [0x11480, 0x114AF], 0x114C4, 0x114C5, 0x114C7, [0x11580, 0x115AE], [0x11600, 0x1162F], 0x11644, [0x11680, 0x116AA], [0x118A0, 0x118DF], 0x118FF, [0x11AC0, 0x11AF8], [0x12000, 0x12398], [0x12400, 0x1246E], [0x13000, 0x1342E], [0x16800, 0x16A38], [0x16A40, 0x16A5E], [0x16AD0, 0x16AED], [0x16B00, 0x16B2F], [0x16B40, 0x16B43], [0x16B63, 0x16B77], [0x16B7D, 0x16B8F], [0x16F00, 0x16F44], 0x16F50, [0x16F93, 0x16F9F], [0x1BC00, 0x1BC6A], [0x1BC70, 0x1BC7C], [0x1BC80, 0x1BC88], [0x1BC90, 0x1BC99], [0x1D400, 0x1D454], [0x1D456, 0x1D49C], 0x1D49E, 0x1D49F, 0x1D4A2, 0x1D4A5, 0x1D4A6, [0x1D4A9, 0x1D4AC], [0x1D4AE, 0x1D4B9], 0x1D4BB, [0x1D4BD, 0x1D4C3], [0x1D4C5, 0x1D505], [0x1D507, 0x1D50A], [0x1D50D, 0x1D514], [0x1D516, 0x1D51C], [0x1D51E, 0x1D539], [0x1D53B, 0x1D53E], [0x1D540, 0x1D544], 0x1D546, [0x1D54A, 0x1D550], [0x1D552, 0x1D6A5], [0x1D6A8, 0x1D6C0], [0x1D6C2, 0x1D6DA], [0x1D6DC, 0x1D6FA], [0x1D6FC, 0x1D714], [0x1D716, 0x1D734], [0x1D736, 0x1D74E], [0x1D750, 0x1D76E], [0x1D770, 0x1D788], [0x1D78A, 0x1D7A8], [0x1D7AA, 0x1D7C2], [0x1D7C4, 0x1D7CB], [0x1E800, 0x1E8C4], [0x1EE00, 0x1EE03], [0x1EE05, 0x1EE1F], 0x1EE21, 0x1EE22, 0x1EE24, 0x1EE27, [0x1EE29, 0x1EE32], [0x1EE34, 0x1EE37], 0x1EE39, 0x1EE3B, 0x1EE42, 0x1EE47, 0x1EE49, 0x1EE4B, [0x1EE4D, 0x1EE4F], 0x1EE51, 0x1EE52, 0x1EE54, 0x1EE57, 0x1EE59, 0x1EE5B, 0x1EE5D, 0x1EE5F, 0x1EE61, 0x1EE62, 0x1EE64, [0x1EE67, 0x1EE6A], [0x1EE6C, 0x1EE72], [0x1EE74, 0x1EE77], [0x1EE79, 0x1EE7C], 0x1EE7E, [0x1EE80, 0x1EE89], [0x1EE8B, 0x1EE9B], [0x1EEA1, 0x1EEA3], [0x1EEA5, 0x1EEA9], [0x1EEAB, 0x1EEBB], [0x1F130, 0x1F149], [0x1F150, 0x1F169], [0x1F170, 0x1F189]],
 	MidLetter: [0x003A, 0x00B7, 0x02D7, 0x0387, 0x05F4, 0x2027, 0xFE13, 0xFE55, 0xFF1A],
-	MidNum: [0x002C, 0x003B, 0x037E, 0x0589, [0x060C, 0x060D], 0x066C, 0x07F8, 0x2044, 0xFE10, 0xFE14, 0xFE50, 0xFE54, 0xFF0C, 0xFF1B],
+	MidNum: [0x002C, 0x003B, 0x037E, 0x0589, 0x060C, 0x060D, 0x066C, 0x07F8, 0x2044, 0xFE10, 0xFE14, 0xFE50, 0xFE54, 0xFF0C, 0xFF1B],
 	MidNumLet: [0x002E, 0x2018, 0x2019, 0x2024, 0xFE52, 0xFF07, 0xFF0E],
 	Numeric: [[0x0030, 0x0039], [0x0660, 0x0669], 0x066B, [0x06F0, 0x06F9], [0x07C0, 0x07C9], [0x0966, 0x096F], [0x09E6, 0x09EF], [0x0A66, 0x0A6F], [0x0AE6, 0x0AEF], [0x0B66, 0x0B6F], [0x0BE6, 0x0BEF], [0x0C66, 0x0C6F], [0x0CE6, 0x0CEF], [0x0D66, 0x0D6F], [0x0DE6, 0x0DEF], [0x0E50, 0x0E59], [0x0ED0, 0x0ED9], [0x0F20, 0x0F29], [0x1040, 0x1049], [0x1090, 0x1099], [0x17E0, 0x17E9], [0x1810, 0x1819], [0x1946, 0x194F], [0x19D0, 0x19D9], [0x1A80, 0x1A89], [0x1A90, 0x1A99], [0x1B50, 0x1B59], [0x1BB0, 0x1BB9], [0x1C40, 0x1C49], [0x1C50, 0x1C59], [0xA620, 0xA629], [0xA8D0, 0xA8D9], [0xA900, 0xA909], [0xA9D0, 0xA9D9], [0xA9F0, 0xA9F9], [0xAA50, 0xAA59], [0xABF0, 0xABF9], [0x104A0, 0x104A9], [0x11066, 0x1106F], [0x110F0, 0x110F9], [0x11136, 0x1113F], [0x111D0, 0x111D9], [0x112F0, 0x112F9], [0x114D0, 0x114D9], [0x11650, 0x11659], [0x116C0, 0x116C9], [0x118E0, 0x118E9], [0x16A60, 0x16A69], [0x16B50, 0x16B59], [0x1D7CE, 0x1D7FF]],
-	ExtendNumLet: [0x005F, [0x203F, 0x2040], 0x2054, [0xFE33, 0xFE34], [0xFE4D, 0xFE4F], 0xFF3F]
+	ExtendNumLet: [0x005F, 0x203F, 0x2040, 0x2054, 0xFE33, 0xFE34, [0xFE4D, 0xFE4F], 0xFF3F]
 };
 
 /*!
@@ -16010,7 +16779,7 @@ unicodeJS.wordbreakproperties = {
  * Implementation of Unicode 7.0.0 Default Word Boundary Specification
  * http://www.unicode.org/reports/tr29/#Default_Grapheme_Cluster_Table
  *
- * @copyright 2013–2014 UnicodeJS team and others; see AUTHORS.txt
+ * @copyright 2013–2015 UnicodeJS team and others; see AUTHORS.txt
  * @license The MIT License (MIT); see LICENSE.txt
  */
 ( function () {
@@ -16136,7 +16905,10 @@ unicodeJS.wordbreakproperties = {
 		}
 
 		// get some context
-		var lft = [], rgt = [], l = 0, r = 0;
+		var lft = [],
+			rgt = [],
+			l = 0,
+			r = 0;
 		rgt.push( getProperty( string.read( pos + r  ) ) );
 		lft.push( getProperty( string.read( pos - l - 1 ) ) );
 
@@ -16164,7 +16936,7 @@ unicodeJS.wordbreakproperties = {
 		// We've reached the end of an Extend|Format sequence, collapse it
 		while ( lft[0] === 'Extend' || lft[0] === 'Format' ) {
 			l++;
-			if ( pos - l - 1 <= 0) {
+			if ( pos - l - 1 <= 0 ) {
 				// start of document
 				return true;
 			}
@@ -16413,7 +17185,7 @@ unicodeJS.wordbreakproperties = {
 /*!
  * VisualEditor namespace.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -16442,7 +17214,7 @@ ve.now = ( function () {
 /*!
  * VisualEditor utilities.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -16589,27 +17361,26 @@ ve.extendObject = $.extend;
  *
  * Includes a replacement for broken implementation of Array.prototype.splice() found in Opera 12.
  *
- * @param {Array|ve.dm.BranchNode} arr Object supporting .splice() to remove from and insert into. Will be modified
+ * @param {Array|ve.dm.BranchNode} arr Target object (must have `splice` method, object will be modified)
  * @param {number} offset Offset in arr to splice at. This may NOT be negative, unlike the
- *  'index' parameter in Array#splice
+ *  'index' parameter in Array#splice.
  * @param {number} remove Number of elements to remove at the offset. May be zero
- * @param {Array} data Array of items to insert at the offset. May not be empty if remove=0
- * @returns {Array} Array of items removed
+ * @param {Array} data Array of items to insert at the offset. Must be non-empty if remove=0
+ * @return {Array} Array of items removed
  */
 ve.batchSplice = ( function () {
 	var arraySplice;
 
-	// This yields 'true' on Opera 12.15.
-	function isSpliceBroken() {
-		var n = 256, a = [];
+	// This yields 'false' on Opera 12.15.
+	function spliceWorks() {
+		var n = 256,
+			a = [];
 		a[n] = 'a';
-
 		a.splice( n + 1, 0, 'b' );
-
-		return a[n] !== 'a';
+		return a[n] === 'a';
 	}
 
-	if ( !isSpliceBroken() ) {
+	if ( spliceWorks() ) {
 		arraySplice = Array.prototype.splice;
 	} else {
 		// Standard Array.prototype.splice() function implemented using .slice() and .push().
@@ -16636,7 +17407,11 @@ ve.batchSplice = ( function () {
 	return function ( arr, offset, remove, data ) {
 		// We need to splice insertion in in batches, because of parameter list length limits which vary
 		// cross-browser - 1024 seems to be a safe batch size on all browsers
-		var splice, index = 0, batchSize = 1024, toRemove = remove, spliced, removed = [];
+		var splice, spliced,
+			index = 0,
+			batchSize = 1024,
+			toRemove = remove,
+			removed = [];
 
 		splice = Array.isArray( arr ) ? arraySplice : arr.splice;
 
@@ -16663,6 +17438,20 @@ ve.batchSplice = ( function () {
 }() );
 
 /**
+ * Insert one array into another.
+ *
+ * Shortcut for `ve.batchSplice( dst, offset, 0, src )`.
+ *
+ * @see #batchSplice
+ * @param {Array|ve.dm.BranchNode} arr Target object (must have `splice` method)
+ * @param {number} offset Offset in arr where items will be inserted
+ * @param {Array} data Items to insert at offset
+ */
+ve.insertIntoArray = function ( dst, offset, src ) {
+	ve.batchSplice( dst, offset, 0, src );
+};
+
+/**
  * Push one array into another.
  *
  * This is the equivalent of arr.push( d1, d2, d3, ... ) except that arguments are
@@ -16675,7 +17464,9 @@ ve.batchSplice = ( function () {
 ve.batchPush = function ( arr, data ) {
 	// We need to push insertion in batches, because of parameter list length limits which vary
 	// cross-browser - 1024 seems to be a safe batch size on all browsers
-	var length, index = 0, batchSize = 1024;
+	var length,
+		index = 0,
+		batchSize = 1024;
 	while ( index < data.length ) {
 		// Call arr.push( i0, i1, i2, ..., i1023 );
 		length = arr.push.apply(
@@ -16684,17 +17475,6 @@ ve.batchPush = function ( arr, data ) {
 		index += batchSize;
 	}
 	return length;
-};
-
-/**
- * Insert one array into another.
- *
- * This just a shortcut for `ve.batchSplice( dst, offset, 0, src )`.
- *
- * @see #batchSplice
- */
-ve.insertIntoArray = function ( dst, offset, src ) {
-	ve.batchSplice( dst, offset, 0, src );
 };
 
 /**
@@ -16797,11 +17577,24 @@ ve.selectEnd = function ( element ) {
  *
  * @param {string} key Message key
  * @param {Mixed...} [params] Message parameters
+ * @returns {string} Localized message
  */
 ve.msg = function () {
 	// Avoid using bind because ve.init.platform doesn't exist yet.
 	// TODO: Fix dependency issues between ve.js and ve.init.platform
 	return ve.init.platform.getMessage.apply( ve.init.platform, arguments );
+};
+
+/**
+ * Get a config value.
+ *
+ * @param {string|string[]} key Config key, or list of keys
+ * @returns {Mixed|Object} Config value, or keyed object of config values if list of keys provided
+ */
+ve.config = function () {
+	// Avoid using bind because ve.init.platform doesn't exist yet.
+	// TODO: Fix dependency issues between ve.js and ve.init.platform
+	return ve.init.platform.getConfig.apply( ve.init.platform, arguments );
 };
 
 /**
@@ -16875,40 +17668,29 @@ ve.graphemeSafeSubstring = function ( text, start, end, outer ) {
  *
  * This method is basically a copy of `mw.html.escape`.
  *
- * @see #escapeHtml_escapeHtmlCharacter
  * @param {string} value Attribute value to escape
  * @returns {string} Escaped attribute value
  */
-ve.escapeHtml = function ( value ) {
-	return value.replace( /['"<>&]/g, ve.escapeHtml.escapeHtmlCharacter );
-};
-
-/**
- * Helper function for #escapeHtml to escape a character for use in HTML.
- *
- * This is a callback intended to be passed to String#replace.
- *
- * @method escapeHtml_escapeHtmlCharacter
- * @private
- * @param {string} key Property name of value being replaced
- * @returns {string} Escaped character
- */
-ve.escapeHtml.escapeHtmlCharacter = function ( value ) {
-	switch ( value ) {
-		case '\'':
-			return '&#039;';
-		case '"':
-			return '&quot;';
-		case '<':
-			return '&lt;';
-		case '>':
-			return '&gt;';
-		case '&':
-			return '&amp;';
-		default:
-			return value;
+ve.escapeHtml = ( function () {
+	function escape( value ) {
+		switch ( value ) {
+			case '\'':
+				return '&#039;';
+			case '"':
+				return '&quot;';
+			case '<':
+				return '&lt;';
+			case '>':
+				return '&gt;';
+			case '&':
+				return '&amp;';
+		}
 	}
-};
+
+	return function ( value ) {
+		return value.replace( /['"<>&]/g, escape );
+	};
+}() );
 
 /**
  * Generate HTML attributes.
@@ -16972,7 +17754,8 @@ ve.getOpeningHtmlTag = function ( tagName, attributes ) {
  * @returns {Object}
  */
 ve.getDomAttributes = function ( element ) {
-	var result = {}, i;
+	var i,
+		result = {};
 	for ( i = 0; i < element.attributes.length; i++ ) {
 		result[element.attributes[i].name] = element.attributes[i].value;
 	}
@@ -16982,9 +17765,11 @@ ve.getDomAttributes = function ( element ) {
 /**
  * Set the attributes of a DOM element as an object with key/value pairs.
  *
+ * Use the `null` or `undefined` value to ensure an attribute's absence.
+ *
  * @param {HTMLElement} element DOM element to apply attributes to
  * @param {Object} attributes Attributes to apply
- * @param {string[]} [whitelist] List of attributes to exclusively allow (all lower case names)
+ * @param {string[]} [whitelist] List of attributes to exclusively allow (all lowercase names)
  */
 ve.setDomAttributes = function ( element, attributes, whitelist ) {
 	var key;
@@ -16993,12 +17778,12 @@ ve.setDomAttributes = function ( element, attributes, whitelist ) {
 		return;
 	}
 	for ( key in attributes ) {
+		if ( whitelist && whitelist.indexOf( key.toLowerCase() ) === -1 ) {
+			continue;
+		}
 		if ( attributes[key] === undefined || attributes[key] === null ) {
 			element.removeAttribute( key );
 		} else {
-			if ( whitelist && whitelist.indexOf( key.toLowerCase() ) === -1 ) {
-				continue;
-			}
 			element.setAttribute( key, attributes[key] );
 		}
 	}
@@ -17317,7 +18102,8 @@ ve.transformStyleAttributes = function ( html, unmask ) {
 	var xmlDoc, fromAttr, toAttr, i, len,
 		maskAttrs = [
 			'style', // IE normalizes 'color:#ffd' to 'color: rgb(255, 255, 221);'
-			'bgcolor' // IE normalizes '#FFDEAD' to '#ffdead'
+			'bgcolor', // IE normalizes '#FFDEAD' to '#ffdead'
+			'color' // IE normalized 'Red' to 'red'
 		];
 
 	// Parse the HTML into an XML DOM
@@ -17644,7 +18430,7 @@ ve.getSystemPlatform = function () {
 /*!
  * VisualEditor UserInterface TriggerListener class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -17725,11 +18511,12 @@ ve.TriggerListener.prototype.getTriggers = function ( name ) {
 /*!
  * VisualEditor tracking methods.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 ( function () {
-	var callbacks = $.Callbacks( 'memory' ), queue = [];
+	var callbacks = $.Callbacks( 'memory' ),
+		queue = [];
 
 	/**
 	 * Track an analytic event.
@@ -17792,7 +18579,7 @@ ve.TriggerListener.prototype.getTriggers = function ( name ) {
 /*!
  * VisualEditor Initialization namespace.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -17801,13 +18588,13 @@ ve.TriggerListener.prototype.getTriggers = function ( name ) {
  * @singleton
  */
 ve.init = {
-	//platform: Initialized in a file containing a subclass of ve.init.Platform
+	// platform: Initialized in a file containing a subclass of ve.init.Platform
 };
 
 /*!
  * VisualEditor Initialization Platform class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -17849,7 +18636,7 @@ ve.init.Platform.static.getSystemPlatform = function () {
  * Check whether we are running in Internet Explorer.
  *
  * HACK: This should not be needed, and it should eventually be removed. If this hasn't died
- * in a fire by the end of September 2014, Roan has failed.
+ * in a fire by the end of September 2015, Roan has failed.
  *
  * @static
  * @method
@@ -17871,6 +18658,18 @@ ve.init.Platform.static.isInternetExplorer = function () {
  */
 ve.init.Platform.prototype.getExternalLinkUrlProtocolsRegExp = function () {
 	throw new Error( 've.init.Platform.getExternalLinkUrlProtocolsRegExp must be overridden in subclass' );
+};
+
+/**
+ * Get a config value from the platform.
+ *
+ * @method
+ * @abstract
+ * @param {string|string[]} key Config key, or list of keys
+ * @returns {Mixed|Object} Config value, or keyed object of config values if list of keys provided
+ */
+ve.init.Platform.prototype.getConfig = function () {
+	throw new Error( 've.init.Platform.getConfig must be overridden in subclass' );
 };
 
 /**
@@ -18025,7 +18824,7 @@ ve.init.Platform.prototype.getInitializedPromise = function () {
 /*!
  * VisualEditor Initialization Target class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -18158,7 +18957,7 @@ ve.init.Target.static.documentCommands = ['commandHelp'];
  *
  * @type {string[]} List of command names
  */
-ve.init.Target.static.targetCommands = ['findAndReplace'];
+ve.init.Target.static.targetCommands = ['findAndReplace', 'findNext', 'findPrevious'];
 
 /**
  * List of commands to exclude from the target entirely
@@ -18349,7 +19148,7 @@ ve.init.Target.prototype.setupToolbar = function ( surface ) {
 /*!
  * VisualEditor stand-alone Initialization namespace.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -18364,7 +19163,7 @@ ve.init.sa = {
 /*!
  * VisualEditor Standalone Initialization Platform class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -18546,7 +19345,7 @@ OO.ui.msg = ve.init.platform.getMessage.bind( ve.init.platform );
 /*!
  * VisualEditor Standalone Initialization Target class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -18653,7 +19452,7 @@ ve.init.sa.Target.prototype.setupToolbar = function ( surface ) {
 /*!
  * VisualEditor Range class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -18761,6 +19560,9 @@ ve.Range.prototype.clone = function () {
 /**
  * Check if an offset is within the range.
  *
+ * Specifically we mean the whole element at a specific offset, so in effect
+ * this is the same as #containsRange( new ve.Range( offset, offset + 1 ) ).
+ *
  * @param {number} offset Offset to check
  * @returns {boolean} If offset is within the range
  */
@@ -18775,7 +19577,7 @@ ve.Range.prototype.containsOffset = function ( offset ) {
  * @returns {boolean} If other range is within the range
  */
 ve.Range.prototype.containsRange = function ( range ) {
-	return range.start >= this.start && range.end < this.end;
+	return range.start >= this.start && range.end <= this.end;
 };
 
 /**
@@ -18890,7 +19692,7 @@ ve.Range.prototype.toJSON = function () {
 /*!
  * VisualEditor Node class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -19258,7 +20060,7 @@ ve.Node.prototype.traverseUpstream = function ( callback ) {
 /*!
  * VisualEditor BranchNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -19398,7 +20200,7 @@ ve.BranchNode.prototype.getNodeFromOffset = function ( offset, shallow ) {
 /*!
  * VisualEditor LeafNode mixin.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -19427,7 +20229,7 @@ ve.LeafNode.prototype.hasChildren = function () {
 /*!
  * VisualEditor Document class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -19979,10 +20781,21 @@ ve.Document.prototype.getCoveredSiblingGroups = function ( range ) {
 	return groups;
 };
 
+/**
+ * Test whether a range lies within a single leaf node.
+ *
+ * @param {ve.Range} range The range to test
+ * @returns {boolean} Whether the range lies within a single node
+ */
+ve.Document.prototype.rangeInsideOneLeafNode = function ( range ) {
+	var selected = this.selectNodes( range, 'leaves' );
+	return selected.length === 1 && selected[0].nodeRange.containsRange( range ) && selected[0].indexInNode === undefined;
+};
+
 /*!
  * VisualEditor EventSequencer class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -20414,7 +21227,7 @@ ve.EventSequencer.prototype.callListener = function ( timing, eventName, i, list
 /*!
  * VisualEditor DataModel namespace.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -20423,16 +21236,16 @@ ve.EventSequencer.prototype.callListener = function ( timing, eventName, i, list
  * @singleton
  */
 ve.dm = {
-	//modelRegistry: Initialized in ve.dm.ModelRegistry.js
-	//nodeFactory: Initialized in ve.dm.NodeFactory.js
-	//annotationFactory: Initialized in ve.dm.AnnotationFactory.js
-	//converter: Initialized in ve.dm.Converter.js
+	// modelRegistry: Initialized in ve.dm.ModelRegistry.js
+	// nodeFactory: Initialized in ve.dm.NodeFactory.js
+	// annotationFactory: Initialized in ve.dm.AnnotationFactory.js
+	// converter: Initialized in ve.dm.Converter.js
 };
 
 /*!
  * VisualEditor DataModel Model class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -20880,7 +21693,7 @@ ve.dm.Model.prototype.getHashObject = function () {
 /*!
  * VisualEditor ModelRegistry class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 ( function ( ve ) {
 
@@ -20934,7 +21747,8 @@ ve.dm.Model.prototype.getHashObject = function () {
 	 * @param {Mixed} value
 	 */
 	function addType( obj ) {
-		var i, len, o = obj;
+		var i, len,
+			o = obj;
 		for ( i = 1, len = arguments.length - 2; i < len; i++ ) {
 			if ( o[arguments[i]] === undefined ) {
 				o[arguments[i]] = {};
@@ -20957,7 +21771,8 @@ ve.dm.Model.prototype.getHashObject = function () {
 	 * @throws No factory associated with this ve.dm.Model subclass
 	 */
 	ve.dm.ModelRegistry.prototype.register = function ( constructor ) {
-		var i, j, tags, types, name = constructor.static && constructor.static.name;
+		var i, j, tags, types,
+			name = constructor.static && constructor.static.name;
 		if ( typeof name !== 'string' || name === '' ) {
 			throw new Error( 'Model names must be strings and must not be empty' );
 		}
@@ -21125,7 +21940,9 @@ ve.dm.Model.prototype.getHashObject = function () {
 		}
 
 		function matchWithFunc( types, tag, mustMatchAll ) {
-			var i, queue = [], queue2 = [];
+			var i,
+				queue = [],
+				queue2 = [];
 			for ( i = 0; i < types.length; i++ ) {
 				// Queue string matches and regexp matches separately
 				queue = queue.concat( ve.getProp( reg.modelsByTypeAndTag, 1, types[i], tag ) || [] );
@@ -21165,7 +21982,10 @@ ve.dm.Model.prototype.getHashObject = function () {
 		}
 
 		function matchWithoutFunc( types, tag, mustMatchAll ) {
-			var i, queue = [], queue2 = [], winningName = null;
+			var i,
+				queue = [],
+				queue2 = [],
+				winningName = null;
 			for ( i = 0; i < types.length; i++ ) {
 				// Queue string and regexp matches separately
 				queue = queue.concat( ve.getProp( reg.modelsByTypeAndTag, 0, types[i], tag ) || [] );
@@ -21325,7 +22145,7 @@ ve.dm.Model.prototype.getHashObject = function () {
 /*!
  * VisualEditor DataModel NodeFactory class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -21585,7 +22405,7 @@ ve.dm.nodeFactory = new ve.dm.NodeFactory();
 /*!
  * VisualEditor DataModel AnnotationFactory class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -21611,7 +22431,7 @@ ve.dm.annotationFactory = new ve.dm.AnnotationFactory();
 /*!
  * VisualEditor DataModel AnnotationSet class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -21790,7 +22610,9 @@ ve.dm.AnnotationSet.prototype.containsIndex = function ( storeIndex ) {
  * @returns {boolean} There is at least one annotation in set that is also in the set
  */
 ve.dm.AnnotationSet.prototype.containsAnyOf = function ( set ) {
-	var i, length, setIndexes = set.getIndexes(), thisIndexes = this.getIndexes();
+	var i, length,
+		setIndexes = set.getIndexes(),
+		thisIndexes = this.getIndexes();
 	for ( i = 0, length = setIndexes.length; i < length; i++ ) {
 		if ( ve.indexOf( setIndexes[i], thisIndexes ) !== -1 ) {
 			return true;
@@ -21807,7 +22629,9 @@ ve.dm.AnnotationSet.prototype.containsAnyOf = function ( set ) {
  * @returns {boolean} All annotations in set are also in the set
  */
 ve.dm.AnnotationSet.prototype.containsAllOf = function ( set ) {
-	var i, length, setIndexes = set.getIndexes(), thisIndexes = this.getIndexes();
+	var i, length,
+		setIndexes = set.getIndexes(),
+		thisIndexes = this.getIndexes();
 	for ( i = 0, length = setIndexes.length; i < length; i++ ) {
 		if ( ve.indexOf( setIndexes[i], thisIndexes ) === -1 ) {
 			return false;
@@ -21953,7 +22777,9 @@ ve.dm.AnnotationSet.prototype.compareTo = function ( annotationSet ) {
  * @returns {boolean} The annotation sets are equal
  */
 ve.dm.AnnotationSet.prototype.equalsInOrder = function ( set ) {
-	var i, len, ourIndexes = this.getIndexes(), theirIndexes = set.getIndexes();
+	var i, len,
+		ourIndexes = this.getIndexes(),
+		theirIndexes = set.getIndexes();
 	if ( ourIndexes.length !== theirIndexes.length ) {
 		return false;
 	}
@@ -22163,7 +22989,7 @@ ve.dm.AnnotationSet.prototype.intersectWith = function ( set ) {
 /*!
  * VisualEditor DataModel MetaItemFactory class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -22219,7 +23045,7 @@ ve.dm.metaItemFactory = new ve.dm.MetaItemFactory();
 /*!
  * VisualEditor DataModel ClassAttribute class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see AUTHORS.txt
+ * @copyright 2011-2015 VisualEditor Team and others; see AUTHORS.txt
  * @license The MIT License (MIT); see LICENSE.txt
  */
 
@@ -22323,9 +23149,93 @@ ve.dm.ClassAttributeNode.static.getClassAttrFromAttributes = function ( attribut
 };
 
 /*!
+ * VisualEditor DataModel Alignable node.
+ *
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ */
+
+/**
+ * A mixin class for Alignable nodes.
+ *
+ * @class
+ * @abstract
+ * @constructor
+ */
+ve.dm.AlignableNode = function VeDmAlignableNode() {
+};
+
+/* Inheritance */
+
+OO.initClass( ve.dm.AlignableNode );
+
+/* Static properties */
+
+/**
+ * CSS class to use for each alignment
+ *
+ * @static
+ * @property {Object}
+ * @inheritable
+ */
+ve.dm.AlignableNode.static.cssClasses = {
+	left: 've-align-left',
+	right: 've-align-right',
+	center: 've-align-center'
+};
+
+/**
+ * Creates attributes for the data element from DOM elements
+ *
+ * @static
+ * @param {Node[]} domElements DOM elements from converter
+ * @param {ve.dm.Converter} converter Converter object
+ * @return {Object} Attributes for data element
+ */
+ve.dm.AlignableNode.static.toDataElementAttributes = function ( domElements ) {
+	var a, align,
+		classList = domElements[0].classList,
+		cssClasses = this.cssClasses;
+
+	for ( a in cssClasses ) {
+		if ( classList.contains( cssClasses[a] ) ) {
+			align = a;
+			break;
+		}
+	}
+
+	if ( align ) {
+		return {
+			align: align,
+			originalAlign: align
+		};
+	} else {
+		return {};
+	}
+};
+
+/**
+ * Modify DOM element from the data element during toDomElements
+ *
+ * @param {Node} domElement Parent DOM element
+ * @param {Object} dataElement Linear model element
+ * @param {HTMLDocument} doc HTML document for creating elements
+ * @return {Object} Attributes for DOM element
+ */
+ve.dm.AlignableNode.static.modifyDomElement = function ( domElement, dataElement ) {
+	if ( dataElement.attributes.align !== dataElement.attributes.originalAlign ) {
+		if ( dataElement.attributes.originalAlign ) {
+			$( domElement ).removeClass( 've-align-' + dataElement.attributes.originalAlign );
+		}
+		if ( dataElement.attributes.align ) {
+			$( domElement ).addClass( 've-align-' + dataElement.attributes.align );
+		}
+	}
+};
+
+/*!
  * VisualEditor DataModel Focusable node.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -22348,7 +23258,7 @@ ve.dm.FocusableNode.static.isFocusable = true;
 /*!
  * VisualEditor DataModel Scalable class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -22475,7 +23385,7 @@ OO.mixinClass( ve.dm.Scalable, OO.EventEmitter );
  * @returns {Object} Dimensions object with width and height
  */
 ve.dm.Scalable.static.getDimensionsFromValue = function ( dimensions, ratio ) {
-	dimensions = ve.copy ( dimensions );
+	dimensions = ve.copy( dimensions );
 
 	// Normalize for 'empty' values that are specifically given
 	// so if '' is explicitly given, it should be translated to 0
@@ -22960,9 +23870,435 @@ ve.dm.Scalable.prototype.isDimensionsObjectValid = function ( dimensions ) {
 };
 
 /*!
+ * VisualEditor DataModel ResourceProvider class.
+ *
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ */
+
+/**
+ * Resource Provider object.
+ *
+ * @class
+ * @mixins OO.EventEmitter
+ *
+ * @constructor
+ * @param {string} apiurl The URL to the api
+ * @param {Object} [config] Configuration options
+ * @cfg {number} fetchLimit The default number of results to fetch
+ * @cfg {string} lang The language of the API
+ * @cfg {number} offset Initial offset, if relevant, to call results from
+ * @cfg {Object} ajaxSettings The settings for the ajax call
+ * @cfg {Object} staticParams The data parameters that are static and should
+ *  always be sent to the API request, as opposed to user parameters.
+ * @cfg {Object} userParams Initial user parameters to be sent as data to
+ *  the API request. These can change per request, like the search query term
+ *  or sizing parameters for images, etc.
+ */
+ve.dm.APIResultsProvider = function VeDmResourceProvider( apiurl, config ) {
+	config = config || {};
+
+	this.setAPIurl( apiurl );
+	this.fetchLimit = config.fetchLimit || 30;
+	this.lang = config.lang;
+	this.offset = config.offset || 0;
+	this.ajaxSettings = config.ajaxSettings || {};
+
+	this.staticParams = config.staticParams || {};
+	this.userParams = config.userParams || {};
+
+	this.toggleDepleted( false );
+
+	// Mixin constructors
+	OO.EventEmitter.call( this );
+};
+
+/* Setup */
+OO.mixinClass( ve.dm.APIResultsProvider, OO.EventEmitter );
+
+/* Methods */
+
+/**
+ * Get results from the source
+ *
+ * @param {number} howMany Number of results to ask for
+ * @return {jQuery.Promise} Promise that is resolved into an array
+ * of available results, or is rejected if no results are available.
+ */
+ve.dm.APIResultsProvider.prototype.getResults = function () {
+	var xhr,
+		deferred = $.Deferred(),
+		allParams = $.extend( {}, this.getStaticParams(), this.getUserParams() );
+
+	xhr = $.getJSON( this.getAPIurl(), allParams )
+		.done( function ( data ) {
+			if (
+				$.type( data ) !== 'array' ||
+				(
+					$.type( data ) === 'array' &&
+					data.length === 0
+				)
+			) {
+				deferred.resolve();
+			} else {
+				deferred.resolve( data );
+			}
+		} );
+	return deferred.promise( { abort: xhr.abort } );
+};
+
+/**
+ * Set API url
+ *
+ * @param {string} apiurl API url
+ */
+ve.dm.APIResultsProvider.prototype.setAPIurl = function ( apiurl ) {
+	this.apiurl = apiurl;
+};
+
+/**
+ * Set api url
+ *
+ * @returns {string} API url
+ */
+ve.dm.APIResultsProvider.prototype.getAPIurl = function () {
+	return this.apiurl;
+};
+
+/**
+ * Get the static, non-changing data parameters sent to the API
+ *
+ * @returns {Object} Data parameters
+ */
+ve.dm.APIResultsProvider.prototype.getStaticParams = function () {
+	return this.staticParams;
+};
+
+/**
+ * Get the user-inputted dybamic data parameters sent to the API
+ *
+ * @returns {Object} Data parameters
+ */
+ve.dm.APIResultsProvider.prototype.getUserParams = function () {
+	return this.userParams;
+};
+
+/**
+ * Set the data parameters sent to the API
+ *
+ * @param {Object} params User defined data parameters
+ */
+ve.dm.APIResultsProvider.prototype.setUserParams = function ( params ) {
+	// Assymetrically compare (params is subset of this.userParams)
+	if ( !ve.compare( params, this.userParams, true ) ) {
+		this.userParams = $.extend( {}, this.userParams, params );
+		// Reset offset
+		this.setOffset( 0 );
+		// Reset depleted status
+		this.toggleDepleted( false );
+	}
+};
+
+/**
+ * Get fetch limit or 'page' size. This is the number
+ * of results per request.
+ *
+ * @returns {number} limit
+ */
+ve.dm.APIResultsProvider.prototype.getDefaultFetchLimit = function () {
+	return this.limit;
+};
+
+/**
+ * Set limit
+ *
+ * @param {number} limit Default number of results to fetch from the API
+ */
+ve.dm.APIResultsProvider.prototype.setDefaultFetchLimit = function ( limit ) {
+	this.limit = limit;
+};
+
+/**
+ * Get provider API language
+ *
+ * @returns {string} Provider API language
+ */
+ve.dm.APIResultsProvider.prototype.getLang = function () {
+	return this.lang;
+};
+
+/**
+ * Set provider API language
+ *
+ * @param {string} lang Provider API language
+ */
+ve.dm.APIResultsProvider.prototype.setLang = function ( lang ) {
+	this.lang = lang;
+};
+
+/**
+ * Get result offset
+ *
+ * @returns {number} Offset Results offset for the upcoming request
+ */
+ve.dm.APIResultsProvider.prototype.getOffset = function () {
+	return this.offset;
+};
+
+/**
+ * Set result offset
+ *
+ * @param {number} Results offset for the upcoming request
+ */
+ve.dm.APIResultsProvider.prototype.setOffset = function ( offset ) {
+	this.offset = offset;
+};
+
+/**
+ * Check whether the provider is depleted and has no more results
+ * to hand off.
+ *
+ * @returns {boolean} The provider is depleted
+ */
+ve.dm.APIResultsProvider.prototype.isDepleted = function () {
+	return this.depleted;
+};
+
+/**
+ * Toggle depleted state
+ *
+ * @param {boolean} isDepleted The provider is depleted
+ */
+ve.dm.APIResultsProvider.prototype.toggleDepleted = function ( isDepleted ) {
+	this.depleted = isDepleted !== undefined ? isDepleted : !this.depleted;
+};
+
+/**
+ * Get the default ajax settings
+ *
+ * @returns {Object} Ajax settings
+ */
+ve.dm.APIResultsProvider.prototype.getAjaxSettings = function () {
+	return this.ajaxSettings;
+};
+
+/**
+ * Get the default ajax settings
+ *
+ * @param {Object} settings Ajax settings
+ */
+ve.dm.APIResultsProvider.prototype.setAjaxSettings = function ( settings ) {
+	this.ajaxSettings = settings;
+};
+
+/*!
+ * VisualEditor DataModel ResourceQueue class.
+ *
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ */
+
+/**
+ * Resource Queue object.
+ *
+ * @class
+ * @mixins OO.EventEmitter
+ *
+ * @constructor
+ * @param {Object} [config] Configuration options
+ * @cfg {number} limit The default number of results to fetch
+ * @cfg {number} threshold The default number of extra results
+ *  that the queue should always strive to have on top of the
+ *  individual requests for items.
+ */
+ve.dm.APIResultsQueue = function VeDmResourceQueue( config ) {
+	config = config || {};
+
+	this.fileRepoPromise = null;
+	this.providers = [];
+	this.providerPromises = [];
+	this.queue = [];
+
+	this.params = {};
+
+	this.limit = config.limit || 20;
+	this.setThreshold( config.threshold || 10 );
+
+	// Mixin constructors
+	OO.EventEmitter.call( this );
+};
+
+/* Setup */
+OO.mixinClass( ve.dm.APIResultsQueue, OO.EventEmitter );
+
+/* Methods */
+
+/**
+ * Set up the queue and its resources.
+ * This should be overrided if there are any setup steps to perform.
+ *
+ * @return {jQuery.Promise} Promise that resolves when the resources
+ *  are set up. Note: The promise must have an .abort() functionality.
+ */
+ve.dm.APIResultsQueue.prototype.setup = function () {
+	return $.Deferred().resolve().promise( { abort: $.noop } );
+};
+
+/**
+ * Get items from the queue
+ *
+ * @param {number} [howMany] How many items to retrieve. Defaults to the
+ *  default limit supplied on initialization.
+ * @return {jQuery.Promise} Promise that resolves into an array of items.
+ */
+ve.dm.APIResultsQueue.prototype.get = function ( howMany ) {
+	var fetchingPromise = null,
+		me = this;
+
+	howMany = howMany || this.limit;
+
+	// Check if the queue has enough items
+	if ( this.queue.length < howMany + this.threshold ) {
+		// Call for more results
+		fetchingPromise = this.queryProviders( howMany + this.threshold )
+			.then( function ( items ) {
+				// Add to the queue
+				me.queue = me.queue.concat.apply( me.queue, items );
+			} );
+	}
+
+	return $.when( fetchingPromise )
+		.then( function () {
+			return me.queue.splice( 0, howMany );
+		} );
+
+};
+
+/**
+ * Get results from all providers
+ *
+ * @param {number} [howMany] How many items to retrieve. Defaults to the
+ *  default limit supplied on initialization.
+ * @return {jQuery.Promise} Promise that is resolved into an array
+ *  of fetched items. Note: The promise must have an .abort() functionality.
+ */
+ve.dm.APIResultsQueue.prototype.queryProviders = function ( howMany ) {
+	var i, len,
+		queue = this;
+
+	// Make sure there are resources set up
+	return this.setup()
+		.then( function () {
+			// Abort previous requests
+			for ( i = 0, len = queue.providerPromises.length; i < len; i++ ) {
+				queue.providerPromises[i].abort();
+			}
+			queue.providerPromises = [];
+			// Set up the query to all providers
+			for ( i = 0, len = queue.providers.length; i < len; i++ ) {
+				if ( !queue.providers[i].isDepleted() ) {
+					queue.providerPromises.push(
+						queue.providers[i].getResults( howMany )
+					);
+				}
+			}
+
+			return $.when.apply( $, queue.providerPromises )
+				.then( Array.prototype.concat.bind( [] ) );
+		} );
+};
+
+/**
+ * Set the search query for all the providers.
+ *
+ * This also makes sure to abort any previous promises.
+ *
+ * @param {Object} params API search parameters
+ */
+ve.dm.APIResultsQueue.prototype.setParams = function ( params ) {
+	var i, len;
+	if ( !ve.compare( params, this.params, true ) ) {
+		this.params = ve.extendObject( this.params, params );
+		// Reset queue
+		this.queue = [];
+		// Reset promises
+		for ( i = 0, len = this.providerPromises.length; i < len; i++ ) {
+			this.providerPromises[i].abort();
+		}
+		// Change queries
+		for ( i = 0, len = this.providers.length; i < len; i++ ) {
+			this.providers[i].setUserParams( this.params );
+		}
+	}
+};
+
+/**
+ * Get the data parameters sent to the API
+ *
+ * @returns {Object} params API search parameters
+ */
+ve.dm.APIResultsQueue.prototype.getParams = function () {
+	return this.params;
+};
+
+/**
+ * Set the providers
+ *
+ * @param {ve.dm.APIResultsProvider[]} providers An array of providers
+ */
+ve.dm.APIResultsQueue.prototype.setProviders = function ( providers ) {
+	this.providers = providers;
+};
+
+/**
+ * Add a provbider to the group
+ *
+ * @param {ve.dm.APIResultsProvider} provider A provider object
+ */
+ve.dm.APIResultsQueue.prototype.addProvider = function ( provider ) {
+	this.providers.push( provider );
+};
+
+/**
+ * Set the providers
+ *
+ * @returns {ve.dm.APIResultsProvider[]} providers An array of providers
+ */
+ve.dm.APIResultsQueue.prototype.getProviders = function () {
+	return this.providers;
+};
+
+/**
+ * Get the queue size
+ *
+ * @return {number} Queue size
+ */
+ve.dm.APIResultsQueue.prototype.getQueueSize = function () {
+	return this.queue.length;
+};
+
+/**
+ * Set queue threshold
+ *
+ * @param {number} threshold Queue threshold, below which we will
+ *  request more items
+ */
+ve.dm.APIResultsQueue.prototype.setThreshold = function ( threshold ) {
+	this.threshold = threshold;
+};
+
+/**
+ * Get queue threshold
+ *
+ * @returns {number} threshold Queue threshold, below which we will
+ *  request more items
+ */
+ve.dm.APIResultsQueue.prototype.getThreshold = function () {
+	return this.threshold;
+};
+
+/*!
  * VisualEditor DataModel Resizable node.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -22976,6 +24312,8 @@ ve.dm.Scalable.prototype.isDimensionsObjectValid = function ( dimensions ) {
  */
 ve.dm.ResizableNode = function VeDmResizableNode() {
 	this.scalable = null;
+
+	this.connect( this, { attributeChange: 'onResizableAttributeChange' } );
 };
 
 /* Inheritance */
@@ -23006,10 +24344,27 @@ ve.dm.ResizableNode.prototype.createScalable = function () {
 	throw new Error( 've.dm.ResizableNode subclass must implement createScalable' );
 };
 
+/**
+ * Handle attribute change events from the model.
+ *
+ * @method
+ * @param {string} key Attribute key
+ * @param {string} from Old value
+ * @param {string} to New value
+ */
+ve.dm.ResizableNode.prototype.onResizableAttributeChange = function ( key ) {
+	if ( key === 'width' || key === 'height' ) {
+		this.getScalable().setCurrentDimensions( {
+			width: this.getAttribute( 'width' ),
+			height: this.getAttribute( 'height' )
+		} );
+	}
+};
+
 /*!
  * VisualEditor DataModel Node class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -23576,7 +24931,7 @@ ve.dm.Node.prototype.canBeMergedWith = function ( node ) {
 /*!
  * VisualEditor DataModel BranchNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -23799,7 +25154,7 @@ ve.dm.BranchNode.prototype.hasSlugAtOffset = function ( offset ) {
 /*!
  * VisualEditor DataModel LeafNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -23850,7 +25205,7 @@ ve.dm.LeafNode.prototype.getAnnotations = function () {
 /*!
  * VisualEditor DataModel Annotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -23998,15 +25353,17 @@ ve.dm.Annotation.prototype.getComparableObjectForSerialization = function () {
 };
 
 /**
- * HACK: Check if the annotation was generated by the converter
+ * Check if the annotation was generated by the converter
  *
  * Used by compareToForSerialization to avoid merging generated annotations.
  *
  * @returns {boolean} The annotation was generated
  */
 ve.dm.Annotation.prototype.isGenerated = function () {
-	var attributes = this.getHtmlAttributes();
-	return attributes[0] && attributes[0].values && attributes[0].values['data-parsoid'];
+	// Only annotations and nodes generated by the converter have htmlAttributes set.
+	// If this annotation was not generated by the converter, this.getHtmlAttributes()
+	// will return an empty array.
+	return this.getHtmlAttributes().length > 0;
 };
 
 /**
@@ -24043,7 +25400,7 @@ ve.dm.Annotation.prototype.compareToForSerialization = function ( annotation ) {
 /*!
  * VisualEditor DataModel InternalList class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -24253,15 +25610,18 @@ ve.dm.InternalList.prototype.getNextUniqueNumber = function () {
  * @returns {Array} Linear model data
  */
 ve.dm.InternalList.prototype.convertToData = function ( converter, doc ) {
-	var i, length, itemData,
-		itemHtmlQueue = this.getItemHtmlQueue(), list = [];
+	var i, length, itemData, div,
+		itemHtmlQueue = this.getItemHtmlQueue(),
+		list = [];
 
 	list.push( { type: 'internalList' } );
 	for ( i = 0, length = itemHtmlQueue.length; i < length; i++ ) {
 		if ( itemHtmlQueue[i] !== '' ) {
-			itemData = converter.getDataFromDomSubtree( $( '<div>', doc ).html( itemHtmlQueue[i] )[0] );
+			div = doc.createElement( 'div' );
+			div.innerHTML = itemHtmlQueue[i];
+			itemData = converter.getDataFromDomSubtree( div );
 			list = list.concat(
-				[{ type: 'internalItem' }],
+				[{ type: 'internalItem', attributes: { originalHtml: itemHtmlQueue[i] } }],
 				itemData,
 				[{ type: '/internalItem' }]
 			);
@@ -24522,7 +25882,7 @@ ve.dm.InternalList.prototype.merge = function ( list, commonLength ) {
 /*!
  * VisualEditor DataModel MetaItem class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -24688,7 +26048,7 @@ ve.dm.MetaItem.prototype.isAttached = function () {
 /*!
  * VisualEditor DataModel MetaList class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -24963,8 +26323,11 @@ ve.dm.MetaList.prototype.onTransact = function ( tx ) {
  */
 ve.dm.MetaList.prototype.findItem = function ( offset, index, group, forInsertion ) {
 	// Binary search for the item
-	var mid, items = typeof group === 'string' ? ( this.groups[group] || [] ) : this.items,
-		left = 0, right = items.length;
+	var mid,
+		items = typeof group === 'string' ? ( this.groups[group] || [] ) : this.items,
+		left = 0,
+		right = items.length;
+
 	while ( left < right ) {
 		// Equivalent to Math.floor( ( left + right ) / 2 ) but much faster in V8
 		/*jshint bitwise:false */
@@ -25071,7 +26434,8 @@ ve.dm.MetaList.prototype.removeMeta = function ( item ) {
  * @fires insert
  */
 ve.dm.MetaList.prototype.addInsertedItem = function ( offset, index, item ) {
-	var group = item.getGroup(), at = this.findItem( offset, index, null, true );
+	var group = item.getGroup(),
+		at = this.findItem( offset, index, null, true );
 	this.items.splice( at, 0, item );
 	if ( this.groups[group] ) {
 		at = this.findItem( offset, index, group, true );
@@ -25169,7 +26533,8 @@ ve.dm.TableMatrix.prototype.update = function () {
 		matrix = [],
 		rowNodes = [],
 		iterator = this.tableNode.getIterator(),
-		row = -1, col = -1;
+		row = -1,
+		col = -1;
 
 	// Handle row transitions
 	iterator.on( 'newRow', function ( rowNode ) {
@@ -25446,7 +26811,7 @@ ve.dm.TableMatrixCell.prototype.equals = function ( other ) {
 /*!
  * VisualEditor DataModel TransactionProcessor class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -25988,7 +27353,7 @@ ve.dm.TransactionProcessor.processors.replaceMetadata = function ( op ) {
 /*!
  * VisualEditor DataModel Transaction class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -26017,7 +27382,8 @@ ve.dm.Transaction = function VeDmTransaction() {
  * @throws {Error} Invalid range
  */
 ve.dm.Transaction.newFromReplacement = function ( doc, range, data, removeMetadata ) {
-	var endOffset, tx = new ve.dm.Transaction();
+	var endOffset,
+		tx = new ve.dm.Transaction();
 	endOffset = tx.pushRemoval( doc, 0, range, removeMetadata );
 	endOffset = tx.pushInsertion( doc, endOffset, endOffset, data );
 	tx.pushFinalRetain( doc, endOffset );
@@ -26584,7 +27950,9 @@ ve.dm.Transaction.newFromWrap = function ( doc, range, unwrapOuter, wrapOuter, u
 
 	// Function to generate arrays of closing elements in reverse order
 	function closingArray( openings ) {
-		var closings = [], i, len = openings.length;
+		var i,
+			closings = [],
+			len = openings.length;
 		for ( i = 0; i < len; i++ ) {
 			closings[closings.length] = { type: '/' + openings[len - i - 1].type };
 		}
@@ -26873,7 +28241,10 @@ ve.dm.Transaction.prototype.markAsApplied = function () {
  * @returns {number} Translated offset, as it will be after processing transaction
  */
 ve.dm.Transaction.prototype.translateOffset = function ( offset, excludeInsertion ) {
-	var i, op, insertLength, removeLength, prevAdjustment, cursor = 0, adjustment = 0;
+	var i, op, insertLength, removeLength, prevAdjustment,
+		cursor = 0,
+		adjustment = 0;
+
 	for ( i = 0; i < this.operations.length; i++ ) {
 		op = this.operations[i];
 		if ( op.type === 'replace' ) {
@@ -27449,7 +28820,7 @@ ve.dm.Transaction.prototype.pushRemoval = function ( doc, currentOffset, range, 
 /*!
  * VisualEditor Selection class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -27646,7 +29017,7 @@ ve.dm.selectionFactory = new OO.Factory();
 /*!
  * VisualEditor Text Selection class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -27780,7 +29151,7 @@ ve.dm.selectionFactory.register( ve.dm.LinearSelection );
 /*!
  * VisualEditor Null Selection class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -27881,7 +29252,7 @@ ve.dm.selectionFactory.register( ve.dm.NullSelection );
 /*!
  * VisualEditor Table Selection class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -28274,7 +29645,7 @@ ve.dm.selectionFactory.register( ve.dm.TableSelection );
 /*!
  * VisualEditor DataModel Surface class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -29199,7 +30570,7 @@ ve.dm.Surface.prototype.onDocumentPreSynchronize = function ( tx ) {
 /*!
  * VisualEditor DataModel Fragment class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -29708,7 +31079,9 @@ ve.dm.SurfaceFragment.prototype.getLeafNodes = function () {
  * @returns {Array} List of nodes and related information
  */
 ve.dm.SurfaceFragment.prototype.getSelectedLeafNodes = function () {
-	var i, len, selectedLeafNodes = [], leafNodes = this.getLeafNodes();
+	var i, len,
+		selectedLeafNodes = [],
+		leafNodes = this.getLeafNodes();
 	for ( i = 0, len = leafNodes.length; i < len; i++ ) {
 		if ( len === 1 || !leafNodes[i].range || leafNodes[i].range.getLength() ) {
 			selectedLeafNodes.push( leafNodes[i].node );
@@ -30355,7 +31728,8 @@ ve.dm.SurfaceFragment.prototype.isolateAndUnwrap = function ( isolateForType ) {
 
 	function createSplits( splitNodes, insertBefore ) {
 		var i, length, tx,
-			adjustment = 0, data = [];
+			adjustment = 0,
+			data = [];
 		for ( i = 0, length = splitNodes.length; i < length; i++ ) {
 			data.unshift( { type: '/' + splitNodes[i].type } );
 			data.push( splitNodes[i].getClonedElement() );
@@ -30429,7 +31803,7 @@ ve.dm.SurfaceFragment.prototype.isolateAndUnwrap = function ( isolateForType ) {
 /*!
  * VisualEditor DataString class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -30465,7 +31839,7 @@ ve.dm.DataString.prototype.read = function ( position ) {
 /*!
  * VisualEditor DataModel Document class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -31788,7 +33162,7 @@ ve.dm.Document.prototype.getDir = function () {
 /*!
  * VisualEditor DataModel DocumentSlice class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -31831,7 +33205,7 @@ ve.dm.DocumentSlice.prototype.getBalancedData = function () {
  *
  * Class containing linear data and an index-value store.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -32048,7 +33422,8 @@ ve.dm.LinearData.prototype.batchSpliceObject = function ( offset, remove, data )
  */
 ve.dm.LinearData.prototype.getDataSlice = function ( range, deep ) {
 	var end, data,
-		start = 0, length = this.getLength();
+		start = 0,
+		length = this.getLength();
 	if ( range !== undefined ) {
 		start = Math.max( 0, Math.min( length, range.start ) );
 		end = Math.max( 0, Math.min( length, range.end ) );
@@ -32074,7 +33449,7 @@ ve.dm.LinearData.prototype.clone = function () {
 /*!
  * VisualEditor DataModel DocumentSynchronizer class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -32409,7 +33784,7 @@ ve.dm.DocumentSynchronizer.prototype.synchronize = function () {
 /*!
  * VisualEditor IndexValueStore class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -32563,7 +33938,7 @@ ve.dm.IndexValueStore.prototype.merge = function ( other ) {
 /*!
  * VisualEditor DataModel Converter class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -34148,7 +35523,7 @@ ve.dm.converter = new ve.dm.Converter( ve.dm.modelRegistry, ve.dm.nodeFactory, v
  *
  * Class containing Flat linear data and an index-value store.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -34235,7 +35610,7 @@ ve.dm.FlatLinearData.prototype.isCloseElementData = function ( offset ) {
  *
  * Class containing element linear data and an index-value store.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -34259,18 +35634,22 @@ OO.inheritClass( ve.dm.ElementLinearData, ve.dm.FlatLinearData );
 /* Static Methods */
 
 /**
- * Compare two elements ignoring any annotations
+ * Compare two elements' basic properties
+ *
+ * Elements are comparable if they have the same type and attributes, or
+ * have the same text data.
  *
  * @param {Object|Array|string} a First element
  * @param {Object|Array|string} b Second element
  * @returns {boolean} Elements are comparable
  */
-ve.dm.ElementLinearData.static.compareUnannotated = function ( a, b ) {
+ve.dm.ElementLinearData.static.compareElements = function ( a, b ) {
 	if ( a === undefined || b === undefined ) {
 		return false;
 	}
 
-	var aPlain = a, bPlain = b;
+	var aPlain = a,
+		bPlain = b;
 
 	if ( Array.isArray( a ) ) {
 		aPlain = a[0];
@@ -34279,14 +35658,16 @@ ve.dm.ElementLinearData.static.compareUnannotated = function ( a, b ) {
 		bPlain = b[0];
 	}
 	if ( a && a.type ) {
-		aPlain = ve.copy( a );
-		delete aPlain.annotations;
-		delete aPlain.internal;
+		aPlain = {
+			type: a.type,
+			attributes: a.attributes
+		};
 	}
 	if ( b && b.type ) {
-		bPlain = ve.copy( b );
-		delete bPlain.annotations;
-		delete bPlain.internal;
+		bPlain = {
+			type: b.type,
+			attributes: b.attributes
+		};
 	}
 	return ve.compare( aPlain, bPlain );
 };
@@ -34569,7 +35950,9 @@ ve.dm.ElementLinearData.prototype.setAnnotationsAtOffset = function ( offset, an
  * @param {number[]} indexes Annotations' store indexes
  */
 ve.dm.ElementLinearData.prototype.setAnnotationIndexesAtOffset = function ( offset, indexes ) {
-	var character, item = this.getData( offset ), isElement = this.isElementData( offset );
+	var character,
+		item = this.getData( offset ),
+		isElement = this.isElementData( offset );
 	if ( indexes.length > 0 ) {
 		if ( isElement ) {
 			// New element annotation
@@ -35092,7 +36475,6 @@ ve.dm.ElementLinearData.prototype.remapInternalListKeys = function ( internalLis
  * @param {string[]} [rules.blacklist] Blacklist of model types which aren't allowed
  * @param {Object} [rules.conversions] Model type conversions to apply, e.g. { heading: 'paragraph' }
  * @param {boolean} [rules.removeHtmlAttributes] Remove all left over HTML attributes
- * @param {boolean} [rules.removeStyles] Remove HTML style attributes
  * @param {boolean} [plainText=false] Remove all formatting for plain text import
  * @param {boolean} [keepEmptyContentBranches=false] Preserve empty content branch nodes
  */
@@ -35109,19 +36491,12 @@ ve.dm.ElementLinearData.prototype.sanitize = function ( rules, plainText, keepEm
 				delete allAnnotations.get( i ).element.htmlAttributes;
 			}
 		}
-		if ( rules.removeStyles ) {
-			for ( i = 0, len = allAnnotations.getLength(); i < len; i++ ) {
-				// Remove inline style attributes from annotations
-				ve.dm.Model.static.removeHtmlAttribute( allAnnotations.get( i ).element, 'style' );
-			}
-		}
 
 		// Create annotation set to remove from blacklist
 		setToRemove = allAnnotations.filter( function ( annotation ) {
 			return ve.indexOf( annotation.name, rules.blacklist ) !== -1 || (
-					// If HTML attributes or styles are stripped and you are left with an empty span, remove it
-					annotation.name === 'textStyle/span' && !annotation.element.htmlAttributes &&
-					( rules.removeHtmlAttributes || rules.removeStyles )
+					// If HTML attributes are stripped, remove spans
+					annotation.name === 'textStyle/span' && rules.removeHtmlAttributes
 				);
 		} );
 	}
@@ -35180,15 +36555,9 @@ ve.dm.ElementLinearData.prototype.sanitize = function ( rules, plainText, keepEm
 				this.setAnnotationsAtOffset( i, annotations );
 			}
 		}
-		if ( this.isOpenElementData( i ) ) {
-			if ( rules.removeHtmlAttributes ) {
-				// Remove HTML attributes from nodes
-				delete this.getData( i ).htmlAttributes;
-			}
-			if ( rules.removeStyles ) {
-				// Remove inline style attributes from nodes
-				ve.dm.Model.static.removeHtmlAttribute( this.getData( i ), 'style' );
-			}
+		if ( this.isOpenElementData( i ) && rules.removeHtmlAttributes ) {
+			// Remove HTML attributes from nodes
+			delete this.getData( i ).htmlAttributes;
 		}
 	}
 };
@@ -35215,7 +36584,9 @@ ve.dm.ElementLinearData.prototype.cloneElements = function ( preserveGenerated )
  * @returns {number} Number of elements that aren't in an internalList
  */
 ve.dm.ElementLinearData.prototype.countNonInternalElements = function () {
-	var i, l, type, internalDepth = 0, count = 0;
+	var i, l, type,
+		internalDepth = 0,
+		count = 0;
 	for ( i = 0, l = this.getLength(); i < l; i++ ) {
 		type = this.getType( i );
 		if ( type && ve.dm.nodeFactory.isNodeInternal( type ) ) {
@@ -35236,7 +36607,7 @@ ve.dm.ElementLinearData.prototype.countNonInternalElements = function () {
  *
  * Class containing meta linear data and an index-value store.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -35283,7 +36654,9 @@ OO.inheritClass( ve.dm.MetaLinearData, ve.dm.LinearData );
  * @returns {Array} Merged data
  */
 ve.dm.MetaLinearData.static.merge = function ( data ) {
-	var i, merged = [], allUndefined = true;
+	var i,
+		merged = [],
+		allUndefined = true;
 	for ( i = 0; i < data.length; i++ ) {
 		if ( data[i] !== undefined ) {
 			allUndefined = false;
@@ -35333,7 +36706,8 @@ ve.dm.MetaLinearData.prototype.getDataLength = function ( offset ) {
  * @returns {number} Number of metadata elements in the entire object
  */
 ve.dm.MetaLinearData.prototype.getTotalDataLength = function () {
-	var n = 0, i = this.getLength();
+	var n = 0,
+		i = this.getLength();
 	while ( i-- ) {
 		n += this.getDataLength( i );
 	}
@@ -35390,7 +36764,7 @@ ve.dm.MetaLinearData.prototype.setAnnotationsAtOffsetAndIndex = function ( offse
 /*!
  * VisualEditor DataModel GeneratedContentNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -35424,7 +36798,7 @@ ve.dm.GeneratedContentNode.static.storeGeneratedContents = function ( dataElemen
 /*!
  * VisualEditor DataModel AlienNode, AlienBlockNode and AlienInlineNode classes.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -35543,7 +36917,7 @@ ve.dm.modelRegistry.register( ve.dm.AlienInlineNode );
 /*!
  * VisualEditor DataModel BlockquoteNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see AUTHORS.txt
+ * @copyright 2011-2015 VisualEditor Team and others; see AUTHORS.txt
  * @license The MIT License (MIT); see LICENSE.txt
  */
 
@@ -35580,7 +36954,7 @@ ve.dm.modelRegistry.register( ve.dm.BlockquoteNode );
 /*!
  * VisualEditor DataModel BreakNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -35616,7 +36990,7 @@ ve.dm.modelRegistry.register( ve.dm.BreakNode );
 /*!
  * VisualEditor DataModel CenterNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -35651,7 +37025,7 @@ ve.dm.modelRegistry.register( ve.dm.CenterNode );
 /*!
  * VisualEditor DataModel DefinitionListItemNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -35702,7 +37076,7 @@ ve.dm.modelRegistry.register( ve.dm.DefinitionListItemNode );
 /*!
  * VisualEditor DataModel DefinitionListNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -35739,7 +37113,7 @@ ve.dm.modelRegistry.register( ve.dm.DefinitionListNode );
 /*!
  * VisualEditor DataModel DivNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -35774,7 +37148,7 @@ ve.dm.modelRegistry.register( ve.dm.DivNode );
 /*!
  * VisualEditor DataModel DocumentNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -35815,7 +37189,7 @@ ve.dm.modelRegistry.register( ve.dm.DocumentNode );
 /*!
  * VisualEditor DataModel HeadingNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -35874,7 +37248,7 @@ ve.dm.modelRegistry.register( ve.dm.HeadingNode );
 /*!
  * VisualEditor DataModel InternalItemNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -35913,7 +37287,7 @@ ve.dm.modelRegistry.register( ve.dm.InternalItemNode );
 /*!
  * VisualEditor DataModel InternalListNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -35952,7 +37326,7 @@ ve.dm.modelRegistry.register( ve.dm.InternalListNode );
 /*!
  * VisualEditor DataModel ListItemNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -35989,7 +37363,7 @@ ve.dm.modelRegistry.register( ve.dm.ListItemNode );
 /*!
  * VisualEditor DataModel ListNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -36046,7 +37420,7 @@ ve.dm.modelRegistry.register( ve.dm.ListNode );
 /*!
  * VisualEditor DataModel ParagraphNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -36083,7 +37457,7 @@ ve.dm.modelRegistry.register( ve.dm.ParagraphNode );
 /*!
  * VisualEditor DataModel PreformattedNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -36122,7 +37496,7 @@ ve.dm.modelRegistry.register( ve.dm.PreformattedNode );
 /*!
  * VisualEditor DataModel TableCaptionNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -36159,7 +37533,7 @@ ve.dm.modelRegistry.register( ve.dm.TableCaptionNode );
 /*!
  * VisualEditor DataModel TableCellNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -36353,7 +37727,7 @@ ve.dm.modelRegistry.register( ve.dm.TableCellNode );
 /*!
  * VisualEditor DataModel TableNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -36593,7 +37967,7 @@ ve.dm.TableNodeCellIterator.prototype.nextCell = function () {
 /*!
  * VisualEditor DataModel TableRowNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -36670,7 +38044,7 @@ ve.dm.modelRegistry.register( ve.dm.TableRowNode );
 /*!
  * VisualEditor DataModel TableSelectionNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -36747,7 +38121,7 @@ ve.dm.modelRegistry.register( ve.dm.TableSectionNode );
 /*!
  * VisualEditor DataModel TextNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -36798,7 +38172,7 @@ ve.dm.modelRegistry.register( ve.dm.TextNode );
 /*!
  * VisualEditor DataModel ImageNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -36812,11 +38186,9 @@ ve.dm.modelRegistry.register( ve.dm.TextNode );
  * @constructor
  */
 ve.dm.ImageNode = function VeDmImageNode() {
-	// Mixin constructor
-	ve.dm.ResizableNode.call( this );
-
 	// Mixin constructors
 	ve.dm.FocusableNode.call( this );
+	ve.dm.ResizableNode.call( this );
 };
 
 /* Inheritance */
@@ -36846,7 +38218,7 @@ ve.dm.ImageNode.prototype.createScalable = function () {
 /*!
  * VisualEditor DataModel BlockImageNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -36855,6 +38227,7 @@ ve.dm.ImageNode.prototype.createScalable = function () {
  * @class
  * @extends ve.dm.BranchNode
  * @mixins ve.dm.ImageNode
+ * @mixins ve.dm.AlignableNode
  *
  * @constructor
  * @param {Object} [element] Reference to element in linear model
@@ -36864,8 +38237,9 @@ ve.dm.BlockImageNode = function VeDmBlockImageNode() {
 	// Parent constructor
 	ve.dm.BlockImageNode.super.apply( this, arguments );
 
-	// Mixin constructor
+	// Mixin constructors
 	ve.dm.ImageNode.call( this );
+	ve.dm.AlignableNode.call( this );
 };
 
 /* Inheritance */
@@ -36874,12 +38248,14 @@ OO.inheritClass( ve.dm.BlockImageNode, ve.dm.BranchNode );
 
 OO.mixinClass( ve.dm.BlockImageNode, ve.dm.ImageNode );
 
+OO.mixinClass( ve.dm.BlockImageNode, ve.dm.AlignableNode );
+
 /* Static Properties */
 
 ve.dm.BlockImageNode.static.name = 'blockImage';
 
 ve.dm.BlockImageNode.static.storeHtmlAttributes = {
-	blacklist: [ 'typeof', 'class', 'src', 'resource', 'width', 'height', 'href', 'rel' ]
+	blacklist: [ 'src', 'width', 'height', 'href' ]
 };
 
 ve.dm.BlockImageNode.static.handlesOwnChildren = true;
@@ -36888,19 +38264,28 @@ ve.dm.BlockImageNode.static.childNodeTypes = [ 'imageCaption' ];
 
 ve.dm.BlockImageNode.static.matchTagNames = [ 'figure' ];
 
-//ve.dm.BlockImageNode.static.blacklistedAnnotationTypes = [ 'link' ];
+// FIXME: This commented code has been here since the file was created. Explain or remove.
+// ve.dm.BlockImageNode.static.blacklistedAnnotationTypes = [ 'link' ];
 
 ve.dm.BlockImageNode.static.toDataElement = function ( domElements, converter ) {
+	// Workaround for jQuery's .children() being expensive due to
+	// https://github.com/jquery/sizzle/issues/311
+	function findChildren( parent, nodeNames ) {
+		return Array.prototype.filter.call( parent.childNodes, function ( element ) {
+			return nodeNames.indexOf( element.nodeName.toLowerCase() ) !== -1;
+		} );
+	}
+
 	var dataElement,
-		$figure = $( domElements[0] ),
-		$img = $figure.children( 'img' ).eq( 0 ),
-		$caption = $figure.children( 'figcaption' ).eq( 0 ),
+		figure = domElements[0],
+		img = findChildren( figure, 'img' )[0] || null,
+		caption = findChildren( figure, 'figcaption' )[0] || null,
 		attributes = {
-			src: $img.attr( 'src' )
+			src: img && img.getAttribute( 'src' )
 		},
-		width = $img.attr( 'width' ),
-		height = $img.attr( 'height' ),
-		altText = $img.attr( 'alt' );
+		width = img && img.getAttribute( 'width' ),
+		height = img && img.getAttribute( 'height' ),
+		altText = img && img.getAttribute( 'alt' );
 
 	if ( altText !== undefined ) {
 		attributes.alt = altText;
@@ -36909,19 +38294,22 @@ ve.dm.BlockImageNode.static.toDataElement = function ( domElements, converter ) 
 	attributes.width = width !== undefined && width !== '' ? Number( width ) : null;
 	attributes.height = height !== undefined && height !== '' ? Number( height ) : null;
 
-	dataElement = { type: this.name, attributes: attributes };
+	dataElement = {
+		type: this.name,
+		attributes: ve.extendObject( ve.dm.AlignableNode.static.toDataElementAttributes( domElements, converter ), attributes )
+	};
 
-	if ( $caption.length === 0 ) {
+	if ( !caption ) {
 		return [
 			dataElement,
 			{ type: 'imageCaption' },
-			{ type: 'imageCaption' },
+			{ type: '/imageCaption' },
 			{ type: '/' + this.name }
 		];
 	} else {
-		return [ dataElement ].
-			concat( converter.getDataFromDomClean( $caption[0], { type: 'imageCaption' } ) ).
-			concat( [ { type: '/' + this.name } ] );
+		return [ dataElement ]
+			.concat( converter.getDataFromDomClean( caption, { type: 'imageCaption' } ) )
+			.concat( [ { type: '/' + this.name } ] );
 	}
 };
 
@@ -36953,6 +38341,9 @@ ve.dm.BlockImageNode.static.toDomElements = function ( data, doc, converter ) {
 			figure.appendChild( wrapper.firstChild );
 		}
 	}
+
+	ve.dm.AlignableNode.static.modifyDomElement( figure, dataElement );
+
 	return [ figure ];
 };
 
@@ -36976,7 +38367,7 @@ ve.dm.modelRegistry.register( ve.dm.BlockImageNode );
 /*!
  * VisualEditor DataModel block image caption node class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -37013,7 +38404,7 @@ ve.dm.modelRegistry.register( ve.dm.BlockImageCaptionNode );
 /*!
  * VisualEditor DataModel InlineImageNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -37078,7 +38469,7 @@ ve.dm.modelRegistry.register( ve.dm.InlineImageNode );
 /*!
  * VisualEditor DataModel LanguageAnnotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -37156,7 +38547,7 @@ ve.dm.modelRegistry.register( ve.dm.LanguageAnnotation );
 /*!
  * VisualEditor DataModel LinkAnnotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -37244,7 +38635,7 @@ ve.dm.modelRegistry.register( ve.dm.LinkAnnotation );
 /*!
  * VisualEditor DataModel TextStyleAnnotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -37302,7 +38693,7 @@ ve.dm.modelRegistry.register( ve.dm.TextStyleAnnotation );
 /*!
  * VisualEditor DataModel AbbreviationAnnotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -37337,7 +38728,7 @@ ve.dm.modelRegistry.register( ve.dm.AbbreviationAnnotation );
 /*!
  * VisualEditor DataModel BigAnnotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -37372,7 +38763,7 @@ ve.dm.modelRegistry.register( ve.dm.BigAnnotation );
 /*!
  * VisualEditor DataModel BoldAnnotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -37407,7 +38798,7 @@ ve.dm.modelRegistry.register( ve.dm.BoldAnnotation );
 /*!
  * VisualEditor DataModel CodeSampleAnnotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -37442,7 +38833,7 @@ ve.dm.modelRegistry.register( ve.dm.CodeSampleAnnotation );
 /*!
  * VisualEditor DataModel CodeAnnotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -37477,7 +38868,7 @@ ve.dm.modelRegistry.register( ve.dm.CodeAnnotation );
 /*!
  * VisualEditor DataModel DatetimeAnnotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -37512,7 +38903,7 @@ ve.dm.modelRegistry.register( ve.dm.DatetimeAnnotation );
 /*!
  * VisualEditor DataModel DefinitionAnnotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -37547,7 +38938,7 @@ ve.dm.modelRegistry.register( ve.dm.DefinitionAnnotation );
 /*!
  * VisualEditor DataModel HighlightAnnotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -37582,7 +38973,7 @@ ve.dm.modelRegistry.register( ve.dm.HighlightAnnotation );
 /*!
  * VisualEditor DataModel ItalicAnnotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -37617,7 +39008,7 @@ ve.dm.modelRegistry.register( ve.dm.ItalicAnnotation );
 /*!
  * VisualEditor DataModel QuotationAnnotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -37652,7 +39043,7 @@ ve.dm.modelRegistry.register( ve.dm.QuotationAnnotation );
 /*!
  * VisualEditor DataModel SmallAnnotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -37687,7 +39078,7 @@ ve.dm.modelRegistry.register( ve.dm.SmallAnnotation );
 /*!
  * VisualEditor DataModel SpanAnnotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -37722,7 +39113,7 @@ ve.dm.modelRegistry.register( ve.dm.SpanAnnotation );
 /*!
  * VisualEditor DataModel StrikethroughAnnotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -37757,7 +39148,7 @@ ve.dm.modelRegistry.register( ve.dm.StrikethroughAnnotation );
 /*!
  * VisualEditor DataModel SubscriptAnnotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -37794,7 +39185,7 @@ ve.dm.modelRegistry.register( ve.dm.SubscriptAnnotation );
 /*!
  * VisualEditor DataModel SuperscriptAnnotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -37831,7 +39222,7 @@ ve.dm.modelRegistry.register( ve.dm.SuperscriptAnnotation );
 /*!
  * VisualEditor DataModel UnderlineAnnotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -37866,7 +39257,7 @@ ve.dm.modelRegistry.register( ve.dm.UnderlineAnnotation );
 /*!
  * VisualEditor DataModel UserInputAnnotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -37901,7 +39292,7 @@ ve.dm.modelRegistry.register( ve.dm.UserInputAnnotation );
 /*!
  * VisualEditor DataModel VariableAnnotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -37936,7 +39327,7 @@ ve.dm.modelRegistry.register( ve.dm.VariableAnnotation );
 /*!
  * VisualEditor DataModel AlienMetaItem class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -37984,7 +39375,7 @@ ve.dm.modelRegistry.register( ve.dm.AlienMetaItem );
 /*!
  * VisualEditor DataModel CommentMetaItem class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -38025,7 +39416,7 @@ ve.dm.modelRegistry.register( ve.dm.CommentMetaItem );
 /*!
  * VisualEditor DataModel CommentNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -38139,7 +39530,7 @@ ve.dm.modelRegistry.register( ve.dm.FakeCommentNode );
 /*!
  * VisualEditor ContentEditable namespace.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -38148,7 +39539,7 @@ ve.dm.modelRegistry.register( ve.dm.FakeCommentNode );
  * @singleton
  */
 ve.ce = {
-	//nodeFactory: Initialized in ve.ce.NodeFactory.js
+	// nodeFactory: Initialized in ve.ce.NodeFactory.js
 };
 
 /* Static Properties */
@@ -38196,7 +39587,7 @@ ve.ce.getDomText = function ( element ) {
 			nodeType === Node.DOCUMENT_NODE ||
 			nodeType === Node.DOCUMENT_FRAGMENT_NODE
 		) {
-			if ( $element.hasClass( 've-ce-branchNode-blockSlug' ) ) {
+			if ( $element.hasClass( 've-ce-branchNode-blockSlugWrapper' ) ) {
 				// Block slugs are not represented in the model at all, but they do
 				// contain a single nbsp/FEFF character in the DOM, so make sure
 				// that character isn't counted
@@ -38246,13 +39637,15 @@ ve.ce.getDomHash = function ( element ) {
 		nodeName = element.nodeName,
 		hash = '';
 
-	if ( nodeType === 3 || nodeType === 4 ) {
+	if ( nodeType === Node.TEXT_NODE || nodeType === Node.CDATA_SECTION_NODE ) {
 		return '#';
-	} else if ( nodeType === 1 || nodeType === 9 ) {
+	} else if ( nodeType === Node.ELEMENT_NODE || nodeType === Node.DOCUMENT_NODE ) {
 		hash += '<' + nodeName + '>';
-		// Traverse its children
-		for ( element = element.firstChild; element; element = element.nextSibling ) {
-			hash += ve.ce.getDomHash( element );
+		if ( !$( element ).hasClass( 've-ce-branchNode-blockSlugWrapper' ) ) {
+			// Traverse its children
+			for ( element = element.firstChild; element; element = element.nextSibling ) {
+				hash += ve.ce.getDomHash( element );
+			}
 		}
 		hash += '</' + nodeName + '>';
 		// Merge adjacent text node representations
@@ -38509,10 +39902,31 @@ ve.ce.isShortcutKey = function ( e ) {
 	return !!( e.ctrlKey || e.metaKey );
 };
 
+/**
+ * Find the DM range of a DOM selection
+ *
+ * @param {Object} selection DOM-selection-like object
+ * @param {Node} selection.anchorNode
+ * @param {number} selection.anchorOffset
+ * @param {Node} selection.focusNode
+ * @param {number} selection.focusOffset
+ * @returns {ve.Range|null} DM range, or null if nothing in the CE document is selected
+ */
+ve.ce.veRangeFromSelection = function ( selection ) {
+	try {
+		return new ve.Range(
+			ve.ce.getOffset( selection.anchorNode, selection.anchorOffset ),
+			ve.ce.getOffset( selection.focusNode, selection.focusOffset )
+		);
+	} catch ( e ) {
+		return null;
+	}
+};
+
 /*!
  * VisualEditor Content Editable Range State class
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -38605,7 +40019,7 @@ ve.ce.RangeState.prototype.saveState = function ( old, $surfaceElement, docNode,
 			anchorNode: liveSelection.anchorNode,
 			anchorOffset: liveSelection.anchorOffset
 		};
-	} ( docNode.getElementDocument().getSelection() ) );
+	}( docNode.getElementDocument().getSelection() ) );
 
 	// Use a blank selection if the selection is outside this surface
 	// (or if the selection is inside another surface inside this one)
@@ -38632,14 +40046,7 @@ ve.ce.RangeState.prototype.saveState = function ( old, $surfaceElement, docNode,
 		this.enteredBlockSlug = false;
 	} else {
 		this.selectionChanged = true;
-		try {
-			this.veRange = new ve.Range(
-				ve.ce.getOffset( selection.anchorNode, selection.anchorOffset ),
-				ve.ce.getOffset( selection.focusNode, selection.focusOffset )
-			);
-		} catch ( e ) {
-			this.veRange = null;
-		}
+		this.veRange = ve.ce.veRangeFromSelection( selection );
 	}
 
 	anchorNodeChanged = !old || old.compareAnchorNode( selection );
@@ -38744,7 +40151,7 @@ ve.ce.RangeState.prototype.compareAnchorNode = function ( selection ) {
 /*!
  * VisualEditor ContentEditable AnnotationFactory class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -38800,7 +40207,7 @@ ve.ce.annotationFactory = new ve.ce.AnnotationFactory();
 /*!
  * VisualEditor ContentEditable NodeFactory class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -38873,7 +40280,7 @@ ve.ce.nodeFactory = new ve.ce.NodeFactory();
 /*!
  * VisualEditor ContentEditable Document class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -38892,7 +40299,7 @@ ve.ce.Document = function VeCeDocument( model, surface ) {
 		model.getDocumentNode(), surface, { $: surface.$ }
 	) );
 
-	this.getDocumentNode().$element.attr( {
+	this.getDocumentNode().$element.prop( {
 		lang: model.getLang(),
 		dir: model.getDir()
 	} );
@@ -39133,7 +40540,7 @@ ve.ce.Document.prototype.getDirectionFromSelection = function ( selection ) {
 /*!
  * VisualEditor ContentEditable View class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -39168,8 +40575,14 @@ ve.ce.View = function VeCeView( model, config ) {
 		teardown: 'onTeardown'
 	} );
 
-	// Initialization
-	this.renderAttributes();
+	// Render attributes from original DOM elements
+	ve.dm.Converter.renderHtmlAttributeList(
+		this.model.getHtmlAttributes(),
+		this.$element,
+		this.constructor.static.renderHtmlAttributes,
+		// computed attributes
+		true
+	);
 };
 
 /* Inheritance */
@@ -39298,22 +40711,6 @@ ve.ce.View.prototype.isInContentEditable = function () {
 };
 
 /**
- * Render an HTML attribute list onto this.$element
- *
- * If no attributeList is given, the attribute list stored in the linear model will be used.
- *
- * @param {Object[]} [attributeList] HTML attribute list, see ve.dm.Converter#buildHtmlAttributeList
- */
-ve.ce.View.prototype.renderAttributes = function ( attributeList ) {
-	ve.dm.Converter.renderHtmlAttributeList(
-		attributeList || this.model.getHtmlAttributes(),
-		this.$element,
-		this.constructor.static.renderHtmlAttributes,
-		true // computed attributes
-	);
-};
-
-/**
  * Get a resolved URL from a model attribute.
  *
  * @abstract
@@ -39330,7 +40727,7 @@ ve.ce.View.prototype.getResolvedAttribute = function ( key ) {
 /*!
  * VisualEditor ContentEditable Annotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -39409,7 +40806,7 @@ ve.ce.Annotation.prototype.getModelHtmlDocument = function () {
 /*!
  * VisualEditor ContentEditable Node class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -39607,7 +41004,7 @@ ve.ce.Node.prototype.getModelHtmlDocument = function () {
 /*!
  * VisualEditor ContentEditable BranchNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -39669,7 +41066,7 @@ ve.ce.BranchNode.inlineSlugTemplate = $( '<span>' )
 	.addClass( 've-ce-branchNode-slug ve-ce-branchNode-inlineSlug' )
 	.append(
 		$( '<img>' )
-			.attr( 'src', ve.ce.minImgDataUri )
+			.prop( 'src', ve.ce.minImgDataUri )
 			.css( { width: '0', height: '0' } )
 			.addClass( 've-ce-chimera' )
 	)
@@ -39687,7 +41084,7 @@ ve.ce.BranchNode.inputDebugInlineSlugTemplate = $( '<span>' )
 	.addClass( 've-ce-branchNode-slug ve-ce-branchNode-inlineSlug' )
 	.append(
 		$( '<img>' )
-			.attr( 'src', ve.ce.chimeraImgDataUri )
+			.prop( 'src', ve.ce.chimeraImgDataUri )
 			.addClass( 've-ce-chimera' )
 	)
 	.get( 0 );
@@ -39750,7 +41147,7 @@ ve.ce.BranchNode.prototype.updateTagName = function () {
 
 	if ( tagName !== this.tagName ) {
 		this.emit( 'teardown' );
-		$wrapper = this.$( this.$.context.createElement( tagName ) );
+		$wrapper = this.$( document.createElement( tagName ) );
 		// Move contents
 		$wrapper.append( this.$element.contents() );
 		// Swap elements
@@ -39929,7 +41326,7 @@ ve.ce.BranchNode.prototype.destroy = function () {
 /*!
  * VisualEditor ContentEditable ContentBranchNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -40341,7 +41738,7 @@ ve.ce.ContentBranchNode.prototype.onTeardown = function () {
 /*!
  * VisualEditor ContentEditable LeafNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -40417,9 +41814,77 @@ ve.ce.LeafNode.prototype.getAnnotatedHtml = function () {
 };
 
 /*!
+ * VisualEditor ContentEditable AlignableNode class.
+ *
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ */
+
+/**
+ * ContentEditable Alignable node.
+ *
+ * @class
+ * @abstract
+ *
+ * @constructor
+ */
+ve.ce.AlignableNode = function VeCeAlignableNode( $alignable, config ) {
+	config = config || {};
+
+	this.$alignable = $alignable || this.$element;
+
+	// Events
+	this.connect( this, { setup: 'onAlignableSetup' } );
+	this.model.connect( this, { attributeChange: 'onAlignableAttributeChange' } );
+};
+
+/* Inheritance */
+
+OO.initClass( ve.ce.AlignableNode );
+
+/* Events */
+
+/**
+ * @event align
+ * @param {string} align New alignment
+ */
+
+/**
+ * Handle attribute change events
+ *
+ * @param {string} key Key
+ * @param {string} from Old value
+ * @param {string} to New value
+ */
+ve.ce.AlignableNode.prototype.onAlignableAttributeChange = function ( key, from, to ) {
+	var cssClasses;
+	if ( key === 'align' ) {
+		cssClasses = this.model.constructor.static.cssClasses;
+		if ( from && cssClasses[from] ) {
+			this.$alignable.removeClass( cssClasses[from] );
+		}
+		if ( to && cssClasses[to] ) {
+			this.$alignable.addClass( cssClasses[to] );
+		}
+		this.emit( 'align', to );
+	}
+};
+
+/**
+ * Handle node setup
+ */
+ve.ce.AlignableNode.prototype.onAlignableSetup = function () {
+	var align = this.model.getAttribute( 'align' ),
+		cssClasses = this.model.constructor.static.cssClasses;
+	if ( align && cssClasses[align] ) {
+		this.$alignable.addClass( cssClasses[align] );
+		this.emit( 'align', align );
+	}
+};
+
+/*!
  * VisualEditor ContentEditable FocusableNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -40487,8 +41952,10 @@ OO.initClass( ve.ce.FocusableNode );
 ve.ce.FocusableNode.prototype.createHighlight = function () {
 	return this.$( '<div>' )
 		.addClass( 've-ce-focusableNode-highlight' )
-		.attr( 'title', this.constructor.static.getDescription( this.model ) )
-		.attr( 'draggable', false )
+		.prop( {
+			title: this.constructor.static.getDescription( this.model ),
+			draggable: false
+		} )
 		.append( this.$( '<img>' )
 			.addClass( 've-ce-focusableNode-highlight-relocatable-marker' )
 			.attr( 'src', 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==' )
@@ -40817,7 +42284,9 @@ ve.ce.FocusableNode.prototype.redrawHighlights = function () {
  * Calculate position of highlights
  */
 ve.ce.FocusableNode.prototype.calculateHighlights = function () {
-	var i, l, rects = [], filteredRects = [],
+	var i, l,
+		rects = [],
+		filteredRects = [],
 		surfaceOffset = this.surface.getSurface().getBoundingClientRect();
 
 	function contains( rect1, rect2 ) {
@@ -40970,7 +42439,7 @@ ve.ce.FocusableNode.prototype.getStartAndEndRects = function () {
 /*!
  * VisualEditor ContentEditable ResizableNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -41013,7 +42482,11 @@ ve.ce.ResizableNode = function VeCeResizableNode( $resizable, config ) {
 		teardown: 'onResizableTeardown',
 		resizing: 'onResizableResizing',
 		resizeEnd: 'onResizableFocus',
-		rerender: 'onResizableFocus'
+		rerender: 'onResizableFocus',
+		align: 'onResizableAlign'
+	} );
+	this.model.connect( this, {
+		attributeChange: 'onResizableAttributeChange'
 	} );
 
 	// Initialization
@@ -41092,7 +42565,7 @@ ve.ce.ResizableNode.prototype.hideSizeLabel = function () {
 	} );
 	// Actually hide the size label after it's done animating
 	setTimeout( function () {
-		node.$sizeLabel.hide();
+		node.$sizeLabel.addClass( 'oo-ui-element-hidden' );
 	}, 200 );
 };
 
@@ -41119,7 +42592,7 @@ ve.ce.ResizableNode.prototype.updateSizeLabel = function () {
 		height = dimensions.height;
 	}
 	this.$sizeLabel
-		.show()
+		.removeClass( 'oo-ui-element-hidden' )
 		.addClass( 've-ce-resizableNode-sizeLabel-resizing' )
 		.css( {
 			top: top,
@@ -41150,24 +42623,22 @@ ve.ce.ResizableNode.prototype.updateSizeLabel = function () {
  * @param {string[]} [handles] List of handles to show: 'nw', 'ne', 'sw', 'se'. Show all if undefined.
  */
 ve.ce.ResizableNode.prototype.showHandles = function ( handles ) {
-	var i, selectors;
+	var i, len,
+		add = [],
+		remove = [],
+		allDirections = [ 'nw', 'ne', 'sw', 'se' ];
 
-	if ( handles === undefined ) {
-		this.$resizeHandles.find( 'div' ).show();
-	} else {
-		this.$resizeHandles.find( 'div' ).hide();
-		i = handles.length;
-		selectors = [];
-		while ( i-- ) {
-			// The following classes can be used here:
-			// ve-ce-resizableNode-nwHandle
-			// ve-ce-resizableNode-neHandle
-			// ve-ce-resizableNode-swHandle
-			// ve-ce-resizableNode-seHandle
-			selectors.push( '.ve-ce-resizableNode-' + handles[i] + 'Handle' );
+	for ( i = 0, len = allDirections.length; i < len; i++ ) {
+		if ( handles === undefined || handles.indexOf( allDirections[i] ) !== -1 ) {
+			remove.push( 've-ce-resizableNode-hide-' + allDirections[i] );
+		} else {
+			add.push( 've-ce-resizableNode-hide-' + allDirections[i] );
 		}
-		this.$resizeHandles.find( selectors.join( ',' ) ).show();
 	}
+
+	this.$resizeHandles
+		.addClass( add.join( ' ' ) )
+		.removeClass( remove.join( ' ' ) );
 };
 
 /**
@@ -41178,11 +42649,10 @@ ve.ce.ResizableNode.prototype.showHandles = function ( handles ) {
 ve.ce.ResizableNode.prototype.onResizableFocus = function () {
 	var surface = this.getRoot().getSurface();
 
+	this.$resizeHandles.appendTo( surface.getSurface().$controls );
 	if ( this.$sizeLabel ) {
-		// Attach the size label first so it doesn't mask the resize handles
 		this.$sizeLabel.appendTo( surface.getSurface().$controls );
 	}
-	this.$resizeHandles.appendTo( surface.getSurface().$controls );
 
 	// Call getScalable to pre-fetch the extended data
 	this.model.getScalable();
@@ -41236,6 +42706,28 @@ ve.ce.ResizableNode.prototype.onResizableBlur = function () {
 };
 
 /**
+ * Respond to AlignableNodes changing their alignment by hiding useless resize handles.
+ *
+ * @param {string} align Alignment
+ */
+ve.ce.ResizableNode.prototype.onResizableAlign = function ( align ) {
+	switch ( align ) {
+		case 'right':
+			this.showHandles( ['sw'] );
+			break;
+		case 'left':
+			this.showHandles( ['se'] );
+			break;
+		case 'center':
+			this.showHandles( ['sw', 'se'] );
+			break;
+		default:
+			this.showHandles();
+			break;
+	}
+};
+
+/**
  * Handle teardown event.
  *
  * @method
@@ -41259,6 +42751,20 @@ ve.ce.ResizableNode.prototype.onResizableResizing = function ( dimensions ) {
 		this.setResizableHandlesPosition();
 	}
 	this.updateSizeLabel();
+};
+
+/**
+ * Handle attribute change events from the model.
+ *
+ * @method
+ * @param {string} key Attribute key
+ * @param {string} from Old value
+ * @param {string} to New value
+ */
+ve.ce.ResizableNode.prototype.onResizableAttributeChange = function ( key, from, to ) {
+	if ( key === 'width' || key === 'height' ) {
+		this.$resizable.css( key, to );
+	}
 };
 
 /**
@@ -41486,7 +42992,7 @@ ve.ce.ResizableNode.prototype.getAttributeChanges = function ( width, height ) {
 /*!
  * VisualEditor ContentEditable Surface class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -41558,7 +43064,11 @@ ve.ce.Surface = function VeCeSurface( model, ui, options ) {
 	this.newModelSelection = null;
 	// These are set during cursor moves (but not text additions/deletions at the cursor)
 	this.cursorEvent = null;
-	this.cursorStartRange = null;
+	// A frozen selection from the start of a cursor keydown. The nodes are live and mutable,
+	// and therefore the offsets may come to point to places that are misleadingly different
+	// from when the selection was saved.
+	this.misleadingCursorStartSelection = null;
+	this.cursorDirectionality = null;
 	this.unicorningNode = null;
 	this.setUnicorningRecursionGuard = false;
 
@@ -41644,9 +43154,12 @@ ve.ce.Surface = function VeCeSurface( model, ui, options ) {
 	this.$highlightsFocused.addClass( 've-ce-surface-highlights-focused' );
 	this.$highlightsBlurred.addClass( 've-ce-surface-highlights-blurred' );
 	this.$deactivatedSelection.addClass( 've-ce-surface-deactivatedSelection' );
-	this.$pasteTarget.addClass( 've-ce-surface-paste' )
-		.attr( 'tabIndex', -1 )
-		.prop( 'contentEditable', 'true' );
+	this.$pasteTarget
+		.addClass( 've-ce-surface-paste' )
+		.prop( {
+			tabIndex: -1,
+			contentEditable: 'true'
+		} );
 
 	// Add elements to the DOM
 	this.$element.append( this.$documentNode, this.$pasteTarget );
@@ -41777,7 +43290,8 @@ ve.ce.Surface.prototype.destroy = function () {
 	// Disconnect DOM events on the window
 	this.$window.off( 'resize', this.onWindowResizeHandler );
 
-	// HACK: Blur to make selection/cursor disappear (needed in Firefox in some cases)
+	// HACK: Blur to make selection/cursor disappear (needed in Firefox
+	// in some cases, and in iOS to hide the keyboard)
 	this.$documentNode[0].blur();
 
 	// Remove DOM elements (also disconnects their events)
@@ -42176,7 +43690,11 @@ ve.ce.Surface.prototype.updateDeactivatedSelection = function () {
 
 	this.$deactivatedSelection.empty();
 
-	if ( !this.deactivated || this.focusedNode || !( selection instanceof ve.dm.LinearSelection ) ) {
+	if (
+		!this.deactivated || this.focusedNode ||
+		!( selection instanceof ve.dm.LinearSelection ) ||
+		selection.isCollapsed()
+	) {
 		return;
 	}
 	rects = this.getSelectionRects( selection );
@@ -42503,10 +44021,10 @@ ve.ce.Surface.prototype.onDocumentDrop = function ( e ) {
 		}
 	} else if ( dataTransfer.files.length ) {
 		for ( i = 0, l = dataTransfer.files.length; i < l; i++ ) {
-			name = ve.ui.fileDropHandlerFactory.getHandlerNameForType( dataTransfer.files[i].type );
+			name = ve.ui.dataTransferHandlerFactory.getHandlerNameForType( dataTransfer.files[i].type );
 			if ( name ) {
 				fileHandlers.push(
-					ve.ui.fileDropHandlerFactory.create( name, this.surface, dataTransfer.files[i] )
+					ve.ui.dataTransferHandlerFactory.create( name, this.surface, dataTransfer.files[i] )
 				);
 			}
 		}
@@ -42619,12 +44137,8 @@ ve.ce.Surface.prototype.onDocumentKeyDown = function ( e ) {
 			}
 
 			if ( selection instanceof ve.dm.LinearSelection ) {
-				if ( e.keyCode === OO.ui.Keys.LEFT || e.keyCode === OO.ui.Keys.RIGHT ) {
-					this.handleLinearLeftOrRightArrowKey( e );
-				} else {
-					this.handleLinearUpOrDownArrowKey( e );
-					updateFromModel = true;
-				}
+				this.handleLinearArrowKey( e );
+				updateFromModel = true;
 			} else if ( selection instanceof ve.dm.TableSelection ) {
 				this.handleTableArrowKey( e );
 			}
@@ -42651,11 +44165,13 @@ ve.ce.Surface.prototype.onDocumentKeyDown = function ( e ) {
 			break;
 		case OO.ui.Keys.BACKSPACE:
 		case OO.ui.Keys.DELETE:
-			e.preventDefault();
 			if ( selection instanceof ve.dm.LinearSelection ) {
-				this.handleLinearDelete( e );
+				if ( this.handleLinearDelete( e ) ) {
+					e.preventDefault();
+				}
 				updateFromModel = true;
 			} else if ( selection instanceof ve.dm.TableSelection ) {
+				e.preventDefault();
 				this.handleTableDelete( e );
 			}
 			break;
@@ -42688,8 +44204,26 @@ ve.ce.Surface.prototype.onDocumentKeyDown = function ( e ) {
 
 /**
  * Handle document key press events.
+ *
+ * @method
+ * @param {jQuery.Event} e Key press event
  */
-ve.ce.Surface.prototype.onDocumentKeyPress = function () {
+ve.ce.Surface.prototype.onDocumentKeyPress = function ( e ) {
+	// Filter out non-character keys. Doing this prevents:
+	// * Unexpected content deletion when selection is not collapsed and the user presses, for
+	//   example, the Home key (Firefox fires 'keypress' for it)
+	// TODO: Should be covered with Selenium tests.
+	if (
+		// Catches most keys that don't produce output (charCode === 0, thus no character)
+		e.which === 0 || e.charCode === 0 ||
+		// Opera 12 doesn't always adhere to that convention
+		e.keyCode === OO.ui.Keys.TAB || e.keyCode === OO.ui.Keys.ESCAPE ||
+		// Ignore all keypresses with Ctrl / Cmd modifier keys
+		ve.ce.isShortcutKey( e )
+	) {
+		return;
+	}
+
 	this.handleInsertion();
 };
 
@@ -42699,11 +44233,159 @@ ve.ce.Surface.prototype.onDocumentKeyPress = function () {
  * @param {jQuery.Event} e keydown event
  */
 ve.ce.Surface.prototype.afterDocumentKeyDown = function ( e ) {
-	var fixupCursor;
+	var direction, focusableNode, startOffset, endOffset, offsetDiff,
+		range, fixupCursorForUnicorn,
+		surface = this,
+		isArrow = (
+			e.keyCode === OO.ui.Keys.UP ||
+			e.keyCode === OO.ui.Keys.DOWN ||
+			e.keyCode === OO.ui.Keys.LEFT ||
+			e.keyCode === OO.ui.Keys.RIGHT
+		);
+
+	/**
+	 * Determine whether a position is editable, and if so which focusable node it is in
+	 *
+	 * We can land inside ce=false in many browsers:
+	 * - Firefox has normal cursor positions at most node boundaries inside ce=false
+	 * - Chromium has superfluous cursor positions around a ce=false img
+	 * - IE hardly restricts editing at all inside ce=false
+	 * If ce=false then we have landed inside the focusable node.
+	 * If we land in a non-text position, assume we should have hit the node
+	 * immediately after the position we hit (in the direction of motion)
+
+	 * @private
+	 * @param {Node} DOM node of cursor position
+	 * @param {number} offset Offset of cursor position
+	 * @param {number} direction Cursor motion direction (1=forward, -1=backward)
+	 * @returns {ve.ce.Node|null} node, or null if not in a focusable node
+	 */
+	function getSurroundingFocusableNode( node, offset, direction ) {
+		var focusNode, $ceNode, focusableNode;
+		if ( node.nodeType === Node.TEXT_NODE ) {
+			focusNode = node;
+		} else if ( direction > 0 && offset < node.childNodes.length ) {
+			focusNode = node.childNodes[ offset ];
+		} else if ( direction < 0 && offset > 0 ) {
+			focusNode = node.childNodes[ offset - 1 ];
+		} else {
+			focusNode = node;
+		}
+		$ceNode = $( focusNode ).closest(
+			'[contenteditable], .ve-ce-branchNode'
+		);
+		if ( $ceNode.prop( 'contenteditable' ) !== 'false' ) {
+			return null;
+		}
+		focusableNode = $ceNode.closest(
+			'.ve-ce-branchNode, .ve-ce-leafNode'
+		).data( 'view' );
+		if ( !focusableNode || !focusableNode.isFocusable() ) {
+			return null;
+		}
+		return focusableNode;
+	}
+
+	/**
+	 * Compute the direction of cursor movement, if any
+	 *
+	 * Even if the user pressed a cursor key in the interior of the document, there may not
+	 * be any movement: browser BIDI and ce=false handling can be quite quirky
+	 *
+	 * @returns {number|null} -1 for startwards, 1 for endwards, null for none
+	 */
+	function getDirection() {
+		return (
+			isArrow &&
+			surface.misleadingCursorStartSelection.focusNode &&
+			surface.nativeSelection.focusNode &&
+			ve.compareDocumentOrder(
+				surface.nativeSelection.focusNode,
+				surface.nativeSelection.focusOffset,
+				surface.misleadingCursorStartSelection.focusNode,
+				surface.misleadingCursorStartSelection.focusOffset
+			)
+		) || null;
+	}
+
 	if ( e !== this.cursorEvent ) {
 		return;
 	}
-	fixupCursor = (
+
+	// Restore the selection and stop, if we cursored out of a table edit cell.
+	// Assumption: if we cursored out of a table cell, then none of the fixups below this point
+	// would have got the selection back inside the cell. Therefore it's OK to check here.
+	if ( isArrow && this.restoreActiveTableNodeSelection() ) {
+		return;
+	}
+
+	// If we arrowed a collapsed cursor across a focusable node, select the node instead
+	if (
+		isArrow &&
+		!e.ctrlKey &&
+		!e.altKey &&
+		!e.metaKey &&
+		this.misleadingCursorStartSelection.isCollapsed &&
+		this.nativeSelection.isCollapsed &&
+		( direction = getDirection() ) !== null
+	) {
+		focusableNode = getSurroundingFocusableNode(
+			this.nativeSelection.focusNode,
+			this.nativeSelection.focusOffset,
+			direction
+		);
+
+		if ( !focusableNode ) {
+			// Calculate the DM offsets of our motion
+			try {
+				startOffset = ve.ce.getOffset(
+					this.misleadingCursorStartSelection.focusNode,
+					this.misleadingCursorStartSelection.focusOffset
+				);
+				endOffset = ve.ce.getOffset(
+					this.nativeSelection.focusNode,
+					this.nativeSelection.focusOffset
+				);
+				offsetDiff = endOffset - startOffset;
+			} catch ( ex ) {
+				startOffset = endOffset = offsetDiff = undefined;
+			}
+
+			if ( Math.abs( offsetDiff ) === 2 ) {
+				// Test whether we crossed a focusable node
+				// (this applies even if we cursored up/down)
+				focusableNode = (
+					this.model.documentModel.documentNode
+					.getNodeFromOffset( ( startOffset + endOffset ) / 2 )
+				);
+
+				if ( focusableNode.isFocusable() ) {
+					range = new ve.Range( startOffset, endOffset );
+				} else {
+					focusableNode = undefined;
+				}
+			}
+		}
+
+		if ( focusableNode ) {
+			if ( !range ) {
+				range = focusableNode.getOuterRange();
+				if ( direction < 0 ) {
+					range = range.flip();
+				}
+			}
+			this.model.setLinearSelection( range );
+			if ( e.keyCode === OO.ui.Keys.LEFT ) {
+				this.cursorDirectionality = direction > 0 ? 'rtl' : 'ltr';
+			} else if ( e.keyCode === OO.ui.Keys.RIGHT ) {
+				this.cursorDirectionality = direction < 0 ? 'rtl' : 'ltr';
+			}
+			// else up/down pressed; leave this.cursorDirectionality as null
+			// (it was set by setLinearSelection calling onModelSelect)
+		}
+	}
+
+	fixupCursorForUnicorn = (
 		!e.shiftKey &&
 		( e.keyCode === OO.ui.Keys.LEFT || e.keyCode === OO.ui.Keys.RIGHT )
 	);
@@ -42713,7 +44395,7 @@ ve.ce.Surface.prototype.afterDocumentKeyDown = function ( e ) {
 	} finally {
 		this.decRenderLock();
 	}
-	this.checkUnicorns( fixupCursor );
+	this.checkUnicorns( fixupCursorForUnicorn );
 };
 
 /**
@@ -42808,8 +44490,8 @@ ve.ce.Surface.prototype.onDocumentKeyUp = function ( e ) {
 	clientRect = RangeFix.getBoundingClientRect( nativeRange );
 
 	if ( clientRect && clientRect.top < this.surface.toolbarHeight ) {
-		scrollTo = this.$window.scrollTop() + clientRect.top - this.surface.toolbarHeight;
-		this.$window.scrollTop( scrollTo );
+		scrollTo = this.getScrollPosition() + clientRect.top - this.surface.toolbarHeight;
+		this.setScrollPosition( scrollTo );
 	}
 };
 
@@ -42878,7 +44560,8 @@ ve.ce.Surface.prototype.onCopy = function ( e ) {
 	unsafeSelector = '[' + ve.ce.Surface.static.unsafeAttributes.join( '],[') + ']';
 	this.$pasteTarget.find( unsafeSelector ).each( function () {
 		var i, val,
-			attrs = {}, ua = ve.ce.Surface.static.unsafeAttributes;
+			attrs = {},
+			ua = ve.ce.Surface.static.unsafeAttributes;
 
 		i = ua.length;
 		while ( i-- ) {
@@ -42920,14 +44603,14 @@ ve.ce.Surface.prototype.onCopy = function ( e ) {
 		originalRange = this.getNativeRange();
 		if ( originalRange ) {
 			// Save scroll position before changing focus to "offscreen" paste target
-			scrollTop = this.$window.scrollTop();
+			scrollTop = this.getScrollPosition();
 
 			// Prevent surface observation due to native range changing
 			this.surfaceObserver.disable();
 			ve.selectElement( this.$pasteTarget[0] );
 
 			// Restore scroll position after changing focus
-			this.$window.scrollTop( scrollTop );
+			this.setScrollPosition( scrollTop );
 
 			setTimeout( function () {
 				// Change focus back
@@ -42935,7 +44618,7 @@ ve.ce.Surface.prototype.onCopy = function ( e ) {
 				view.nativeSelection.removeAllRanges();
 				view.nativeSelection.addRange( originalRange.cloneRange() );
 				// Restore scroll position
-				view.$window.scrollTop( scrollTop );
+				view.setScrollPosition( scrollTop );
 				view.surfaceObserver.clear();
 				view.surfaceObserver.enable();
 			} );
@@ -43013,7 +44696,7 @@ ve.ce.Surface.prototype.beforePaste = function ( e ) {
 	}
 
 	// Save scroll position before changing focus to "offscreen" paste target
-	this.beforePasteData.scrollTop = this.$window.scrollTop();
+	this.beforePasteData.scrollTop = this.getScrollPosition();
 
 	this.$pasteTarget.empty();
 
@@ -43025,9 +44708,6 @@ ve.ce.Surface.prototype.beforePaste = function ( e ) {
 		textStart = textEnd = 0;
 		nodeRange = node.getRange();
 		contextElement = node.getClonedElement();
-		// Throw away inner whitespace and other internal properties
-		// otherwise our textStart/End offsets may be wrong.
-		delete contextElement.internal;
 		context = [ contextElement ];
 		// If there is content to the left of the cursor, put a placeholder
 		// character to the left of the cursor
@@ -43049,6 +44729,9 @@ ve.ce.Surface.prototype.beforePaste = function ( e ) {
 		}
 		context.push( { type: '/' + context[0].type } );
 
+		// Throw away 'internal', specifically inner whitespace,
+		// before conversion as it can affect textStart/End offsets.
+		delete contextElement.internal;
 		ve.dm.converter.getDomSubtreeFromModel(
 			new ve.dm.Document(
 				new ve.dm.ElementLinearData( doc.getStore(), context ),
@@ -43081,7 +44764,7 @@ ve.ce.Surface.prototype.beforePaste = function ( e ) {
 	}
 
 	// Restore scroll position after focusing the paste target
-	this.$window.scrollTop( this.beforePasteData.scrollTop );
+	this.setScrollPosition( this.beforePasteData.scrollTop );
 
 };
 
@@ -43288,7 +44971,7 @@ ve.ce.Surface.prototype.afterPaste = function () {
 			left = 0;
 			while (
 				context.getLength() &&
-				ve.dm.ElementLinearData.static.compareUnannotated(
+				ve.dm.ElementLinearData.static.compareElements(
 					data.getData( left ),
 					data.isElementData( left ) ? context.getData( 0 ) : beforePasteData.leftText
 				)
@@ -43301,7 +44984,7 @@ ve.ce.Surface.prototype.afterPaste = function () {
 			right = internalListRange.start;
 			while (
 				context.getLength() &&
-				ve.dm.ElementLinearData.static.compareUnannotated(
+				ve.dm.ElementLinearData.static.compareElements(
 					data.getData( right - 1 ),
 					data.isElementData( right - 1 ) ? context.getData( context.getLength() - 1 ) : beforePasteData.rightText
 				)
@@ -43329,7 +45012,7 @@ ve.ce.Surface.prototype.afterPaste = function () {
 	// Firefox sometimes doesn't change scrollTop immediately when pasting
 	// line breaks so wait until we fix it.
 	setTimeout( function () {
-		view.$window.scrollTop( beforePasteData.scrollTop );
+		view.setScrollPosition( beforePasteData.scrollTop );
 	} );
 
 	selection = selection.translateByTransaction( tx );
@@ -43395,6 +45078,7 @@ ve.ce.Surface.prototype.onModelSelect = function () {
 	var focusedNode,
 		selection = this.getModel().getSelection();
 
+	this.cursorDirectionality = null;
 	this.contentBranchNodeChanged = false;
 
 	if ( selection instanceof ve.dm.LinearSelection ) {
@@ -43693,6 +45377,11 @@ ve.ce.Surface.prototype.updateSlug = function () {
 				this.slugFragment = null;
 			}
 		} else {
+			// Unwrap the ve-ce-branchNode-blockSlugWrapper wrapper from the paragraph
+			this.getDocument().getBranchNodeFromOffset( slugFragmentRange.start + 1 ).$element.unwrap();
+			// Modifying the DOM above breaks cursor position, so restore
+			this.showSelection( this.getModel().getSelection() );
+
 			model.applyStaging();
 			this.slugFragment = null;
 		}
@@ -43991,17 +45680,27 @@ ve.ce.Surface.prototype.getActiveTableNode = function () {
  * @param {jQuery.Event|null} e Key down event
  */
 ve.ce.Surface.prototype.storeKeyDownState = function ( e ) {
-	var range;
-	// Store the key event / range, obliterating the old one if necessary.
 	if ( this.nativeSelection.rangeCount === 0 ) {
 		this.cursorEvent = null;
-		this.cursorStartRange = null;
+		this.misleadingCursorStartSelection = null;
 		return;
 	}
-	range = this.nativeSelection.getRangeAt( 0 );
-
 	this.cursorEvent = e;
-	this.cursorStartRange = range;
+	this.misleadingCursorStartSelection = null;
+	if (
+		e.keyCode === OO.ui.Keys.UP ||
+		e.keyCode === OO.ui.Keys.DOWN ||
+		e.keyCode === OO.ui.Keys.LEFT ||
+		e.keyCode === OO.ui.Keys.RIGHT
+	) {
+		this.misleadingCursorStartSelection = {
+			isCollapsed: this.nativeSelection.isCollapsed,
+			anchorNode: this.nativeSelection.anchorNode,
+			anchorOffset: this.nativeSelection.anchorOffset,
+			focusNode: this.nativeSelection.focusNode,
+			focusOffset: this.nativeSelection.focusOffset
+		};
+	}
 };
 
 /**
@@ -44022,48 +45721,47 @@ ve.ce.Surface.prototype.moveModelCursor = function ( offset ) {
 };
 
 /**
- * Handle left or right arrow key events with a linear selection.
- *
- * @param {jQuery.Event} e Left or right key down event
+ * Get the directionality at the current focused node
+ * @returns {string} 'ltr' or 'rtl'
  */
-ve.ce.Surface.prototype.handleLinearLeftOrRightArrowKey = function ( e ) {
-	var direction, range = this.getModel().getSelection().getRange();
+ve.ce.Surface.prototype.getFocusedNodeDirectionality = function () {
+	var cursorNode,
+		range = this.model.getSelection().getRange();
 
-	// On Mac OS pressing Command (metaKey) + Left/Right is same as pressing Home/End.
-	// As we are not able to handle it programmatically (because we don't know at which offsets
-	// lines starts and ends) let it happen natively.
-	if ( e.metaKey ) {
-		return;
+	// Use stored directionality if we have one.
+	if ( this.cursorDirectionality ) {
+		return this.cursorDirectionality;
 	}
-	// Selection is going to be displayed programmatically so prevent default browser behaviour
-	e.preventDefault();
-	// TODO: onDocumentKeyDown did this already
-	this.surfaceObserver.stopTimerLoop();
-	this.incRenderLock();
-	try {
-		// TODO: onDocumentKeyDown did this already
-		this.surfaceObserver.pollOnce();
-	} finally {
-		this.decRenderLock();
+
+	// Else fall back on the CSS directionality of the focused node at the DM selection focus,
+	// which is less reliable because it does not take plaintext bidi into account.
+	// (range.to will actually be at the edge of the focused node, but the
+	// CSS directionality will be the same).
+	cursorNode = this.getDocument().getNodeAndOffset( range.to ).node;
+	if ( cursorNode.nodeType === Node.TEXT_NODE ) {
+		cursorNode = cursorNode.parentNode;
 	}
-	if ( this.$( e.target ).css( 'direction' ) === 'rtl' ) {
-		// If the language direction is RTL, switch left/right directions:
-		direction = e.keyCode === OO.ui.Keys.LEFT ? 1 : -1;
+	return this.$( cursorNode ).css( 'direction' );
+};
+
+/**
+ * Restore the selection from the model if it is outside the active table node
+ *
+ * This is only useful if the DOM selection and the model selection are out of sync
+ * @returns {boolean} Whether the selection was restored
+ */
+ve.ce.Surface.prototype.restoreActiveTableNodeSelection = function () {
+	var activeTableNode, editingRange;
+	if (
+		( activeTableNode = this.getActiveTableNode() ) &&
+		( editingRange = activeTableNode.getEditingRange() ) &&
+		!editingRange.containsRange( ve.ce.veRangeFromSelection( this.nativeSelection ) )
+	) {
+		this.showSelection( this.getModel().getSelection() );
+		return true;
 	} else {
-		direction = e.keyCode === OO.ui.Keys.LEFT ? -1 : 1;
+		return false;
 	}
-
-	range = this.model.getDocument().getRelativeRange(
-		range,
-		direction,
-		( e.altKey === true || e.ctrlKey === true ) ? 'word' : 'character',
-		e.shiftKey,
-		this.getActiveTableNode() ? this.getActiveTableNode().getEditingRange() : null
-	);
-	this.model.setLinearSelection( range );
-	// TODO: onDocumentKeyDown does this anyway
-	this.surfaceObserver.startTimerLoop();
-	this.surfaceObserver.pollOnce();
 };
 
 /**
@@ -44071,11 +45769,10 @@ ve.ce.Surface.prototype.handleLinearLeftOrRightArrowKey = function ( e ) {
  *
  * @param {jQuery.Event} e Up or down key down event
  */
-ve.ce.Surface.prototype.handleLinearUpOrDownArrowKey = function ( e ) {
-	var nativeRange, endNode, endOffset,
+ve.ce.Surface.prototype.handleLinearArrowKey = function ( e ) {
+	var nativeRange, collapseNode, collapseOffset, direction, directionality, upOrDown,
+		startFocusNode, startFocusOffset,
 		range = this.model.getSelection().getRange(),
-		tableEditingRange = this.getActiveTableNode() ? this.getActiveTableNode().getEditingRange() : null,
-		direction = e.keyCode === OO.ui.Keys.DOWN ? 1 : -1,
 		surface = this;
 
 	// TODO: onDocumentKeyDown did this already
@@ -44083,10 +45780,25 @@ ve.ce.Surface.prototype.handleLinearUpOrDownArrowKey = function ( e ) {
 	// TODO: onDocumentKeyDown did this already
 	this.surfaceObserver.pollOnce();
 
+	upOrDown = e.keyCode === OO.ui.Keys.UP || e.keyCode === OO.ui.Keys.DOWN;
+
 	if ( this.focusedNode ) {
+		if ( upOrDown ) {
+			direction = e.keyCode === OO.ui.Keys.DOWN ? 1 : -1;
+		} else {
+			directionality = this.getFocusedNodeDirectionality();
+			/*jshint bitwise:false */
+			if ( e.keyCode === OO.ui.Keys.LEFT ^ directionality === 'rtl' ) {
+				// leftarrow in ltr, or rightarrow in rtl
+				direction = -1;
+			} else {
+				// leftarrow in rtl, or rightarrow in ltr
+				direction = 1;
+			}
+		}
+
 		if ( !this.focusedNode.isContent() ) {
-			// Block focusable node, just move back/forward in the model
-			e.preventDefault();
+			// Block focusable node: move back/forward in DM (and DOM) and preventDefault
 			range = this.model.getDocument().getRelativeRange(
 				range,
 				direction,
@@ -44095,55 +45807,103 @@ ve.ce.Surface.prototype.handleLinearUpOrDownArrowKey = function ( e ) {
 				this.getActiveTableNode() ? this.getActiveTableNode().getEditingRange() : null
 			);
 			this.model.setLinearSelection( range );
+			e.preventDefault();
 			return;
-		} else {
-			// Inline focusable node, move to end of node in model, then let up/down happen natively
-			this.model.setLinearSelection( new ve.Range( direction === 1 ? range.end : range.start ) );
 		}
-	} else if ( !range.isCollapsed() ) {
-		// Perform programmatic handling for a selection that is expanded because CE
-		// behaviour is inconsistent
-		if ( !this.nativeSelection.extend && range.isBackwards() ) {
-			// If the browser doesn't support backwards selections, but the dm range
-			// is backwards, then use anchorNode/Offset to compensate
-			endNode = this.nativeSelection.anchorNode;
-			endOffset = this.nativeSelection.anchorOffset;
+		// Else inline focusable node
+
+		if ( e.shiftKey ) {
+			// There is no DOM range to expand (because the selection is faked), so
+			// use "collapse to focus - observe - expand". Define "focus" to be the
+			// edge of the focusedNode in the direction of motion (so the selection
+			// always grows). This means that clicking on the focusableNode then
+			// modifying the selection will always include the node.
+			if ( direction === -1 ^ range.isBackwards() ) {
+				range = range.flip();
+			}
+			this.model.setLinearSelection( new ve.Range( range.to ) );
 		} else {
-			endNode = this.nativeSelection.focusNode;
-			endOffset = this.nativeSelection.focusOffset;
+			// Move to start/end of node in the model in DM (and DOM)
+			range = new ve.Range( direction === 1 ? range.end : range.start );
+			this.model.setLinearSelection( range );
+			if ( !upOrDown ) {
+				// un-shifted left/right: we've already moved so preventDefault
+				e.preventDefault();
+				return;
+			}
+			// Else keep going with the cursor in the new place
 		}
+		// Else keep DM range and DOM selection as-is
 	}
-	if ( endNode ) {
+
+	if ( !this.nativeSelection.extend && range.isBackwards() ) {
+		// If the browser doesn't support backwards selections, but the dm range
+		// is backwards, then use "collapse to anchor - observe - expand".
+		collapseNode = this.nativeSelection.anchorNode;
+		collapseOffset = this.nativeSelection.anchorOffset;
+	} else if ( !range.isCollapsed() && upOrDown ) {
+		// If selection is expanded and cursoring is up/down, use
+		// "collapse to focus - observe - expand" to work round quirks.
+		collapseNode = this.nativeSelection.focusNode;
+		collapseOffset = this.nativeSelection.focusOffset;
+	}
+	// Else don't collapse the selection
+
+	if ( collapseNode ) {
 		nativeRange = this.getElementDocument().createRange();
-		nativeRange.setStart( endNode, endOffset );
-		nativeRange.setEnd( endNode, endOffset );
+		nativeRange.setStart( collapseNode, collapseOffset );
+		nativeRange.setEnd( collapseNode, collapseOffset );
 		this.nativeSelection.removeAllRanges();
 		this.nativeSelection.addRange( nativeRange );
 	}
 
-	setTimeout( function () {
-		var viewNode, newRange;
+	startFocusNode = this.nativeSelection.focusNode;
+	startFocusOffset = this.nativeSelection.focusOffset;
+
+	// Re-expand (or fixup) the selection after the native action, if necessary
+	this.eventSequencer.afterOne( { keydown: function () {
+		var viewNode, newRange, afterDirection;
+
 		// Chrome bug lets you cursor into a multi-line contentEditable=false with up/down...
-		viewNode = $( surface.nativeSelection.anchorNode ).closest( '.ve-ce-leafNode,.ve-ce-branchNode' ).data( 'view' );
+		viewNode = $( surface.nativeSelection.focusNode ).closest( '.ve-ce-leafNode,.ve-ce-branchNode' ).data( 'view' );
+		if ( !viewNode ) {
+			// Irrelevant selection (or none)
+			return;
+		}
+
 		if ( viewNode.isFocusable() ) {
-			newRange = direction === 1 ? viewNode.getOuterRange() : viewNode.getOuterRange().flip();
+			// We've landed in a focusable node; fixup the range
+			if ( upOrDown ) {
+				// The intended direction is clear, even if the cursor did not move
+				// or did something completely preposterous
+				afterDirection = e.keyCode === OO.ui.Keys.DOWN ? 1 : -1;
+			} else {
+				// Observe which way the cursor moved
+				afterDirection = ve.compareDocumentOrder(
+					startFocusNode,
+					startFocusNode,
+					surface.nativeSelection.focusNode,
+					surface.nativeSelection.focusOffset
+				);
+			}
+			newRange = (
+				afterDirection === 1 ?
+				viewNode.getOuterRange() :
+				viewNode.getOuterRange().flip()
+			);
 		} else {
-			// Check where the range is about to move to
+			// Check where the range has moved to
 			surface.surfaceObserver.pollOnceNoEmit();
 			newRange = new ve.Range( surface.surfaceObserver.getRange().to );
 		}
-		// Expand range
-		if ( e.shiftKey === true ) {
+
+		// Adjust range to use old anchor, if necessary
+		if ( e.shiftKey ) {
 			newRange = new ve.Range( range.from, newRange.to );
-		}
-		if ( tableEditingRange && !tableEditingRange.containsRange( newRange ) ) {
-			// The cursor moved outside the editing cell, move it back
-			surface.showSelection( surface.getModel().getSelection() );
-		} else {
 			surface.getModel().setLinearSelection( newRange );
 		}
 		surface.surfaceObserver.pollOnce();
-	} );
+	} } );
 };
 
 /**
@@ -44244,7 +46004,7 @@ ve.ce.Surface.prototype.handleInsertion = function () {
 		annotations = documentModel.data.getAnnotationsFromRange(
 			new ve.Range( range.start, range.start + 1 )
 		);
-		if ( !this.rangeInsideOneLeafNode( range ) ) {
+		if ( !this.documentView.rangeInsideOneLeafNode( range ) ) {
 			this.model.change(
 				ve.dm.Transaction.newFromRemoval(
 					this.documentView.model,
@@ -44263,17 +46023,6 @@ ve.ce.Surface.prototype.handleInsertion = function () {
 		this.surfaceObserver.stopTimerLoop();
 		this.surfaceObserver.pollOnce();
 	}
-};
-
-/**
- * Test whether a range lies within a single leaf node.
- *
- * @param {ve.Range} range The range to test
- * @returns {boolean} Whether the range lies within a single node
- */
-ve.ce.Surface.prototype.rangeInsideOneLeafNode = function ( range ) {
-	var selected = this.documentView.selectNodes( range, 'leaves' );
-	return selected.length === 1;
 };
 
 /**
@@ -44307,6 +46056,10 @@ ve.ce.Surface.prototype.handleLinearEnter = function ( e ) {
 		// assertion: node is certainly a contentBranchNode
 		nodeModel = node.getModel();
 		nodeModelRange = nodeModel.getRange();
+	}
+
+	if (node && node.handleEnter) {
+		return node.handleEnter(this);
 	}
 
 	// Handle insertion
@@ -44361,6 +46114,11 @@ ve.ce.Surface.prototype.handleLinearEnter = function ( e ) {
 			txInsert = undefined;
 			// Continue to traverseUpstream below. That will succeed because all
 			// ContentBranchNodes have splitOnEnter === true.
+			// HACK / WIP: we want to be able to veto the split behavior in certain cases
+			// which are not covered by the current impl.
+			// Particularly we want to use ce.ContentBranchNode as it solves the rendering
+			// of annotated text, but allow splitOnEnter = false
+			return;
 		}
 		insertEmptyParagraph = undefined;
 	}
@@ -44471,7 +46229,15 @@ ve.ce.Surface.prototype.handleTableEnter = function ( e ) {
 /**
  * Handle delete and backspace key down events with a linear selection.
  *
+ * The handler just schedules a poll to observe the native content removal, unless
+ * one of the following is true:
+ * - The ctrlKey is down; or
+ * - The selection is expanded; or
+ * - We are directly adjacent to an element node in the deletion direction.
+ * In these cases, it will perform the content removal itself.
+ *
  * @param {jQuery.Event} e Delete key down event
+ * @return {boolean} Whether the content was removed by this method
  */
 ve.ce.Surface.prototype.handleLinearDelete = function ( e ) {
 	var docLength, startNode, tableEditingRange,
@@ -44483,12 +46249,26 @@ ve.ce.Surface.prototype.handleLinearDelete = function ( e ) {
 		data = documentModel.data;
 
 	if ( rangeToRemove.isCollapsed() ) {
+		// Use native behaviour then poll, unless we are adjacent to some element (or CTRL
+		// is down, in which case we can't reliably predict whether the native behaviour
+		// would delete far enough to remove some element)
+		offset = rangeToRemove.start;
+		if ( !e.ctrlKey && (
+			( direction === -1 && !data.isElementData( offset - 1 ) ) ||
+			( direction === 1 && !data.isElementData( offset ) )
+		) ) {
+			this.eventSequencer.afterOne( {
+				keydown: this.surfaceObserver.pollOnce.bind( this.surfaceObserver )
+			} );
+			return false;
+		}
+
 		// In case when the range is collapsed use the same logic that is used for cursor left and
 		// right movement in order to figure out range to remove.
 		rangeToRemove = documentModel.getRelativeRange( rangeToRemove, direction, unit, true );
 		tableEditingRange = this.getActiveTableNode() ? this.getActiveTableNode().getEditingRange() : null;
 		if ( tableEditingRange && !tableEditingRange.containsRange( rangeToRemove ) ) {
-			return;
+			return true;
 		}
 		offset = rangeToRemove.start;
 		docLength = data.getLength();
@@ -44501,12 +46281,12 @@ ve.ce.Surface.prototype.handleLinearDelete = function ( e ) {
 			startNode = documentModel.getDocumentNode().getNodeFromOffset( offset + 1 );
 			if ( startNode.isFocusable() ) {
 				this.getModel().setLinearSelection( startNode.getOuterRange() );
-				return;
+				return true;
 			}
 		}
 		if ( rangeToRemove.isCollapsed() ) {
 			// For instance beginning or end of the document.
-			return;
+			return true;
 		}
 	}
 
@@ -44515,6 +46295,7 @@ ve.ce.Surface.prototype.handleLinearDelete = function ( e ) {
 	// TODO: is any of this necessary?
 	this.focus();
 	this.surfaceObserver.clear();
+	return false;
 };
 
 /**
@@ -44553,6 +46334,53 @@ ve.ce.Surface.prototype.handleTableEditingEscape = function ( e ) {
 	e.preventDefault();
 	e.stopPropagation();
 	this.getActiveTableNode().setEditing( false );
+};
+
+/**
+ * Get an approximate range covering data visible in the viewport
+ *
+ * It is assumed that vertical offset increases as you progress through the DM.
+ * Items with custom positioning may throw off results given by this method, so
+ * it should only be treated as an approximation.
+ *
+ * @return {ve.Range} Range covering data visible in the viewport
+ */
+ve.ce.Surface.prototype.getViewportRange = function () {
+	var surface = this,
+		documentModel = this.getModel().getDocument(),
+		data = documentModel.data,
+		surfaceRect = this.getSurface().getBoundingClientRect(),
+		padding = 50,
+		top = Math.max( this.surface.toolbarHeight - surfaceRect.top - padding, 0 ),
+		bottom = top + this.$window.height() - this.surface.toolbarHeight + ( padding * 2 ),
+		documentRange = new ve.Range( 0, this.getModel().getDocument().getInternalList().getListNode().getOuterRange().start );
+
+	function binarySearch( offset, range, side ) {
+		var mid, rect,
+			start = range.start,
+			end = range.end,
+			lastLength = Infinity;
+		while ( range.getLength() < lastLength ) {
+			lastLength = range.getLength();
+			mid = data.getNearestContentOffset(
+				Math.round( ( range.start + range.end ) / 2 )
+			);
+			rect = surface.getSelectionBoundingRect( new ve.dm.LinearSelection( documentModel, new ve.Range( mid ) ) );
+			if ( rect[side] > offset ) {
+				end = mid;
+				range = new ve.Range( range.start, end );
+			} else {
+				start = mid;
+				range = new ve.Range( start, range.end );
+			}
+		}
+		return side === 'bottom' ? start : end;
+	}
+
+	return new ve.Range(
+		binarySearch( top, documentRange, 'bottom' ),
+		binarySearch( bottom, documentRange, 'top' )
+	);
 };
 
 /**
@@ -44889,10 +46717,18 @@ ve.ce.Surface.prototype.setNotUnicorningAll = function ( node ) {
 	this.setUnicorning( null );
 };
 
+ve.ce.Surface.prototype.setScrollPosition = function ( pos ) {
+	this.$window.scrollTop(pos);
+};
+
+ve.ce.Surface.prototype.getScrollPosition = function () {
+	return this.$window.scrollTop();
+};
+
 /*!
  * VisualEditor ContentEditable Surface class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -45196,7 +47032,7 @@ ve.ce.SurfaceObserver.prototype.getRange = function () {
 /*!
  * VisualEditor ContentEditable GeneratedContentNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -45299,14 +47135,19 @@ ve.ce.GeneratedContentNode.prototype.getRenderedDomElements = function ( domElem
 	 * @private
 	 */
 	function resolveAttribute() {
-		this.setAttribute( attr, this[attr] );
+		var origDoc = domElements[0].ownerDocument,
+			nodeInOrigDoc = origDoc.createElement( this.nodeName );
+		nodeInOrigDoc.setAttribute( attr, this.getAttribute( attr ) );
+		this.setAttribute( attr, nodeInOrigDoc[attr] );
 	}
 
-	// Copy domElements so we can modify the elements
+	// Clone the elements into the target document
+	$rendering = $( ve.copyDomElements( domElements, doc ) );
+
 	// Filter out link and style tags for bug 50043
 	// Previously filtered out meta tags, but restore these as they
 	// can be made visible.
-	$rendering = this.$( domElements ).not( 'link, style' );
+	$rendering = $rendering.not( 'link, style' );
 	// Also remove link and style tags nested inside other tags
 	$rendering.find( 'link, style' ).remove();
 
@@ -45329,8 +47170,7 @@ ve.ce.GeneratedContentNode.prototype.getRenderedDomElements = function ( domElem
 			.each( resolveAttribute );
 	}
 
-	// Clone the elements into the target document
-	return ve.copyDomElements( $rendering.toArray(), doc );
+	return $rendering.toArray();
 };
 
 /**
@@ -45514,7 +47354,7 @@ ve.ce.GeneratedContentNode.prototype.getResizableElement = function () {
 /*!
  * VisualEditor ContentEditable AlienNode, AlienBlockNode and AlienInlineNode classes.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -45563,13 +47403,13 @@ ve.ce.AlienNode.prototype.createHighlight = function () {
 	// Mixin method
 	return ve.ce.FocusableNode.prototype.createHighlight.call( this )
 		.addClass( 've-ce-alienNode-highlight' )
-		.attr( 'title', ve.msg( 'visualeditor-aliennode-tooltip' ) );
+		.prop( 'title', ve.msg( 'visualeditor-aliennode-tooltip' ) );
 };
 
 /**
  * @inheritdoc
  */
-ve.ce.AlienNode.prototype.generateContents = function ( config )  {
+ve.ce.AlienNode.prototype.generateContents = function ( config ) {
 	var deferred = $.Deferred();
 	deferred.resolve( ( config && config.domElements ) || this.model.getAttribute( 'domElements' ) || [] );
 	return deferred.promise();
@@ -45632,7 +47472,7 @@ ve.ce.nodeFactory.register( ve.ce.AlienInlineNode );
 /*!
  * VisualEditor ContentEditable BlockquoteNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see AUTHORS.txt
+ * @copyright 2011-2015 VisualEditor Team and others; see AUTHORS.txt
  * @license The MIT License (MIT); see LICENSE.txt
  */
 
@@ -45640,7 +47480,7 @@ ve.ce.nodeFactory.register( ve.ce.AlienInlineNode );
  * ContentEditable Blockquote node.
  *
  * @class
- * @extends ve.ce.BranchNode
+ * @extends ve.ce.ContentBranchNode
  * @constructor
  * @param {ve.dm.BlockquoteNode} model Model to observe
  * @param {Object} [config] Configuration options
@@ -45667,7 +47507,7 @@ ve.ce.nodeFactory.register( ve.ce.BlockquoteNode );
 /*!
  * VisualEditor ContentEditable BreakNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -45704,7 +47544,7 @@ ve.ce.nodeFactory.register( ve.ce.BreakNode );
 /*!
  * VisualEditor ContentEditable CenterNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -45738,7 +47578,7 @@ ve.ce.nodeFactory.register( ve.ce.CenterNode );
 /*!
  * VisualEditor ContentEditable CommentNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -45798,7 +47638,7 @@ ve.ce.nodeFactory.register( ve.ce.CommentNode );
 /*!
  * VisualEditor ContentEditable DefinitionListItemNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -45866,7 +47706,7 @@ ve.ce.nodeFactory.register( ve.ce.DefinitionListItemNode );
 /*!
  * VisualEditor ContentEditable DefinitionListNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -45900,7 +47740,7 @@ ve.ce.nodeFactory.register( ve.ce.DefinitionListNode );
 /*!
  * VisualEditor ContentEditable DivNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -45932,7 +47772,7 @@ ve.ce.nodeFactory.register( ve.ce.DivNode );
 /*!
  * VisualEditor ContentEditable DocumentNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -46017,14 +47857,14 @@ ve.ce.nodeFactory.register( ve.ce.DocumentNode );
 /*!
  * VisualEditor ContentEditable HeadingNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
  * ContentEditable heading node.
  *
  * @class
- * @extends ve.ce.BranchNode
+ * @extends ve.ce.ContentBranchNode
  * @constructor
  * @param {ve.dm.HeadingNode} model Model to observe
  * @param {Object} [config] Configuration options
@@ -46083,7 +47923,7 @@ ve.ce.nodeFactory.register( ve.ce.HeadingNode );
 /*!
  * VisualEditor InternalItemNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -46119,7 +47959,7 @@ ve.ce.nodeFactory.register( ve.ce.InternalItemNode );
 /*!
  * VisualEditor InternalListNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -46163,7 +48003,7 @@ ve.ce.nodeFactory.register( ve.ce.InternalListNode );
 /*!
  * VisualEditor ContentEditable ListItemNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -46199,7 +48039,7 @@ ve.ce.nodeFactory.register( ve.ce.ListItemNode );
 /*!
  * VisualEditor ContentEditable ListNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -46265,14 +48105,14 @@ ve.ce.nodeFactory.register( ve.ce.ListNode );
 /*!
  * VisualEditor ContentEditable ParagraphNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
  * ContentEditable paragraph node.
  *
  * @class
- * @extends ve.ce.BranchNode
+ * @extends ve.ce.ContentBranchNode
  * @constructor
  * @param {ve.dm.ParagraphNode} model Model to observe
  * @param {Object} [config] Configuration options
@@ -46308,14 +48148,14 @@ ve.ce.nodeFactory.register( ve.ce.ParagraphNode );
 /*!
  * VisualEditor ContentEditable PreformattedNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
  * ContentEditable preformatted node.
  *
  * @class
- * @extends ve.ce.BranchNode
+ * @extends ve.ce.ContentBranchNode
  * @constructor
  * @param {ve.dm.PreformattedNode} model Model to observe
  * @param {Object} [config] Configuration options
@@ -46342,7 +48182,7 @@ ve.ce.nodeFactory.register( ve.ce.PreformattedNode );
 /*!
  * VisualEditor ContentEditable TableCaptionNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -46391,7 +48231,7 @@ ve.ce.nodeFactory.register( ve.ce.TableCaptionNode );
 /*!
  * VisualEditor ContentEditable TableCellNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -46428,6 +48268,9 @@ ve.ce.TableCellNode.static.name = 'tableCell';
  * @inheritdoc
  */
 ve.ce.TableCellNode.prototype.onSetup = function () {
+	var rowspan = this.model.getRowspan(),
+		colspan = this.model.getColspan();
+
 	// Parent method
 	ve.ce.TableCellNode.super.prototype.onSetup.call( this );
 
@@ -46441,11 +48284,14 @@ ve.ce.TableCellNode.prototype.onSetup = function () {
 		// The following classes can be used here:
 		// ve-ce-tableCellNode-data
 		// ve-ce-tableCellNode-header
-		.addClass( 've-ce-tableCellNode ve-ce-tableCellNode-' + this.model.getAttribute( 'style' ) )
-		.attr( {
-			rowspan: this.model.getRowspan(),
-			colspan: this.model.getColspan()
-		} );
+		.addClass( 've-ce-tableCellNode ve-ce-tableCellNode-' + this.model.getAttribute( 'style' ) );
+
+	if ( rowspan > 1 ) {
+		this.$element.attr( 'rowspan', rowspan );
+	}
+	if ( colspan > 1 ) {
+		this.$element.attr( 'colspan', colspan );
+	}
 };
 
 /**
@@ -46514,7 +48360,7 @@ ve.ce.nodeFactory.register( ve.ce.TableCellNode );
 /*!
  * VisualEditor ContentEditable TableNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -46575,8 +48421,7 @@ ve.ce.TableNode.prototype.onSetup = function () {
 	} );
 
 	this.$overlay = this.$( '<div>' )
-		.hide()
-		.addClass( 've-ce-tableNodeOverlay' )
+		.addClass( 've-ce-tableNodeOverlay oo-ui-element-hidden' )
 		.append( [
 			this.$selectionBox,
 			this.$selectionBoxAnchor,
@@ -46819,7 +48664,7 @@ ve.ce.TableNode.prototype.onSurfaceModelSelect = function ( selection ) {
 
 	if ( active ) {
 		if ( !this.active ) {
-			this.$overlay.show();
+			this.$overlay.removeClass( 'oo-ui-element-hidden' );
 			// Only register touchstart event after table has become active to prevent
 			// accidental focusing of the table while scrolling
 			this.$element.on( 'touchstart.ve-ce-tableNode', this.onTableMouseDown.bind( this ) );
@@ -46827,7 +48672,7 @@ ve.ce.TableNode.prototype.onSurfaceModelSelect = function ( selection ) {
 		this.surface.setActiveTableNode( this );
 		this.updateOverlayDebounced();
 	} else if ( !active && this.active ) {
-		this.$overlay.hide();
+		this.$overlay.addClass( 'oo-ui-element-hidden' );
 		if ( this.editingFragment ) {
 			this.setEditing( false, true );
 		}
@@ -46976,7 +48821,7 @@ ve.ce.nodeFactory.register( ve.ce.TableNode );
 /*!
  * VisualEditor ContentEditable TableRowNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -47010,7 +48855,7 @@ ve.ce.nodeFactory.register( ve.ce.TableRowNode );
 /*!
  * VisualEditor ContentEditable TableSectionNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -47076,7 +48921,7 @@ ve.ce.nodeFactory.register( ve.ce.TableSectionNode );
 /*!
  * VisualEditor ContentEditable TextNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -47185,7 +49030,7 @@ ve.ce.nodeFactory.register( ve.ce.TextNode );
 /*!
  * VisualEditor ContentEditable ImageNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -47251,7 +49096,7 @@ ve.ce.ImageNode.static.getDescription = function ( model ) {
 ve.ce.ImageNode.prototype.onAttributeChange = function ( key, from, to ) {
 	switch ( key ) {
 		case 'src':
-			this.$image.attr( 'src', this.getResolvedAttribute( 'src' ) );
+			this.$image.prop( 'src', this.getResolvedAttribute( 'src' ) );
 			break;
 
 		case 'width':
@@ -47277,7 +49122,7 @@ ve.ce.ImageNode.prototype.onLoad = function () {
 /*!
  * VisualEditor ContentEditable block image node class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -47286,6 +49131,7 @@ ve.ce.ImageNode.prototype.onLoad = function () {
  * @class
  * @extends ve.ce.BranchNode
  * @mixins ve.ce.ImageNode
+ * @mixins ve.ce.AlignableNode
  *
  * @constructor
  * @param {ve.dm.BlockImageNode} model Model to observe
@@ -47301,16 +49147,17 @@ ve.ce.BlockImageNode = function VeCeBlockImageNode( model, config ) {
 
 	// Build DOM
 	this.$image = this.$( '<img>' )
-		.attr( 'src', this.getResolvedAttribute( 'src' ) )
+		.prop( 'src', this.getResolvedAttribute( 'src' ) )
 		.prependTo( this.$element );
 
 	// Mixin constructors
 	ve.ce.ImageNode.call( this, this.$element, this.$image, config );
+	ve.ce.AlignableNode.call( this, this.$element, config );
 
 	// Initialization
 	this.$element.addClass( 've-ce-blockImageNode' );
 	this.$image
-		.attr( {
+		.prop( {
 			alt: this.model.getAttribute( 'alt' ),
 			src: this.getResolvedAttribute( 'src' )
 		} )
@@ -47326,6 +49173,8 @@ OO.inheritClass( ve.ce.BlockImageNode, ve.ce.BranchNode );
 
 OO.mixinClass( ve.ce.BlockImageNode, ve.ce.ImageNode );
 
+OO.mixinClass( ve.ce.BlockImageNode, ve.ce.AlignableNode );
+
 /* Static Properties */
 
 ve.ce.BlockImageNode.static.name = 'blockImage';
@@ -47339,7 +49188,7 @@ ve.ce.nodeFactory.register( ve.ce.BlockImageNode );
 /*!
  * VisualEditor ContentEditable block image caption node class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -47373,7 +49222,7 @@ ve.ce.nodeFactory.register( ve.ce.BlockImageCaptionNode );
 /*!
  * VisualEditor ContentEditable InlineImageNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -47402,7 +49251,7 @@ ve.ce.InlineImageNode = function VeCeInlineImageNode( model, config ) {
 	// Initialization
 	this.$element
 		.addClass( 've-ce-inlineImageNode' )
-		.attr( {
+		.prop( {
 			alt: this.model.getAttribute( 'alt' ),
 			src: this.getResolvedAttribute( 'src' )
 		} )
@@ -47431,7 +49280,7 @@ ve.ce.nodeFactory.register( ve.ce.InlineImageNode );
 /*!
  * VisualEditor ContentEditable LanguageAnnotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -47452,7 +49301,7 @@ ve.ce.LanguageAnnotation = function VeCeLanguageAnnotation() {
 	this.$element
 		.addClass( 've-ce-languageAnnotation' )
 		.addClass( 've-ce-bidi-isolate' )
-		.attr( {
+		.prop( {
 			lang: this.model.getAttribute( 'lang' ),
 			dir: this.model.getAttribute( 'dir' ),
 			title: this.constructor.static.getDescription( this.model )
@@ -47481,9 +49330,9 @@ ve.ce.LanguageAnnotation.static.getDescription = function ( model ) {
 
 	if ( !dir || dir === ve.init.platform.getLanguageDirection( lang ).toUpperCase() ) {
 		return ve.msg( 'visualeditor-languageannotation-description', name );
-	} else {
-		return ve.msg( 'visualeditor-languageannotation-description-with-dir', name, dir );
 	}
+
+	return ve.msg( 'visualeditor-languageannotation-description-with-dir', name, dir );
 };
 
 /* Registration */
@@ -47493,7 +49342,7 @@ ve.ce.annotationFactory.register( ve.ce.LanguageAnnotation );
 /*!
  * VisualEditor ContentEditable LinkAnnotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -47513,8 +49362,10 @@ ve.ce.LinkAnnotation = function VeCeLinkAnnotation() {
 	// DOM changes
 	this.$element
 		.addClass( 've-ce-linkAnnotation' )
-		.attr( 'href', ve.resolveUrl( this.model.getHref(), this.getModelHtmlDocument() ) )
-		.attr( 'title', this.constructor.static.getDescription( this.model ) )
+		.prop( {
+			href: ve.resolveUrl( this.model.getHref(), this.getModelHtmlDocument() ),
+			title: this.constructor.static.getDescription( this.model )
+		} )
 		// Some browsers will try to let links do their thing
 		// (e.g. iOS Safari when the keyboard is closed)
 		.on( 'click', function ( e ) {
@@ -47553,7 +49404,7 @@ ve.ce.annotationFactory.register( ve.ce.LinkAnnotation );
 /*!
  * VisualEditor ContentEditable TextStyleAnnotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -47596,7 +49447,7 @@ ve.ce.annotationFactory.register( ve.ce.TextStyleAnnotation );
 /*!
  * VisualEditor ContentEditable AbbreviationAnnotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -47634,7 +49485,7 @@ ve.ce.annotationFactory.register( ve.ce.AbbreviationAnnotation );
 /*!
  * VisualEditor ContentEditable BigAnnotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -47672,7 +49523,7 @@ ve.ce.annotationFactory.register( ve.ce.BigAnnotation );
 /*!
  * VisualEditor ContentEditable BoldAnnotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -47710,7 +49561,7 @@ ve.ce.annotationFactory.register( ve.ce.BoldAnnotation );
 /*!
  * VisualEditor ContentEditable CodeAnnotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -47748,7 +49599,7 @@ ve.ce.annotationFactory.register( ve.ce.CodeAnnotation );
 /*!
  * VisualEditor ContentEditable CodeSampleAnnotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -47786,7 +49637,7 @@ ve.ce.annotationFactory.register( ve.ce.CodeSampleAnnotation );
 /*!
  * VisualEditor ContentEditable DatetimeAnnotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -47824,7 +49675,7 @@ ve.ce.annotationFactory.register( ve.ce.DatetimeAnnotation );
 /*!
  * VisualEditor ContentEditable DefinitionAnnotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -47862,7 +49713,7 @@ ve.ce.annotationFactory.register( ve.ce.DefinitionAnnotation );
 /*!
  * VisualEditor ContentEditable HighlightAnnotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -47900,7 +49751,7 @@ ve.ce.annotationFactory.register( ve.ce.HighlightAnnotation );
 /*!
  * VisualEditor ContentEditable ItalicAnnotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -47938,7 +49789,7 @@ ve.ce.annotationFactory.register( ve.ce.ItalicAnnotation );
 /*!
  * VisualEditor ContentEditable QuotationAnnotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -47976,7 +49827,7 @@ ve.ce.annotationFactory.register( ve.ce.QuotationAnnotation );
 /*!
  * VisualEditor ContentEditable SmallAnnotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -48014,7 +49865,7 @@ ve.ce.annotationFactory.register( ve.ce.SmallAnnotation );
 /*!
  * VisualEditor ContentEditable SpanAnnotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -48052,7 +49903,7 @@ ve.ce.annotationFactory.register( ve.ce.SpanAnnotation );
 /*!
  * VisualEditor ContentEditable StrikethroughAnnotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -48090,7 +49941,7 @@ ve.ce.annotationFactory.register( ve.ce.StrikethroughAnnotation );
 /*!
  * VisualEditor ContentEditable SubscriptAnnotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -48128,7 +49979,7 @@ ve.ce.annotationFactory.register( ve.ce.SubscriptAnnotation );
 /*!
  * VisualEditor ContentEditable SuperscriptAnnotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -48166,7 +50017,7 @@ ve.ce.annotationFactory.register( ve.ce.SuperscriptAnnotation );
 /*!
  * VisualEditor ContentEditable UnderlineAnnotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -48204,7 +50055,7 @@ ve.ce.annotationFactory.register( ve.ce.UnderlineAnnotation );
 /*!
  * VisualEditor ContentEditable UserInputAnnotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -48242,7 +50093,7 @@ ve.ce.annotationFactory.register( ve.ce.UserInputAnnotation );
 /*!
  * VisualEditor ContentEditable VariableAnnotation class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -48280,7 +50131,7 @@ ve.ce.annotationFactory.register( ve.ce.VariableAnnotation );
 /*!
  * VisualEditor UserInterface namespace.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -48290,11 +50141,11 @@ ve.ce.annotationFactory.register( ve.ce.VariableAnnotation );
  * @singleton
  */
 ve.ui = {
-	//'actionFactory' instantiated in ve.ui.ActionFactory.js
-	//'commandRegistry' instantiated in ve.ui.CommandRegistry.js
-	//'triggerRegistry' instantiated in ve.ui.TriggerRegistry.js
-	//'toolFactory' instantiated in ve.ui.ToolFactory.js
-	//'fileDropHandlerFactory' instantiated in ve.ui.FileDropHandlerFactory.js
+	// 'actionFactory' instantiated in ve.ui.ActionFactory.js
+	// 'commandRegistry' instantiated in ve.ui.CommandRegistry.js
+	// 'triggerRegistry' instantiated in ve.ui.TriggerRegistry.js
+	// 'toolFactory' instantiated in ve.ui.ToolFactory.js
+	// 'dataTransferHandlerFactory' instantiated in ve.ui.DataTransferHandlerFactory.js
 	windowFactory: new OO.Factory()
 };
 
@@ -48303,7 +50154,7 @@ ve.ui.windowFactory.register( OO.ui.MessageDialog );
 /*!
  * VisualEditor UserInterface Overlay class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -48331,7 +50182,7 @@ OO.inheritClass( ve.ui.Overlay, OO.ui.Element );
 /*!
  * VisualEditor UserInterface Surface class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -48781,7 +50632,7 @@ ve.ui.Surface.prototype.stopFilibuster = function () {
 /*!
  * VisualEditor UserInterface Context class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -48816,9 +50667,10 @@ ve.ui.Context = function VeUiContext( surface, config ) {
 	this.menu.connect( this, { choose: 'onContextItemChoose' } );
 
 	// Initialization
-	// Hide element using $.hide() not this.toggle as child implementations
+	// Hide element using a class, not this.toggle, as child implementations
 	// of toggle may require the instance to be fully constructed before running.
-	this.$element.addClass( 've-ui-context' ).hide();
+	this.$element
+		.addClass( 've-ui-context oo-ui-element-hidden' );
 	this.menu.toggle( false );
 	this.inspectors.$element.addClass( 've-ui-context-inspectors' );
 };
@@ -49104,7 +50956,7 @@ ve.ui.Context.prototype.toggle = function ( show ) {
 	show = show === undefined ? !this.visible : !!show;
 	if ( show !== this.visible ) {
 		this.visible = show;
-		this.$element.toggle();
+		this.$element.toggleClass( 'oo-ui-element-hidden', !this.visible );
 	}
 	return $.Deferred().resolve().promise();
 };
@@ -49141,7 +50993,7 @@ ve.ui.Context.prototype.destroy = function () {
 /*!
  * VisualEditor UserInterface Table Context class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -49277,7 +51129,7 @@ ve.ui.TableContext.prototype.toggle = function ( show ) {
 /*!
  * VisualEditor UserInterface Tool classes.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -49376,7 +51228,7 @@ ve.ui.Tool.prototype.getCommand = function () {
 /*!
  * VisualEditor UserInterface Toolbar class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -49603,16 +51455,9 @@ ve.ui.Toolbar.prototype.getCommands = function () {
  * @inheritdoc
  */
 ve.ui.Toolbar.prototype.getToolAccelerator = function ( name ) {
-	var i, l, triggers = this.getTriggers( name ), shortcuts = [];
+	var messages = ve.ui.triggerRegistry.getMessages( name );
 
-	if ( triggers ) {
-		for ( i = 0, l = triggers.length; i < l; i++ ) {
-			shortcuts.push( triggers[i].getMessage() );
-		}
-		return shortcuts.join( ', ' );
-	} else {
-		return undefined;
-	}
+	return messages ? messages.join( ', ' ) : undefined;
 };
 
 /**
@@ -49722,7 +51567,7 @@ ve.ui.Toolbar.prototype.unfloat = function () {
 /*!
  * VisualEditor UserInterface TargetToolbar class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -49781,7 +51626,7 @@ ve.ui.TargetToolbar.prototype.getCommands = function () {
 /*!
  * VisualEditor UserInterface ToolFactory class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -49877,7 +51722,7 @@ ve.ui.toolGroupFactory = new OO.ui.ToolGroupFactory();
 /*!
  * VisualEditor UserInterface Command class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -49968,7 +51813,7 @@ ve.ui.Command.prototype.getArgs = function () {
 /*!
  * VisualEditor CommandRegistry class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -50113,6 +51958,16 @@ ve.ui.commandRegistry.register(
 );
 ve.ui.commandRegistry.register(
 	new ve.ui.Command(
+		'findNext', 'window', 'open', { args: ['findAndReplace', null, 'findNext'] }
+	)
+);
+ve.ui.commandRegistry.register(
+	new ve.ui.Command(
+		'findPrevious', 'window', 'open', { args: ['findAndReplace', null, 'findPrevious'] }
+	)
+);
+ve.ui.commandRegistry.register(
+	new ve.ui.Command(
 		'code', 'annotation', 'toggle',
 		{ args: ['textStyle/code'], supportedSelections: ['linear', 'table'] }
 	)
@@ -50252,7 +52107,7 @@ ve.ui.commandRegistry.register(
 );
 ve.ui.commandRegistry.register(
 	new ve.ui.Command( 'deleteColumn', 'table', 'delete',
-		{  args: ['col'], supportedSelections: ['table'] }
+		{ args: ['col'], supportedSelections: ['table'] }
 	)
 );
 ve.ui.commandRegistry.register(
@@ -50271,7 +52126,7 @@ ve.ui.commandRegistry.register(
 /*!
  * VisualEditor UserInterface Trigger class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -50669,7 +52524,7 @@ ve.ui.Trigger.prototype.getMessage = function () {
 /*!
  * VisualEditor UserInterface TriggerRegistry class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -50681,7 +52536,7 @@ ve.ui.Trigger.prototype.getMessage = function () {
  */
 ve.ui.TriggerRegistry = function VeUiTriggerRegistry() {
 	// Parent constructor
-	OO.Registry.call( this );
+	ve.ui.TriggerRegistry.super.call( this );
 };
 
 /* Inheritance */
@@ -50728,7 +52583,17 @@ ve.ui.TriggerRegistry.prototype.register = function ( name, triggers ) {
 		}
 	}
 
-	OO.Registry.prototype.register.call( this, name, triggerList );
+	ve.ui.TriggerRegistry.super.prototype.register.call( this, name, triggerList );
+};
+
+/**
+ * Get trigger messages for a trigger by name
+ *
+ * @param {string} name Symbolic name
+ * @return {string[]} List of trigger messages
+ */
+ve.ui.TriggerRegistry.prototype.getMessages = function ( name ) {
+	return ( this.lookup( name ) || [] ).map( function ( trigger ) { return trigger.getMessage(); } );
 };
 
 /* Initialization */
@@ -50843,11 +52708,29 @@ ve.ui.triggerRegistry.register(
 ve.ui.triggerRegistry.register(
 	'findAndReplace', { mac: new ve.ui.Trigger( 'cmd+f' ), pc: new ve.ui.Trigger( 'ctrl+f' ) }
 );
+ve.ui.triggerRegistry.register(
+	'findNext', {
+		mac: new ve.ui.Trigger( 'cmd+g' ),
+		pc: [
+			new ve.ui.Trigger( 'ctrl+g' ),
+			new ve.ui.Trigger( 'f3' )
+		]
+	}
+);
+ve.ui.triggerRegistry.register(
+	'findPrevious', {
+		mac: new ve.ui.Trigger( 'cmd+shift+g' ),
+		pc: [
+			new ve.ui.Trigger( 'shift+ctrl+g' ),
+			new ve.ui.Trigger( 'shift+f3' )
+		]
+	}
+);
 
 /*!
  * VisualEditor UserInterface Sequence class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -50949,7 +52832,7 @@ ve.ui.Sequence.prototype.getCommandName = function () {
 /*!
  * VisualEditor UserInterface SequenceRegistry class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -51019,7 +52902,7 @@ ve.ui.sequenceRegistry.register(
 /*!
  * VisualEditor UserInterface Action class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -51063,7 +52946,7 @@ ve.ui.Action.static.methods = [];
 /*!
  * VisualEditor UserInterface ActionFactory class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -51104,13 +52987,13 @@ ve.ui.ActionFactory.prototype.doesActionSupportMethod = function ( action, metho
 ve.ui.actionFactory = new ve.ui.ActionFactory();
 
 /*!
- * VisualEditor UserInterface file drop handler class.
+ * VisualEditor UserInterface data transfer handler class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
- * File drop handler.
+ * Data transfer handler.
  *
  * @class
  * @abstract
@@ -51119,7 +53002,7 @@ ve.ui.actionFactory = new ve.ui.ActionFactory();
  * @param {ve.ui.Surface} surface Surface
  * @param {File} file File to handle
  */
-ve.ui.FileDropHandler = function VeUiFileDropHandler( surface, file ) {
+ve.ui.DataTransferHandler = function VeUiDataTransferHandler( surface, file ) {
 	// Properties
 	this.surface = surface;
 	this.file = file;
@@ -51139,7 +53022,7 @@ ve.ui.FileDropHandler = function VeUiFileDropHandler( surface, file ) {
 
 /* Inheritance */
 
-OO.initClass( ve.ui.FileDropHandler );
+OO.initClass( ve.ui.DataTransferHandler );
 
 /* Static properties */
 
@@ -51150,7 +53033,7 @@ OO.initClass( ve.ui.FileDropHandler );
  * @property {string}
  * @inheritable
  */
-ve.ui.FileDropHandler.static.name = null;
+ve.ui.DataTransferHandler.static.name = null;
 
 /**
  * List of mime types supported by this handler
@@ -51159,7 +53042,7 @@ ve.ui.FileDropHandler.static.name = null;
  * @property {string[]}
  * @inheritable
  */
-ve.ui.FileDropHandler.static.types = [];
+ve.ui.DataTransferHandler.static.types = [];
 
 /* Methods */
 
@@ -51168,8 +53051,8 @@ ve.ui.FileDropHandler.static.types = [];
  *
  * Implementations should aim to resolve this.insertableDataDeferred.
  */
-ve.ui.FileDropHandler.prototype.process = function () {
-	throw new Error( 've.ui.FileDropHandler subclass must implement process' );
+ve.ui.DataTransferHandler.prototype.process = function () {
+	throw new Error( 've.ui.DataTransferHandler subclass must implement process' );
 };
 
 /**
@@ -51177,7 +53060,7 @@ ve.ui.FileDropHandler.prototype.process = function () {
  *
  * @return {jQuery.Promise} Promise which resolves with data to insert
  */
-ve.ui.FileDropHandler.prototype.getInsertableData = function () {
+ve.ui.DataTransferHandler.prototype.getInsertableData = function () {
 	this.process();
 
 	return this.insertableDataDeferred.promise();
@@ -51188,26 +53071,26 @@ ve.ui.FileDropHandler.prototype.getInsertableData = function () {
  *
  * @param {Event} e Progress event
  */
-ve.ui.FileDropHandler.prototype.onFileProgress = function () {};
+ve.ui.DataTransferHandler.prototype.onFileProgress = function () {};
 
 /**
  * Handle load events from the file reader
  *
  * @param {Event} e Load event
  */
-ve.ui.FileDropHandler.prototype.onFileLoad = function () {};
+ve.ui.DataTransferHandler.prototype.onFileLoad = function () {};
 
 /**
  * Handle load end events from the file reader
  *
  * @param {Event} e Load end event
  */
-ve.ui.FileDropHandler.prototype.onFileLoadEnd = function () {};
+ve.ui.DataTransferHandler.prototype.onFileLoadEnd = function () {};
 
 /**
- * Abort the file drop handler
+ * Abort the data transfer handler
  */
-ve.ui.FileDropHandler.prototype.abort = function () {
+ve.ui.DataTransferHandler.prototype.abort = function () {
 	this.insertableDataDeferred.reject();
 };
 
@@ -51217,7 +53100,7 @@ ve.ui.FileDropHandler.prototype.abort = function () {
  * @param {jQuery.Promise} progressCompletePromise Promise which resolves when the progress action is complete
  * @param {jQuery|string|Function} [label] Progress bar label, defaults to file name
  */
-ve.ui.FileDropHandler.prototype.createProgress = function ( progressCompletePromise, label ) {
+ve.ui.DataTransferHandler.prototype.createProgress = function ( progressCompletePromise, label ) {
 	var handler = this;
 
 	this.surface.createProgress( progressCompletePromise, label || this.file.name ).done( function ( progressBar, cancelPromise ) {
@@ -51235,7 +53118,7 @@ ve.ui.FileDropHandler.prototype.createProgress = function ( progressCompleteProm
  *
  * @param {number} progress Progress percent
  */
-ve.ui.FileDropHandler.prototype.setProgress = function ( progress ) {
+ve.ui.DataTransferHandler.prototype.setProgress = function ( progress ) {
 	this.progress = progress;
 	if ( this.progressBar ) {
 		this.progressBar.setProgress( this.progress );
@@ -51243,9 +53126,9 @@ ve.ui.FileDropHandler.prototype.setProgress = function ( progress ) {
 };
 
 /*!
- * VisualEditor FileDropHandlerFactory class.
+ * VisualEditor DataTransferHandlerFactory class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -51255,25 +53138,25 @@ ve.ui.FileDropHandler.prototype.setProgress = function ( progress ) {
  * @extends OO.Factory
  * @constructor
  */
-ve.ui.FileDropHandlerFactory = function VeUiFileDropHandlerFactory() {
+ve.ui.DataTransferHandlerFactory = function VeUiDataTransferHandlerFactory() {
 	// Parent constructor
-	ve.ui.FileDropHandlerFactory.super.apply( this, arguments );
+	ve.ui.DataTransferHandlerFactory.super.apply( this, arguments );
 
 	this.handlerNamesByType = {};
 };
 
 /* Inheritance */
 
-OO.inheritClass( ve.ui.FileDropHandlerFactory, OO.Factory );
+OO.inheritClass( ve.ui.DataTransferHandlerFactory, OO.Factory );
 
 /* Methods */
 
 /**
  * @inheritdoc
  */
-ve.ui.FileDropHandlerFactory.prototype.register = function ( constructor ) {
+ve.ui.DataTransferHandlerFactory.prototype.register = function ( constructor ) {
 	// Parent method
-	ve.ui.FileDropHandlerFactory.super.prototype.register.call( this, constructor );
+	ve.ui.DataTransferHandlerFactory.super.prototype.register.call( this, constructor );
 
 	var i, l, types = constructor.static.types;
 	for ( i = 0, l = types.length; i < l; i++ ) {
@@ -51287,18 +53170,18 @@ ve.ui.FileDropHandlerFactory.prototype.register = function ( constructor ) {
  * @param {string} type File type
  * @returns {string|undefined} Handler name, or undefined if not found
  */
-ve.ui.FileDropHandlerFactory.prototype.getHandlerNameForType = function ( type ) {
+ve.ui.DataTransferHandlerFactory.prototype.getHandlerNameForType = function ( type ) {
 	return this.handlerNamesByType[type];
 };
 
 /* Initialization */
 
-ve.ui.fileDropHandlerFactory = new ve.ui.FileDropHandlerFactory();
+ve.ui.dataTransferHandlerFactory = new ve.ui.DataTransferHandlerFactory();
 
 /*!
  * VisualEditor UserInterface WindowManager class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -51348,7 +53231,7 @@ ve.ui.WindowManager.prototype.getReadyDelay = function () {
 /*!
  * VisualEditor UserInterface AnnotationAction class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -51493,7 +53376,7 @@ ve.ui.actionFactory.register( ve.ui.AnnotationAction );
 /*!
  * VisualEditor UserInterface ContentAction class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -51594,7 +53477,7 @@ ve.ui.actionFactory.register( ve.ui.ContentAction );
 /*!
  * VisualEditor UserInterface FormatAction class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -51681,7 +53564,7 @@ ve.ui.actionFactory.register( ve.ui.FormatAction );
 /*!
  * VisualEditor UserInterface HistoryAction class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -51745,7 +53628,7 @@ ve.ui.actionFactory.register( ve.ui.HistoryAction );
 /*!
  * VisualEditor UserInterface IndentationAction class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -52084,7 +53967,7 @@ ve.ui.actionFactory.register( ve.ui.IndentationAction );
 /*!
  * VisualEditor UserInterface ListAction class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -52316,7 +54199,7 @@ ve.ui.actionFactory.register( ve.ui.ListAction );
 /*!
  * VisualEditor ContentEditable TableNode class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see AUTHORS.txt
+ * @copyright 2011-2015 VisualEditor Team and others; see AUTHORS.txt
  * @license The MIT License (MIT); see LICENSE.txt
  */
 
@@ -52505,10 +54388,11 @@ ve.ui.TableAction.prototype.changeCellStyle = function ( style ) {
  * @return {boolean} Action was executed
  */
 ve.ui.TableAction.prototype.mergeCells = function () {
-	var i, cells,
+	var i, r, c, cell, cells, hasNonPlaceholders,
 		txs = [],
 		surfaceModel = this.surface.getModel(),
-		selection = surfaceModel.getSelection();
+		selection = surfaceModel.getSelection(),
+		matrix = selection.getTableNode().getMatrix();
 
 	if ( !( selection instanceof ve.dm.TableSelection ) ) {
 		return false;
@@ -52526,12 +54410,13 @@ ve.ui.TableAction.prototype.mergeCells = function () {
 		for ( i = cells.length - 1; i >= 1; i-- ) {
 			txs.push(
 				this.replacePlaceholder(
-					selection.getTableNode().getMatrix(),
+					matrix,
 					cells[i],
 					{ style: cells[0].node.getStyle() }
 				)
 			);
 		}
+		surfaceModel.change( txs );
 	} else {
 		// Merge
 		cells = selection.getMatrixCells();
@@ -52551,8 +54436,36 @@ ve.ui.TableAction.prototype.mergeCells = function () {
 				)
 			);
 		}
+		surfaceModel.change( txs );
+
+		// Check for rows filled with entirely placeholders. If such a row exists, delete it.
+		for ( r = selection.endRow; r >= selection.startRow; r-- ) {
+			hasNonPlaceholders = false;
+			for ( c = 0; ( cell = matrix.getCell( r, c ) ) !== undefined; c++ ) {
+				if ( cell && !cell.isPlaceholder() ) {
+					hasNonPlaceholders = true;
+					break;
+				}
+			}
+			if ( !hasNonPlaceholders ) {
+				this.deleteRowsOrColumns( matrix, 'row', r, r );
+			}
+		}
+
+		// Check for columns filled with entirely placeholders. If such a column exists, delete it.
+		for ( c = selection.endCol; c >= selection.startCol; c-- ) {
+			hasNonPlaceholders = false;
+			for ( r = 0; ( cell = matrix.getCell( r, c ) ) !== undefined; r++ ) {
+				if ( cell && !cell.isPlaceholder() ) {
+					hasNonPlaceholders = true;
+					break;
+				}
+			}
+			if ( !hasNonPlaceholders ) {
+				this.deleteRowsOrColumns( matrix, 'col', c, c );
+			}
+		}
 	}
-	surfaceModel.change( txs );
 	return true;
 };
 
@@ -52939,7 +54852,7 @@ ve.ui.actionFactory.register( ve.ui.TableAction );
 /*!
  * VisualEditor UserInterface WindowAction class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -52974,14 +54887,15 @@ ve.ui.WindowAction.static.methods = [ 'open', 'close', 'toggle' ];
 /* Methods */
 
 /**
- * Open or toggle a window.
+ * Open a window.
  *
  * @method
  * @param {string} name Symbolic name of window to open
  * @param {Object} [data] Window opening data
+ * @param {string} [action] Action to execute after opening, or immediately if the window is already open
  * @return {boolean} Action was executed
  */
-ve.ui.WindowAction.prototype.open = function ( name, data ) {
+ve.ui.WindowAction.prototype.open = function ( name, data, action ) {
 	var windowType = this.getWindowType( name ),
 		windowManager = windowType && this.getWindowManager( windowType ),
 		surface = this.surface,
@@ -53000,9 +54914,22 @@ ve.ui.WindowAction.prototype.open = function ( name, data ) {
 		data = ve.extendObject( data, { surface: surface } );
 	}
 
-	windowManager.openWindow( name, data ).then( function ( closing ) {
-		closing.then( function () {
-			surface.getView().activate();
+	windowManager.getWindow( name ).then( function ( win ) {
+		var opening = windowManager.openWindow( win, data );
+
+		surface.getView().emit( 'position' );
+
+		opening.then( function ( closing ) {
+			closing.then( function ( closed ) {
+				surface.getView().activate();
+				closed.then( function () {
+					surface.getView().emit( 'position' );
+				} );
+			} );
+		} ).always( function () {
+			if ( action ) {
+				win.executeAction( action );
+			}
 		} );
 	} );
 
@@ -53098,7 +55025,7 @@ ve.ui.actionFactory.register( ve.ui.WindowAction );
 /*!
  * VisualEditor UserInterface ClearAnnotationCommand class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -53139,7 +55066,7 @@ ve.ui.commandRegistry.register( new ve.ui.ClearAnnotationCommand() );
 /*!
  * VisualEditor UserInterface HistoryCommand class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -53188,7 +55115,7 @@ ve.ui.commandRegistry.register( new ve.ui.HistoryCommand( 'redo', 'redo' ) );
 /*!
  * VisualEditor UserInterface IndentationCommand class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -53244,7 +55171,7 @@ ve.ui.commandRegistry.register( new ve.ui.IndentationCommand( 'outdent', 'decrea
 /*!
  * VisualEditor UserInterface MergeCellsCommand class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -53285,7 +55212,7 @@ ve.ui.commandRegistry.register( new ve.ui.MergeCellsCommand() );
 /*!
  * VisualEditor UserInterface TableCaptionCommand class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -53345,7 +55272,7 @@ ve.ui.commandRegistry.register( new ve.ui.TableCaptionCommand() );
 /*!
  * VisualEditor UserInterface FragmentDialog class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -53408,7 +55335,7 @@ ve.ui.FragmentDialog.prototype.getFragment = function () {
 /*!
  * VisualEditor user interface NodeDialog class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -53501,7 +55428,7 @@ ve.ui.NodeDialog.prototype.getTeardownProcess = function ( data ) {
 /*!
  * VisualEditor UserInterface ToolbarDialog class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -53548,7 +55475,7 @@ ve.ui.ToolbarDialog.prototype.initialize = function () {
 /*!
  * VisualEditor UserInterface CommandHelpDialog class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -53682,24 +55609,6 @@ ve.ui.CommandHelpDialog.static.getCommandGroups = function () {
 				{ trigger: 'clear', msg: 'visualeditor-clearbutton-tooltip' }
 			]
 		},
-		history: {
-			title: 'visualeditor-shortcuts-history',
-			commands: [
-				{ trigger: 'undo', msg: 'visualeditor-historybutton-undo-tooltip' },
-				{ trigger: 'redo', msg: 'visualeditor-historybutton-redo-tooltip' }
-			]
-		},
-		formatting: {
-			title: 'visualeditor-shortcuts-formatting',
-			commands: [
-				{ trigger: 'paragraph', msg: 'visualeditor-formatdropdown-format-paragraph' },
-				{ shortcuts: ['ctrl+(1-6)'], msg: 'visualeditor-formatdropdown-format-heading-label' },
-				{ trigger: 'preformatted', msg: 'visualeditor-formatdropdown-format-preformatted' },
-				{ trigger: 'blockquote', msg: 'visualeditor-formatdropdown-format-blockquote' },
-				{ trigger: 'indent', msg: 'visualeditor-indentationbutton-indent-tooltip' },
-				{ trigger: 'outdent', msg: 'visualeditor-indentationbutton-outdent-tooltip' }
-			]
-		},
 		clipboard: {
 			title: 'visualeditor-shortcuts-clipboard',
 			commands: [
@@ -53727,10 +55636,30 @@ ve.ui.CommandHelpDialog.static.getCommandGroups = function () {
 				{ trigger: 'pasteSpecial', msg: 'visualeditor-clipboard-paste-special' }
 			]
 		},
+		formatting: {
+			title: 'visualeditor-shortcuts-formatting',
+			commands: [
+				{ trigger: 'paragraph', msg: 'visualeditor-formatdropdown-format-paragraph' },
+				{ shortcuts: ['ctrl+(1-6)'], msg: 'visualeditor-formatdropdown-format-heading-label' },
+				{ trigger: 'preformatted', msg: 'visualeditor-formatdropdown-format-preformatted' },
+				{ trigger: 'blockquote', msg: 'visualeditor-formatdropdown-format-blockquote' },
+				{ trigger: 'indent', msg: 'visualeditor-indentationbutton-indent-tooltip' },
+				{ trigger: 'outdent', msg: 'visualeditor-indentationbutton-outdent-tooltip' }
+			]
+		},
+		history: {
+			title: 'visualeditor-shortcuts-history',
+			commands: [
+				{ trigger: 'undo', msg: 'visualeditor-historybutton-undo-tooltip' },
+				{ trigger: 'redo', msg: 'visualeditor-historybutton-redo-tooltip' }
+			]
+		},
 		other: {
 			title: 'visualeditor-shortcuts-other',
 			commands: [
 				{ trigger: 'findAndReplace', msg: 'visualeditor-find-and-replace-title' },
+				{ trigger: 'findNext', msg: 'visualeditor-find-and-replace-next-button' },
+				{ trigger: 'findPrevious', msg: 'visualeditor-find-and-replace-previous-button' },
 				{ trigger: 'selectAll', msg: 'visualeditor-content-select-all' },
 				{ trigger: 'commandHelp', msg: 'visualeditor-dialog-command-help-title' }
 			]
@@ -53745,7 +55674,7 @@ ve.ui.windowFactory.register( ve.ui.CommandHelpDialog );
 /*!
  * VisualEditor UserInterface FindAndReplaceDialog class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -53763,6 +55692,7 @@ ve.ui.FindAndReplaceDialog = function VeUiFindAndReplaceDialog( config ) {
 
 	// Properties
 	this.surface = null;
+	this.invalidRegex = false;
 
 	// Pre-initialization
 	this.$element.addClass( 've-ui-findAndReplaceDialog' );
@@ -53776,6 +55706,13 @@ ve.ui.FindAndReplaceDialog.static.name = 'findAndReplace';
 
 ve.ui.FindAndReplaceDialog.static.title = OO.ui.deferMsg( 'visualeditor-find-and-replace-title' );
 
+/**
+ * Maximum number of results to render
+ *
+ * @property {number}
+ */
+ve.ui.FindAndReplaceDialog.static.maxRenderedResults = 100;
+
 /* Methods */
 
 /**
@@ -53787,12 +55724,15 @@ ve.ui.FindAndReplaceDialog.prototype.initialize = function () {
 
 	this.$findResults = this.$( '<div>' ).addClass( 've-ui-findAndReplaceDialog-findResults' );
 	this.fragments = [];
+	this.results = 0;
+	// Range over the list of fragments indicating which ones where rendered,
+	// e.g. [1,3] means fragments 1 & 2 were rendered
+	this.renderedFragments = null;
 	this.replacing = false;
 	this.focusedIndex = 0;
 	this.query = null;
 	this.findText = new OO.ui.TextInputWidget( {
 		$: this.$,
-		classes: ['ve-ui-findAndReplaceDialog-cell', 've-ui-findAndReplaceDialog-findText'],
 		placeholder: ve.msg( 'visualeditor-find-and-replace-find-text' )
 	} );
 	this.matchCaseToggle = new OO.ui.ToggleButtonWidget( {
@@ -53805,21 +55745,21 @@ ve.ui.FindAndReplaceDialog.prototype.initialize = function () {
 		icon: 'regular-expression',
 		iconTitle: ve.msg( 'visualeditor-find-and-replace-regular-expression' )
 	} );
-	this.focusedIndexLabel = new OO.ui.LabelWidget( {
-		$: this.$,
-		classes: ['ve-ui-findAndReplaceDialog-focusedIndexLabel']
-	} );
+
 	this.previousButton = new OO.ui.ButtonWidget( {
 		$: this.$,
-		icon: 'previous'
+		icon: 'previous',
+		iconTitle: ve.msg( 'visualeditor-find-and-replace-previous-button' ) + ' ' +
+			ve.ui.triggerRegistry.getMessages( 'findPrevious' ).join( ', ' )
 	} );
 	this.nextButton = new OO.ui.ButtonWidget( {
 		$: this.$,
-		icon: 'next'
+		icon: 'next',
+		iconTitle: ve.msg( 'visualeditor-find-and-replace-next-button' ) + ' ' +
+			ve.ui.triggerRegistry.getMessages( 'findNext' ).join( ', ' )
 	} );
 	this.replaceText = new OO.ui.TextInputWidget( {
 		$: this.$,
-		classes: ['ve-ui-findAndReplaceDialog-cell'],
 		placeholder: ve.msg( 'visualeditor-find-and-replace-replace-text' )
 	} );
 	this.replaceButton = new OO.ui.ButtonWidget( {
@@ -53858,41 +55798,44 @@ ve.ui.FindAndReplaceDialog.prototype.initialize = function () {
 		doneButton = new OO.ui.ButtonWidget( {
 			$: this.$,
 			classes: ['ve-ui-findAndReplaceDialog-cell'],
-			label: ve.msg( 'visualeditor-dialog-action-done' )
+			label: ve.msg( 'visualeditor-find-and-replace-done' )
 		} ),
 		$findRow = this.$( '<div>' ).addClass( 've-ui-findAndReplaceDialog-row' ),
 		$replaceRow = this.$( '<div>' ).addClass( 've-ui-findAndReplaceDialog-row' );
 
 	// Events
+	this.onWindowScrollDebounced = ve.debounce( this.onWindowScroll.bind( this ), 250 );
 	this.updateFragmentsDebounced = ve.debounce( this.updateFragments.bind( this ) );
-	this.positionResultsDebounced = ve.debounce( this.positionResults.bind( this ) );
+	this.renderFragmentsDebounced = ve.debounce( this.renderFragments.bind( this ) );
 	this.findText.connect( this, {
 		change: 'onFindChange',
 		enter: 'onFindTextEnter'
 	} );
 	this.matchCaseToggle.connect( this, { change: 'onFindChange' } );
 	this.regexToggle.connect( this, { change: 'onFindChange' } );
-	this.nextButton.connect( this, { click: 'onNextButtonClick' } );
-	this.previousButton.connect( this, { click: 'onPreviousButtonClick' } );
+	this.nextButton.connect( this, { click: 'findNext' } );
+	this.previousButton.connect( this, { click: 'findPrevious' } );
 	this.replaceButton.connect( this, { click: 'onReplaceButtonClick' } );
 	this.replaceAllButton.connect( this, { click: 'onReplaceAllButtonClick' } );
 	doneButton.connect( this, { click: 'close' } );
 
 	// Initialization
-	this.findText.$input.attr( 'tabIndex', 1 );
-	this.replaceText.$input.attr( 'tabIndex', 2 );
+	this.findText.$input.prop( 'tabIndex', 1 );
+	this.replaceText.$input.prop( 'tabIndex', 2 );
 	this.$content.addClass( 've-ui-findAndReplaceDialog-content' );
 	this.$body
 		.append(
 			$findRow.append(
-				this.findText.$element.append(
-					this.focusedIndexLabel.$element
+				this.$( '<div>' ).addClass( 've-ui-findAndReplaceDialog-cell ve-ui-findAndReplaceDialog-cell-input' ).append(
+					this.findText.$element
 				),
 				navigateGroup.$element,
 				optionsGroup.$element
 			),
 			$replaceRow.append(
-				this.replaceText.$element,
+				this.$( '<div>' ).addClass( 've-ui-findAndReplaceDialog-cell ve-ui-findAndReplaceDialog-cell-input' ).append(
+					this.replaceText.$element
+				),
 				replaceGroup.$element,
 				doneButton.$element
 			)
@@ -53908,14 +55851,17 @@ ve.ui.FindAndReplaceDialog.prototype.getSetupProcess = function ( data ) {
 		.first( function () {
 			this.surface = data.surface;
 			this.surface.$selections.append( this.$findResults );
+
+			// Events
 			this.surface.getModel().connect( this, { documentUpdate: this.updateFragmentsDebounced } );
-			this.surface.getView().connect( this, { position: this.positionResultsDebounced } );
+			this.surface.getView().connect( this, { position: this.renderFragmentsDebounced } );
+			this.surface.getView().$window.on( 'scroll', this.onWindowScrollDebounced );
 
 			var text = data.fragment.getText();
-			if ( text ) {
+			if ( text && text !== this.findText.getValue() ) {
 				this.findText.setValue( text );
 			} else {
-				this.updateFragments();
+				this.onFindChange();
 			}
 		}, this );
 };
@@ -53937,13 +55883,27 @@ ve.ui.FindAndReplaceDialog.prototype.getTeardownProcess = function ( data ) {
 	return ve.ui.FindAndReplaceDialog.super.prototype.getTeardownProcess.call( this, data )
 		.next( function () {
 			var surfaceView = this.surface.getView();
+
+			// Events
 			this.surface.getModel().disconnect( this );
 			surfaceView.disconnect( this );
+			this.surface.getView().$window.off( 'scroll', this.onWindowScrollDebounced );
+
 			surfaceView.focus();
 			this.$findResults.empty().detach();
-			this.fragment = [];
+			this.fragments = [];
 			this.surface = null;
 		}, this );
+};
+
+/**
+ * Handle window scroll events
+ */
+ve.ui.FindAndReplaceDialog.prototype.onWindowScroll = function () {
+	if ( this.renderedFragments.getLength() < this.results ) {
+		// If viewport clipping is being used, reposition results based on the current viewport
+		this.renderFragments();
+	}
 };
 
 /**
@@ -53951,7 +55911,7 @@ ve.ui.FindAndReplaceDialog.prototype.getTeardownProcess = function ( data ) {
  */
 ve.ui.FindAndReplaceDialog.prototype.onFindChange = function () {
 	this.updateFragments();
-	this.positionResults();
+	this.renderFragments();
 	this.highlightFocused( true );
 };
 
@@ -53961,13 +55921,13 @@ ve.ui.FindAndReplaceDialog.prototype.onFindChange = function () {
  * @param {jQuery.Event} e
  */
 ve.ui.FindAndReplaceDialog.prototype.onFindTextEnter = function ( e ) {
-	if ( !this.fragments.length ) {
+	if ( !this.results ) {
 		return;
 	}
 	if ( e.shiftKey ) {
-		this.onPreviousButtonClick();
+		this.findPrevious();
 	} else {
-		this.onNextButtonClick();
+		this.findNext();
 	}
 };
 
@@ -53976,7 +55936,6 @@ ve.ui.FindAndReplaceDialog.prototype.onFindTextEnter = function ( e ) {
  */
 ve.ui.FindAndReplaceDialog.prototype.updateFragments = function () {
 	var i, l,
-		hasError = false,
 		surfaceModel = this.surface.getModel(),
 		documentModel = surfaceModel.getDocument(),
 		ranges = [],
@@ -53984,16 +55943,18 @@ ve.ui.FindAndReplaceDialog.prototype.updateFragments = function () {
 		isRegex = this.regexToggle.getValue(),
 		find = this.findText.getValue();
 
+	this.invalidRegex = false;
+
 	if ( isRegex && find ) {
 		try {
 			this.query = new RegExp( find );
 		} catch ( e ) {
-			hasError = true;
+			this.invalidRegex = true;
 		}
 	} else {
 		this.query = find;
 	}
-	this.findText.$element.toggleClass( 've-ui-findAndReplaceDialog-findText-error', hasError );
+	this.findText.$element.toggleClass( 've-ui-findAndReplaceDialog-findText-error', this.invalidRegex );
 
 	this.fragments = [];
 	if ( this.query ) {
@@ -54002,25 +55963,59 @@ ve.ui.FindAndReplaceDialog.prototype.updateFragments = function () {
 			this.fragments.push( surfaceModel.getLinearFragment( ranges[i], true, true ) );
 		}
 	}
-	this.focusedIndex = Math.min( this.focusedIndex, this.fragments.length );
-	this.nextButton.setDisabled( !this.fragments.length );
-	this.previousButton.setDisabled( !this.fragments.length );
-	this.replaceButton.setDisabled( !this.fragments.length );
-	this.replaceAllButton.setDisabled( !this.fragments.length );
+	this.results = this.fragments.length;
+	this.focusedIndex = Math.min( this.focusedIndex, this.results ? this.results - 1 : 0 );
+	this.nextButton.setDisabled( !this.results );
+	this.previousButton.setDisabled( !this.results );
+	this.replaceButton.setDisabled( !this.results );
+	this.replaceAllButton.setDisabled( !this.results );
 };
 
 /**
  * Position results markers
  */
-ve.ui.FindAndReplaceDialog.prototype.positionResults = function () {
+ve.ui.FindAndReplaceDialog.prototype.renderFragments = function () {
 	if ( this.replacing ) {
 		return;
 	}
 
-	var i, ilen, j, jlen, rects, $result, top;
+	var i, selection, viewportRange,
+		start = 0,
+		end = this.results;
 
+	// When there are a large number of results, calculate the viewport range for clipping
+	if ( this.results > 50 ) {
+		viewportRange = this.surface.getView().getViewportRange();
+		for ( i = 0; i < this.results; i++ ) {
+			selection = this.fragments[i].getSelection();
+			if ( viewportRange && selection.getRange().start < viewportRange.start ) {
+				start = i + 1;
+				continue;
+			}
+			if ( viewportRange && selection.getRange().end > viewportRange.end ) {
+				end = i;
+				break;
+			}
+		}
+	}
+
+	// When there are too many results to render, just render the current one
+	if ( end - start <= this.constructor.static.maxRenderedResults ) {
+		this.renderRangeOfFragments( new ve.Range( start, end ) );
+	} else {
+		this.renderRangeOfFragments( new ve.Range( this.focusedIndex, this.focusedIndex + 1 ) );
+	}
+};
+
+/**
+ * Render subset of search result fragments
+ *
+ * @param {ve.Range} range Range of fragments to render
+ */
+ve.ui.FindAndReplaceDialog.prototype.renderRangeOfFragments = function ( range ) {
+	var i, j, jlen, rects, $result, top;
 	this.$findResults.empty();
-	for ( i = 0, ilen = this.fragments.length; i < ilen; i++ ) {
+	for ( i = range.start; i < range.end; i++ ) {
 		rects = this.surface.getView().getSelectionRects( this.fragments[i].getSelection() );
 		$result = this.$( '<div>' ).addClass( 've-ui-findAndReplaceDialog-findResult' );
 		top = Infinity;
@@ -54036,6 +56031,7 @@ ve.ui.FindAndReplaceDialog.prototype.positionResults = function () {
 		$result.data( 'top', top );
 		this.$findResults.append( $result );
 	}
+	this.renderedFragments = range;
 	this.highlightFocused();
 };
 
@@ -54045,27 +56041,43 @@ ve.ui.FindAndReplaceDialog.prototype.positionResults = function () {
  * @param {boolean} scrollIntoView Scroll the marker into view
  */
 ve.ui.FindAndReplaceDialog.prototype.highlightFocused = function ( scrollIntoView ) {
-	var windowScrollTop, windowScrollHeight, offset,
-		surfaceView = this.surface.getView(),
-		$result = this.$findResults.children().eq( this.focusedIndex );
+	var $result, rect, top,
+		offset, windowScrollTop, windowScrollHeight,
+		surfaceView = this.surface.getView();
+
+	if ( this.results ) {
+		this.findText.setLabel(
+			ve.msg( 'visualeditor-find-and-replace-results', this.focusedIndex + 1, this.results )
+		);
+	} else {
+		this.findText.setLabel(
+			this.invalidRegex ? ve.msg( 'visualeditor-find-and-replace-invalid-regex' ) : ''
+		);
+		return;
+	}
 
 	this.$findResults
 		.find( '.ve-ui-findAndReplaceDialog-findResult-focused' )
 		.removeClass( 've-ui-findAndReplaceDialog-findResult-focused' );
-	$result.addClass( 've-ui-findAndReplaceDialog-findResult-focused' );
 
-	if ( this.fragments.length ) {
-		this.focusedIndexLabel.setLabel(
-			ve.msg( 'visualeditor-find-and-replace-results', this.focusedIndex + 1, this.fragments.length )
-		);
+	if ( this.renderedFragments.containsOffset( this.focusedIndex ) ) {
+		$result = this.$findResults.children().eq( this.focusedIndex - this.renderedFragments.start )
+			.addClass( 've-ui-findAndReplaceDialog-findResult-focused' );
+
+		top = $result.data( 'top' );
 	} else {
-		this.focusedIndexLabel.setLabel( '' );
+		// Focused result hasn't been rendered yet so find its offset manually
+		rect = surfaceView.getSelectionBoundingRect( this.fragments[this.focusedIndex].getSelection() );
+		top = rect.top;
+		this.renderRangeOfFragments( new ve.Range( this.focusedIndex, this.focusedIndex + 1 ) );
 	}
 
 	if ( scrollIntoView ) {
-		offset = $result.data( 'top' ) + surfaceView.$element.offset().top;
+		surfaceView = this.surface.getView();
+		offset = top + surfaceView.$element.offset().top;
 		windowScrollTop = surfaceView.$window.scrollTop() + this.surface.toolbarHeight;
 		windowScrollHeight = surfaceView.$window.height() - this.surface.toolbarHeight;
+
 		if ( offset < windowScrollTop || offset > windowScrollTop + windowScrollHeight ) {
 			surfaceView.$( 'body, html' ).animate( { scrollTop: offset - ( windowScrollHeight / 2  ) }, 'fast' );
 		}
@@ -54073,18 +56085,18 @@ ve.ui.FindAndReplaceDialog.prototype.highlightFocused = function ( scrollIntoVie
 };
 
 /**
- * Handle click events on the next button
+ * Find the next result
  */
-ve.ui.FindAndReplaceDialog.prototype.onNextButtonClick = function () {
-	this.focusedIndex = ( this.focusedIndex + 1 ) % this.fragments.length;
+ve.ui.FindAndReplaceDialog.prototype.findNext = function () {
+	this.focusedIndex = ( this.focusedIndex + 1 ) % this.results;
 	this.highlightFocused( true );
 };
 
 /**
- * Handle click events on the previous button
+ * Find the previous result
  */
-ve.ui.FindAndReplaceDialog.prototype.onPreviousButtonClick = function () {
-	this.focusedIndex = ( this.focusedIndex + this.fragments.length - 1 ) % this.fragments.length;
+ve.ui.FindAndReplaceDialog.prototype.findPrevious = function () {
+	this.focusedIndex = ( this.focusedIndex + this.results - 1 ) % this.results;
 	this.highlightFocused( true );
 };
 
@@ -54094,7 +56106,7 @@ ve.ui.FindAndReplaceDialog.prototype.onPreviousButtonClick = function () {
 ve.ui.FindAndReplaceDialog.prototype.onReplaceButtonClick = function () {
 	var end;
 
-	if ( !this.fragments.length ) {
+	if ( !this.results ) {
 		return;
 	}
 
@@ -54106,7 +56118,7 @@ ve.ui.FindAndReplaceDialog.prototype.onReplaceButtonClick = function () {
 	// updateFragmentsDebounced is triggered by insertContent, but call it immediately
 	// so we can find the next fragment to select.
 	this.updateFragments();
-	if ( !this.fragments.length ) {
+	if ( !this.results ) {
 		this.focusedIndex = 0;
 		return;
 	}
@@ -54114,7 +56126,7 @@ ve.ui.FindAndReplaceDialog.prototype.onReplaceButtonClick = function () {
 		this.focusedIndex++;
 	}
 	// We may have iterated off the end
-	this.focusedIndex = this.focusedIndex % this.fragments.length;
+	this.focusedIndex = this.focusedIndex % this.results;
 };
 
 /**
@@ -54123,7 +56135,7 @@ ve.ui.FindAndReplaceDialog.prototype.onReplaceButtonClick = function () {
 ve.ui.FindAndReplaceDialog.prototype.onReplaceAllButtonClick = function () {
 	var i, l;
 
-	for ( i = 0, l = this.fragments.length; i < l; i++ ) {
+	for ( i = 0, l = this.results; i < l; i++ ) {
 		this.replace( i );
 	}
 };
@@ -54146,6 +56158,16 @@ ve.ui.FindAndReplaceDialog.prototype.replace = function ( index ) {
 	}
 };
 
+/**
+ * @inheritdoc
+ */
+ve.ui.FindAndReplaceDialog.prototype.getActionProcess = function ( action ) {
+	if ( action === 'findNext' || action === 'findPrevious' ) {
+		return new OO.ui.Process( this[action], this );
+	}
+	return ve.ui.FindAndReplaceDialog.super.prototype.getActionProcess.call( this, action );
+};
+
 /* Registration */
 
 ve.ui.windowFactory.register( ve.ui.FindAndReplaceDialog );
@@ -54153,7 +56175,7 @@ ve.ui.windowFactory.register( ve.ui.FindAndReplaceDialog );
 /*!
  * VisualEditor UserInterface ProgressDialog class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -54281,7 +56303,7 @@ ve.ui.ProgressDialog.prototype.progressComplete = function ( $row, failed ) {
 	}
 	if ( failed ) {
 		$row.remove();
-		this.manager.updateWindowSize( this );
+		this.updateSize();
 	}
 };
 
@@ -54292,42 +56314,42 @@ ve.ui.ProgressDialog.prototype.progressComplete = function ( $row, failed ) {
 ve.ui.windowFactory.register( ve.ui.ProgressDialog );
 
 /*!
- * VisualEditor UserInterface delimiter-separated values file drop handler class.
+ * VisualEditor UserInterface delimiter-separated values file transfer handler class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
- * Delimiter-separated values file drop handler.
+ * Delimiter-separated values file transfer handler.
  *
  * @class
- * @extends ve.ui.FileDropHandler
+ * @extends ve.ui.DataTransferHandler
  *
  * @constructor
  * @param {ve.ui.Surface} surface
  * @param {File} file
  */
-ve.ui.DSVFileDropHandler = function VeUiDSVFileDropHandler() {
+ve.ui.DSVFileTransferHandler = function VeUiDSVFileTransferHandler() {
 	// Parent constructor
-	ve.ui.DSVFileDropHandler.super.apply( this, arguments );
+	ve.ui.DSVFileTransferHandler.super.apply( this, arguments );
 };
 
 /* Inheritance */
 
-OO.inheritClass( ve.ui.DSVFileDropHandler, ve.ui.FileDropHandler );
+OO.inheritClass( ve.ui.DSVFileTransferHandler, ve.ui.DataTransferHandler );
 
 /* Static properties */
 
-ve.ui.DSVFileDropHandler.static.name = 'dsv';
+ve.ui.DSVFileTransferHandler.static.name = 'dsv';
 
-ve.ui.DSVFileDropHandler.static.types = [ 'text/csv', 'text/tab-separated-values' ];
+ve.ui.DSVFileTransferHandler.static.types = [ 'text/csv', 'text/tab-separated-values' ];
 
 /* Methods */
 
 /**
  * @inheritdoc
  */
-ve.ui.DSVFileDropHandler.prototype.process = function () {
+ve.ui.DSVFileTransferHandler.prototype.process = function () {
 	this.createProgress( this.insertableDataDeferred.promise() );
 	this.reader.readAsText( this.file );
 };
@@ -54335,7 +56357,7 @@ ve.ui.DSVFileDropHandler.prototype.process = function () {
 /**
  * @inheritdoc
  */
-ve.ui.DSVFileDropHandler.prototype.onFileProgress = function ( e ) {
+ve.ui.DSVFileTransferHandler.prototype.onFileProgress = function ( e ) {
 	if ( e.lengthComputable ) {
 		this.setProgress( 100 * e.loaded / e.total );
 	} else {
@@ -54346,7 +56368,7 @@ ve.ui.DSVFileDropHandler.prototype.onFileProgress = function ( e ) {
 /**
  * @inheritdoc
  */
-ve.ui.DSVFileDropHandler.prototype.onFileLoad = function () {
+ve.ui.DSVFileTransferHandler.prototype.onFileLoad = function () {
 	var i, j, line,
 		data = [],
 		input = Papa.parse( this.reader.result );
@@ -54382,7 +56404,7 @@ ve.ui.DSVFileDropHandler.prototype.onFileLoad = function () {
 /**
  * @inheritdoc
  */
-ve.ui.DSVFileDropHandler.prototype.onFileLoadEnd = function () {
+ve.ui.DSVFileTransferHandler.prototype.onFileLoadEnd = function () {
 	// 'loadend' fires after 'load'/'abort'/'error'.
 	// Reject the deferred if it hasn't already resolved.
 	this.insertableDataDeferred.reject();
@@ -54391,54 +56413,54 @@ ve.ui.DSVFileDropHandler.prototype.onFileLoadEnd = function () {
 /**
  * @inheritdoc
  */
-ve.ui.DSVFileDropHandler.prototype.abort = function () {
+ve.ui.DSVFileTransferHandler.prototype.abort = function () {
 	// Parent method
-	ve.ui.DSVFileDropHandler.super.prototype.abort.call( this );
+	ve.ui.DSVFileTransferHandler.super.prototype.abort.call( this );
 
 	this.reader.abort();
 };
 
 /* Registration */
 
-ve.ui.fileDropHandlerFactory.register( ve.ui.DSVFileDropHandler );
+ve.ui.dataTransferHandlerFactory.register( ve.ui.DSVFileTransferHandler );
 
 /*!
- * VisualEditor UserInterface plain text file drop handler class.
+ * VisualEditor UserInterface plain text file data transfer handler class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
- * Plain text file drop handler.
+ * Plain text data transfer filetransfer handler.
  *
  * @class
- * @extends ve.ui.FileDropHandler
+ * @extends ve.ui.DataTransferHandler
  *
  * @constructor
  * @param {ve.ui.Surface} surface
  * @param {File} file
  */
-ve.ui.PlainTextFileDropHandler = function VeUiPlainTextFileDropHandler() {
+ve.ui.PlainTextFileTransferHandler = function VeUiPlainTextFileTransferHandler() {
 	// Parent constructor
-	ve.ui.PlainTextFileDropHandler.super.apply( this, arguments );
+	ve.ui.PlainTextFileTransferHandler.super.apply( this, arguments );
 };
 
 /* Inheritance */
 
-OO.inheritClass( ve.ui.PlainTextFileDropHandler, ve.ui.FileDropHandler );
+OO.inheritClass( ve.ui.PlainTextFileTransferHandler, ve.ui.DataTransferHandler );
 
 /* Static properties */
 
-ve.ui.PlainTextFileDropHandler.static.name = 'plainText';
+ve.ui.PlainTextFileTransferHandler.static.name = 'plainText';
 
-ve.ui.PlainTextFileDropHandler.static.types = ['text/plain'];
+ve.ui.PlainTextFileTransferHandler.static.types = ['text/plain'];
 
 /* Methods */
 
 /**
  * @inheritdoc
  */
-ve.ui.PlainTextFileDropHandler.prototype.process = function () {
+ve.ui.PlainTextFileTransferHandler.prototype.process = function () {
 	this.createProgress( this.insertableDataDeferred.promise() );
 	this.reader.readAsText( this.file );
 };
@@ -54446,7 +56468,7 @@ ve.ui.PlainTextFileDropHandler.prototype.process = function () {
 /**
  * @inheritdoc
  */
-ve.ui.PlainTextFileDropHandler.prototype.onFileProgress = function ( e ) {
+ve.ui.PlainTextFileTransferHandler.prototype.onFileProgress = function ( e ) {
 	if ( e.lengthComputable ) {
 		this.setProgress( 100 * e.loaded / e.total );
 	} else {
@@ -54457,7 +56479,7 @@ ve.ui.PlainTextFileDropHandler.prototype.onFileProgress = function ( e ) {
 /**
  * @inheritdoc
  */
-ve.ui.PlainTextFileDropHandler.prototype.onFileLoad = function () {
+ve.ui.PlainTextFileTransferHandler.prototype.onFileLoad = function () {
 	var i, l,
 		data = [],
 		lines = this.reader.result.split( /[\r\n]+/ );
@@ -54476,7 +56498,7 @@ ve.ui.PlainTextFileDropHandler.prototype.onFileLoad = function () {
 /**
  * @inheritdoc
  */
-ve.ui.PlainTextFileDropHandler.prototype.onFileLoadEnd = function () {
+ve.ui.PlainTextFileTransferHandler.prototype.onFileLoadEnd = function () {
 	// 'loadend' fires after 'load'/'abort'/'error'.
 	// Reject the deferred if it hasn't already resolved.
 	this.insertableDataDeferred.reject();
@@ -54485,54 +56507,54 @@ ve.ui.PlainTextFileDropHandler.prototype.onFileLoadEnd = function () {
 /**
  * @inheritdoc
  */
-ve.ui.PlainTextFileDropHandler.prototype.abort = function () {
+ve.ui.PlainTextFileTransferHandler.prototype.abort = function () {
 	// Parent method
-	ve.ui.PlainTextFileDropHandler.super.prototype.abort.call( this );
+	ve.ui.PlainTextFileTransferHandler.super.prototype.abort.call( this );
 
 	this.reader.abort();
 };
 
 /* Registration */
 
-ve.ui.fileDropHandlerFactory.register( ve.ui.PlainTextFileDropHandler );
+ve.ui.dataTransferHandlerFactory.register( ve.ui.PlainTextFileTransferHandler );
 
 /*!
- * VisualEditor UserInterface HTML file drop handler class.
+ * VisualEditor UserInterface HTML file transfer handler class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
- * HTML file drop handler.
+ * HTML file transfer handler.
  *
  * @class
- * @extends ve.ui.FileDropHandler
+ * @extends ve.ui.DataTransferHandler
  *
  * @constructor
  * @param {ve.ui.Surface} surface
  * @param {File} file
  */
-ve.ui.HTMLFileDropHandler = function VeUiHTMLFileDropHandler() {
+ve.ui.HTMLFileTransferHandler = function VeUiHTMLFileTransferHandler() {
 	// Parent constructor
-	ve.ui.HTMLFileDropHandler.super.apply( this, arguments );
+	ve.ui.HTMLFileTransferHandler.super.apply( this, arguments );
 };
 
 /* Inheritance */
 
-OO.inheritClass( ve.ui.HTMLFileDropHandler, ve.ui.FileDropHandler );
+OO.inheritClass( ve.ui.HTMLFileTransferHandler, ve.ui.DataTransferHandler );
 
 /* Static properties */
 
-ve.ui.HTMLFileDropHandler.static.name = 'html';
+ve.ui.HTMLFileTransferHandler.static.name = 'html';
 
-ve.ui.HTMLFileDropHandler.static.types = [ 'text/html', 'application/xhtml+xml' ];
+ve.ui.HTMLFileTransferHandler.static.types = [ 'text/html', 'application/xhtml+xml' ];
 
 /* Methods */
 
 /**
  * @inheritdoc
  */
-ve.ui.HTMLFileDropHandler.prototype.process = function () {
+ve.ui.HTMLFileTransferHandler.prototype.process = function () {
 	this.createProgress( this.insertableDataDeferred.promise() );
 	this.reader.readAsText( this.file );
 };
@@ -54540,7 +56562,7 @@ ve.ui.HTMLFileDropHandler.prototype.process = function () {
 /**
  * @inheritdoc
  */
-ve.ui.HTMLFileDropHandler.prototype.onFileProgress = function ( e ) {
+ve.ui.HTMLFileTransferHandler.prototype.onFileProgress = function ( e ) {
 	if ( e.lengthComputable ) {
 		this.setProgress( 100 * e.loaded / e.total );
 	} else {
@@ -54551,7 +56573,7 @@ ve.ui.HTMLFileDropHandler.prototype.onFileProgress = function ( e ) {
 /**
  * @inheritdoc
  */
-ve.ui.HTMLFileDropHandler.prototype.onFileLoad = function () {
+ve.ui.HTMLFileTransferHandler.prototype.onFileLoad = function () {
 	this.insertableDataDeferred.resolve(
 		this.surface.getModel().getDocument().newFromHtml( this.reader.result )
 	);
@@ -54561,7 +56583,7 @@ ve.ui.HTMLFileDropHandler.prototype.onFileLoad = function () {
 /**
  * @inheritdoc
  */
-ve.ui.HTMLFileDropHandler.prototype.onFileLoadEnd = function () {
+ve.ui.HTMLFileTransferHandler.prototype.onFileLoadEnd = function () {
 	// 'loadend' fires after 'load'/'abort'/'error'.
 	// Reject the deferred if it hasn't already resolved.
 	this.insertableDataDeferred.reject();
@@ -54570,21 +56592,21 @@ ve.ui.HTMLFileDropHandler.prototype.onFileLoadEnd = function () {
 /**
  * @inheritdoc
  */
-ve.ui.HTMLFileDropHandler.prototype.abort = function () {
+ve.ui.HTMLFileTransferHandler.prototype.abort = function () {
 	// Parent method
-	ve.ui.HTMLFileDropHandler.super.prototype.abort.call( this );
+	ve.ui.HTMLFileTransferHandler.super.prototype.abort.call( this );
 
 	this.reader.abort();
 };
 
 /* Registration */
 
-ve.ui.fileDropHandlerFactory.register( ve.ui.HTMLFileDropHandler );
+ve.ui.dataTransferHandlerFactory.register( ve.ui.HTMLFileTransferHandler );
 
 /*!
  * VisualEditor UserInterface ToolbarDialogWindowManager class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -54608,6 +56630,9 @@ OO.inheritClass( ve.ui.ToolbarDialogWindowManager, ve.ui.WindowManager );
 
 /* Static Properties */
 
+ve.ui.ToolbarDialogWindowManager.static.sizes = ve.copy(
+	ve.ui.ToolbarDialogWindowManager.super.static.sizes
+);
 ve.ui.ToolbarDialogWindowManager.static.sizes.full = {
 	width: '100%',
 	maxHeight: '100%'
@@ -54623,9 +56648,62 @@ ve.ui.ToolbarDialogWindowManager.prototype.getTeardownDelay = function () {
 };
 
 /*!
+ * VisualEditor UserInterface AlignWidget class.
+ *
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
+ */
+
+/**
+ * Widget that lets the user edit alignment of an object
+ *
+ * @class
+ * @extends OO.ui.ButtonSelectWidget
+ *
+ * @constructor
+ * @param {Object} [config] Configuration options
+ * @cfg {string} [dir='ltr'] Interface directionality
+ */
+ve.ui.AlignWidget = function VeUiAlignWidget( config ) {
+	// Parent constructor
+	ve.ui.AlignWidget.super.call( this, config );
+
+	var alignButtons = [
+			new OO.ui.ButtonOptionWidget( {
+				$: this.$,
+				data: 'left',
+				icon: 'align-float-left',
+				label: ve.msg( 'visualeditor-align-widget-left' )
+			} ),
+			new OO.ui.ButtonOptionWidget( {
+				$: this.$,
+				data: 'center',
+				icon: 'align-center',
+				label: ve.msg( 'visualeditor-align-widget-center' )
+			} ),
+			new OO.ui.ButtonOptionWidget( {
+				$: this.$,
+				data: 'right',
+				icon: 'align-float-right',
+				label: ve.msg( 'visualeditor-align-widget-right' )
+			} )
+		];
+
+	if ( config.dir === 'rtl' ) {
+		alignButtons = alignButtons.reverse();
+	}
+
+	this.addItems( alignButtons, 0 );
+
+};
+
+/* Inheritance */
+
+OO.inheritClass( ve.ui.AlignWidget, OO.ui.ButtonSelectWidget );
+
+/*!
  * VisualEditor UserInterface LanguageSearchWidget class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -54768,7 +56846,7 @@ ve.ui.LanguageSearchWidget.static.escapeRegex = function ( value ) {
 /*!
  * VisualEditor UserInterface LanguageResultWidget class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -54851,7 +56929,7 @@ ve.ui.LanguageResultWidget.prototype.highlightQuery = function ( text, query ) {
 /*!
  * VisualEditor UserInterface LanguageSearchDialog class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -54968,7 +57046,7 @@ ve.ui.windowFactory.register( ve.ui.LanguageSearchDialog );
 /*!
  * VisualEditor UserInterface LanguageInputWidget class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -55175,7 +57253,7 @@ ve.ui.LanguageInputWidget.prototype.getDir = function () {
 /*!
  * VisualEditor UserInterface SurfaceWidget class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -55291,7 +57369,7 @@ ve.ui.SurfaceWidget.prototype.focus = function () {
 /*!
  * VisualEditor UserInterface LinkTargetInputWidget class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -55438,7 +57516,7 @@ ve.ui.LinkTargetInputWidget.prototype.getTargetFromAnnotation = function ( annot
 /*!
  * VisualEditor Context Menu widget class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -55482,7 +57560,7 @@ ve.ui.ContextSelectWidget.prototype.onChooseItem = function () {
 /*!
  * VisualEditor Context Item widget class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -55554,7 +57632,7 @@ ve.ui.ContextOptionWidget.prototype.getCommand = function () {
 /*!
  * VisualEditor UserInterface DimensionsWidget class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -55664,8 +57742,8 @@ ve.ui.DimensionsWidget.prototype.setDefaults = function ( dimensions ) {
  * Render the default dimensions as input placeholders
  */
 ve.ui.DimensionsWidget.prototype.renderDefaults = function () {
-	this.widthInput.$input.attr( 'placeholder', this.getDefaults().width );
-	this.heightInput.$input.attr( 'placeholder', this.getDefaults().height );
+	this.widthInput.$input.prop( 'placeholder', this.getDefaults().width );
+	this.heightInput.$input.prop( 'placeholder', this.getDefaults().height );
 };
 
 /**
@@ -55789,7 +57867,7 @@ ve.ui.DimensionsWidget.prototype.setHeight = function ( value ) {
 /*!
  * VisualEditor UserInterface MediaSizeWidget class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -56077,7 +58155,7 @@ ve.ui.MediaSizeWidget.prototype.onSizeTypeChoose = function ( item ) {
  * @param {number} value Placeholder value
  */
 ve.ui.MediaSizeWidget.prototype.setScalePlaceholder = function ( value ) {
-	this.scaleInput.$element.attr( 'placeholder', value );
+	this.scaleInput.$element.prop( 'placeholder', value );
 };
 
 /**
@@ -56085,7 +58163,7 @@ ve.ui.MediaSizeWidget.prototype.setScalePlaceholder = function ( value ) {
  * @returns {string} Placeholder value
  */
 ve.ui.MediaSizeWidget.prototype.getScalePlaceholder = function () {
-	return this.scaleInput.$element.attr( 'placeholder' );
+	return this.scaleInput.$element.prop( 'placeholder' );
 };
 
 /**
@@ -56304,7 +58382,7 @@ ve.ui.MediaSizeWidget.prototype.validateDimensions = function () {
 
 	if ( this.valid !== isValid ) {
 		this.valid = isValid;
-		this.errorLabel.$element.toggle( !isValid );
+		this.errorLabel.toggle( !isValid );
 		this.$element.toggleClass( 've-ui-mediaSizeWidget-input-hasError', !isValid );
 		// Emit change event
 		this.emit( 'valid', this.valid );
@@ -56400,7 +58478,7 @@ ve.ui.MediaSizeWidget.prototype.isValid = function () {
 /*!
  * VisualEditor UserInterface WhitespacePreservingTextInputWidget class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -56486,7 +58564,7 @@ ve.ui.WhitespacePreservingTextInputWidget.prototype.getInnerValue = function () 
 /*!
  * VisualEditor UserInterface AnnotationTool classes.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -56760,7 +58838,7 @@ ve.ui.toolFactory.register( ve.ui.SubscriptAnnotationTool );
 /*!
  * VisualEditor UserInterface ClearAnnotationTool class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -56804,7 +58882,7 @@ ve.ui.toolFactory.register( ve.ui.ClearAnnotationTool );
 /*!
  * VisualEditor UserInterface DialogTool class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -56882,7 +58960,7 @@ ve.ui.toolFactory.register( ve.ui.CommandHelpDialogTool );
 /*!
  * VisualEditor UserInterface FindAndReplaceTool classes.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -56917,7 +58995,7 @@ ve.ui.toolFactory.register( ve.ui.FindAndReplaceTool );
 /*!
  * VisualEditor UserInterface FormatTool classes.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -57235,7 +59313,7 @@ ve.ui.toolFactory.register( ve.ui.TableCellDataFormatTool );
 /*!
  * VisualEditor UserInterface HistoryTool classes.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -57324,7 +59402,7 @@ ve.ui.toolFactory.register( ve.ui.RedoHistoryTool );
 /*!
  * VisualEditor UserInterface IndentationTool classes.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -57393,7 +59471,7 @@ ve.ui.toolFactory.register( ve.ui.DecreaseIndentationTool );
 /*!
  * VisualEditor UserInterface InspectorTool classes.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -57529,7 +59607,7 @@ ve.ui.toolFactory.register( ve.ui.CommentInspectorTool );
 /*!
  * VisualEditor UserInterface language tool class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -57557,7 +59635,7 @@ ve.ui.toolFactory.register( ve.ui.LanguageInspectorTool );
 /*!
  * VisualEditor UserInterface ListTool classes.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -57666,7 +59744,7 @@ ve.ui.toolFactory.register( ve.ui.NumberListTool );
 /*!
  * VisualEditor UserInterface ListTool classes.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see AUTHORS.txt
+ * @copyright 2011-2015 VisualEditor Team and others; see AUTHORS.txt
  * @license The MIT License (MIT); see LICENSE.txt
  */
 
@@ -57838,7 +59916,7 @@ ve.ui.toolFactory.register( ve.ui.TableCaptionTool );
 /*!
  * VisualEditor UserInterface FragmentInspector class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -57975,7 +60053,7 @@ ve.ui.FragmentInspector.prototype.getBodyHeight = function () {
 /*!
  * VisualEditor UserInterface AnnotationInspector class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -58279,7 +60357,7 @@ ve.ui.AnnotationInspector.prototype.getTeardownProcess = function ( data ) {
 /*!
  * VisualEditor user interface NodeInspector class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -58372,7 +60450,7 @@ ve.ui.NodeInspector.prototype.getTeardownProcess = function ( data ) {
 /*!
  * VisualEditor UserInterface LinkInspector class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -58540,7 +60618,7 @@ ve.ui.windowFactory.register( ve.ui.LinkInspector );
 /*!
  * VisualEditor UserInterface CommentInspector class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -58623,7 +60701,7 @@ ve.ui.CommentInspector.prototype.initialize = function () {
 ve.ui.CommentInspector.prototype.onTextInputWidgetChange = function () {
 	var height = this.textWidget.$element.height();
 	if ( height !== this.previousTextWidgetHeight ) {
-		this.getManager().updateWindowSize( this );
+		this.updateSize();
 		this.previousTextWidgetHeight = height;
 	}
 };
@@ -58714,7 +60792,7 @@ ve.ui.windowFactory.register( ve.ui.CommentInspector );
 /*!
  * VisualEditor UserInterface LanguageInspector class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -58811,7 +60889,7 @@ ve.ui.windowFactory.register( ve.ui.LanguageInspector );
 /*!
  * VisualEditor UserInterface SpecialCharacterInspector class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -58885,7 +60963,7 @@ ve.ui.SpecialCharacterInspector.prototype.getSetupProcess = function ( data ) {
 			this.getFragment().insertContent( ' ' );
 			// Don't request the character list again if we already have it
 			if ( !this.characters ) {
-				this.$spinner.show();
+				this.$spinner.removeClass( 'oo-ui-element-hidden' );
 				this.fetchCharList()
 					.done( function () {
 						inspector.buildButtonList();
@@ -58893,7 +60971,7 @@ ve.ui.SpecialCharacterInspector.prototype.getSetupProcess = function ( data ) {
 					// TODO: show error message on fetchCharList().fail
 					.always( function () {
 						// TODO: generalize push/pop pending, like we do in Dialog
-						inspector.$spinner.hide();
+						inspector.$spinner.addClass( 'oo-ui-element-hidden' );
 					} );
 			}
 		}, this );
@@ -58993,7 +61071,7 @@ ve.ui.windowFactory.register( ve.ui.SpecialCharacterInspector );
 /*!
  * VisualEditor UserInterface DesktopSurface class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -59035,7 +61113,7 @@ ve.ui.DesktopSurface.prototype.createDialogWindowManager = function () {
 /*!
  * VisualEditor UserInterface DesktopContext class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -59086,7 +61164,9 @@ ve.ui.DesktopContext = function VeUiDesktopContext( surface, config ) {
 	// HACK: hide the popup with visibility: hidden; rather than display: none;, because
 	// the popup contains inspector iframes, and applying display: none; to those causes them to
 	// not load in Firefox
-	this.popup.$element.css( { visibility: 'hidden', display: '' } );
+	this.popup.$element
+		.css( { visibility: 'hidden' } )
+		.removeClass( 'oo-ui-element-hidden' );
 };
 
 /* Inheritance */
@@ -59206,10 +61286,11 @@ ve.ui.DesktopContext.prototype.toggle = function ( show ) {
 	// HACK: make the context and popup visibility: hidden; instead of display: none; because
 	// they contain inspector iframes, and applying display: none; to those causes them to
 	// not load in Firefox
-	this.$element.add( this.popup.$element ).css( {
-		visibility: show ? '' : 'hidden',
-		display: ''
-	} );
+	this.$element.add( this.popup.$element )
+		.removeClass( 'oo-ui-element-hidden' )
+		.css( {
+			visibility: show ? 'visible' : 'hidden'
+		} );
 
 	this.transitioning.resolve();
 	this.transitioning = null;
@@ -59217,7 +61298,7 @@ ve.ui.DesktopContext.prototype.toggle = function ( show ) {
 
 	if ( show ) {
 		if ( this.inspector ) {
-			this.inspectors.updateWindowSize( this.inspector );
+			this.inspector.updateSize();
 		}
 		// updateDimensionsDebounced is not necessary here and causes a movement flicker
 		this.updateDimensions();
@@ -59339,7 +61420,7 @@ ve.ui.DesktopContext.prototype.destroy = function () {
 /*!
  * VisualEditor UserInterface DesktopInspectorWindowManager class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -59416,7 +61497,7 @@ ve.ui.DesktopInspectorWindowManager.prototype.getTeardownDelay = function () {
 /*!
  * VisualEditor UserInterface MobileSurface class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -59532,7 +61613,7 @@ ve.ui.MobileSurface.prototype.destroy = function () {
 /*!
  * VisualEditor UserInterface MobileContext class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -59561,9 +61642,8 @@ ve.ui.MobileContext = function VeUiMobileContext( surface, config ) {
 	// Initialization
 	this.$element
 		.addClass( 've-ui-mobileContext' )
-		.append( this.menu.$element )
-		// Mobile context uses a class to toggle visibility
-		.show();
+		.append( this.menu.$element );
+	this.toggle( true );
 	this.menu.$element.addClass( 've-ui-mobileContext-menu' );
 	this.inspectors.$element.addClass( 've-ui-mobileContext-inspectors' );
 	this.surface.getGlobalOverlay().$element.append( this.inspectors.$element );
@@ -59603,7 +61683,8 @@ ve.ui.MobileContext.prototype.toggle = function ( show ) {
 	show = show === undefined ? !this.visible : !!show;
 	if ( show !== this.visible ) {
 		this.visible = show;
-		this.$element.toggleClass( 've-ui-mobileContext-visible', show );
+		this.$element
+			.toggleClass( 'oo-ui-element-hidden', !show );
 		setTimeout( function () {
 			deferred.resolve();
 		}, 300 );
@@ -59617,7 +61698,7 @@ ve.ui.MobileContext.prototype.toggle = function ( show ) {
 /*!
  * VisualEditor UserInterface MobileWindowManager class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
@@ -59681,7 +61762,7 @@ ve.ui.MobileWindowManager.prototype.getTeardownDelay = function () {
 /*!
  * VisualEditor Mobile Context Item widget class.
  *
- * @copyright 2011-2014 VisualEditor Team and others; see http://ve.mit-license.org
+ * @copyright 2011-2015 VisualEditor Team and others; see http://ve.mit-license.org
  */
 
 /**
