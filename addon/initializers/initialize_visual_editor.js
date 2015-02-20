@@ -8,8 +8,13 @@ var _loadedScripts = {};
 // This version injects a script instead of using global.eval
 // which eases debugging (e.g., stacktraces make sense)
 var injectScript = function(src) {
-  var headEl = document.head || document.getElementsByTagName("head")[0];
   var promise = window.jQuery.Deferred();
+
+  if (_loadedScripts[src]) {
+    return promise.resolve();
+  }
+
+  var headEl = document.head || document.getElementsByTagName("head")[0];
   var scriptEl = window.document.createElement('script');
   scriptEl.type = "text\/javascript";
   scriptEl.src = src;
@@ -28,26 +33,27 @@ var injectScript = function(src) {
 var loadScriptWithEval = function(src) {
   var promise = window.jQuery.Deferred();
   if (_loadedScripts[src]) {
-    promise.resolve();
-  } else {
-    $.ajax(src, {
-      method: "GET",
-      cache: false,
-      error: function(xhr, status, msg) {
-        promise.reject(msg);
-      },
-      success: function(data) {
-        try {
-          window.jQuery.globalEval(data);
-          _loadedScripts[src] = true;
-          promise.resolve();
-        } catch (err) {
-          console.error('Could not evaluate loaded script', err.stack);
-          promise.reject(err);
-        }
-      }
-    });
+    return promise.resolve();
   }
+
+  $.ajax(src, {
+    method: "GET",
+    cache: false,
+    error: function(xhr, status, msg) {
+      promise.reject(msg);
+    },
+    success: function(data) {
+      try {
+        window.jQuery.globalEval(data);
+        _loadedScripts[src] = true;
+        promise.resolve();
+      } catch (err) {
+        console.error('Could not evaluate loaded script', err.stack);
+        promise.reject(err);
+      }
+    }
+  });
+
   return promise;
 };
 
